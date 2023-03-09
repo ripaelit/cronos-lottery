@@ -345,7 +345,7 @@ const Home = () => {
                 <img src="/images/brother.png" className={styles.trpzImg} />
               </div>
               <div className={styles.Trpz_right}>
-                <p className={styles.Trpz_title}>For My Brothers</p>
+                <p className={styles.Heart_title}>For My Brothers</p>
                 <div className={styles.Heart_right_group}>
                   <p>
                     A unique NFT collection designed by Elkay to raise awareness surrounding mens mental health in the Crypto and NFT space.
