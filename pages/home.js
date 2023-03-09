@@ -87,9 +87,6 @@ const Home = () => {
                   <p className={styles.Banner_left_bottom_context}>
                     CroDraw is the first truly randomised lottery system built on the Cronos blockchain powered by Witnet Oracle.{' '}
                   </p>
-                  <p className={styles.Banner_left_bottom_findout}>
-                    Find out more &gt;
-                  </p>
                 </div>
               </div>
             </div>
