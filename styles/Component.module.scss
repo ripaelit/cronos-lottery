@@ -1,0 +1,385 @@
+/* Header Section Start */
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans:wght@900&display=swap');
+
+.HeaderControl {
+  width: 100%;
+  padding: 32px 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.showMobile {
+  display: none;
+}
+
+.hideMobile {
+  display: block;
+}
+
+.mobileLogo {
+  width: 65px !important;
+  height: 65px !important;
+  margin-left: 20px !important;
+}
+
+.HeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 160px;
+}
+
+.Logo {
+  width: 198px;
+  margin-left: 82px;
+}
+
+.Logo img {
+  width: 100%;
+}
+
+.flexGrow {
+  flex-grow: 1;
+}
+
+.HeaderMenu {
+  display: flex;
+  align-items: center;
+  gap: 111px;
+}
+
+.menuActive {
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #009cdc !important;
+  font-size: 20px !important;
+  line-height: 20px !important;
+  cursor: pointer !important;
+  font-weight: bold !important;
+  font-style: normal !important;
+}
+
+.menuPassive {
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #707070 !important;
+  font-size: 20px !important;
+  line-height: 20px !important;
+  cursor: pointer !important;
+  font-weight: bold !important;
+  font-style: normal !important;
+}
+
+.walletButtonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  border: 3px solid #009fe2;
+  background: white;
+  border-radius: 50px;
+  padding-left: 40px;
+}
+
+.boughtText {
+  color: #009fe2;
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 900 !important;
+  padding: 0px 20px 0px 10px;
+}
+
+.WalletButton {
+  background: #009cdc;
+  padding: 24px;
+  border-radius: 50px;
+  color: white;
+  font-size: 24px;
+  line-height: 24px;
+  border: none;
+  font-weight: bold !important;
+}
+
+.WalletClickButton {
+  background: #009cdc;
+  padding: 24px;
+  border-radius: 50px;
+  color: white;
+  font-size: 24px;
+  line-height: 24px;
+  border: none;
+  font-weight: bold !important;
+}
+
+.MobileMenuContent {
+  display: flex !important;
+  flex-direction: column;
+  gap: 22px;
+  padding: 30px;
+  text-align: center;
+}
+
+.MobileMenuContent img {
+  width: 120px;
+  margin: 0 auto
+}
+
+.flexRow {
+  display: flex;
+  flex-direction: row;
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.gap20 {
+  gap: 20px;
+}
+
+@media(max-width:1660px) {
+  .HeaderLeft {
+    gap: 80px
+  }
+
+  .HeaderMenu {
+    gap: 55px
+  }
+
+  .Logo {
+    width: 120px;
+  }
+}
+
+@media(max-width:768px) {
+  .HeaderControl {
+    /* justify-content: unset; */
+    gap: 24px
+  }
+
+  .HeaderMenu {
+    display: none;
+  }
+
+  .WalletButton {
+    padding: 14px;
+  }
+
+  .WalletClickButton {
+    padding: 14px;
+    position: absolute;
+    top: 60px;
+    left: calc(50vw - 48px) !important;
+  }
+
+  .Logo {
+    margin-left: 0;
+  }
+
+  .walletButtonContainer {
+    position: absolute;
+    top: 45px;
+    left: calc(50vw - 88px) !important;
+  }
+
+  .MobileWalletButton {
+    display: block;
+    background: #009cdc;
+    padding: 12px;
+    border-radius: 50px;
+    color: white;
+    font-size: 24px;
+    border: none;
+    margin: 0 auto;
+  }
+}
+
+/* Header Section End */
+
+
+/*Footer Section Start */
+.Footer {
+  margin-top: 56px;
+  background: #325e6f;
+  padding: 0 0px 40px 0px;
+  border-radius: 50px 50px 0px 0px;
+}
+
+.Footer_container {
+  width: 1464px;
+  margin: 0 auto
+}
+
+.Footer_control {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 50px;
+  padding: 50px 30px;
+  align-items: center;
+}
+
+.Footer_control img {
+  width: 70%;
+}
+
+.Footer_text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 18px;
+}
+
+.Footer_text a {
+  text-decoration: underline;
+}
+
+.oracle {
+  text-decoration: underline;
+}
+
+.Footer_item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-grow: 1 !important;
+}
+
+.Footer_main_text {
+  font-size: 30px;
+  color: white;
+  font-weight: 400;
+  line-height: 30px;
+}
+
+.Footer_subMain_text {
+  font-size: 15px;
+  color: white;
+  font-weight: 400;
+  line-height: 15px;
+}
+
+.Footer_last_text {
+  font-size: 30px;
+  color: white;
+  font-weight: bold !important;
+  text-align: center;
+}
+
+@media(max-width:1660px) {
+  .Footer_container {
+    width: 90%;
+  }
+}
+
+@media(max-width:1200px) {
+  .Footer_container {
+    .Footer_text {
+      font-size: 20px !important;
+    }
+  }
+
+  .walletButtonContainer {
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    padding: 0px 0px 4px 0px !important;
+    border-radius: 10px !important;
+    gap: 4px !important;
+  }
+
+  .WalletButton {
+    width: calc(100% + 6px) !important;
+    font-size: 12px !important;
+    line-height: 12px !important;
+    padding: 6px 22px !important;
+    margin-top: -12px !important;
+  }
+
+  .WalletClickButton {
+    font-size: 12px !important;
+    line-height: 12px !important;
+    padding: 11px 22px !important;
+    margin-top: -12px !important;
+  }
+
+  .boughtText {
+    padding: 0px 40px !important;
+    font-size: 12px !important;
+  }
+
+}
+
+@media(max-width:1024px) {
+  .Footer {
+    padding: 30px 0px 60px 0px
+  }
+
+  .Footer_control {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .Footer_control a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .Footer_item {
+    width: 100%;
+  }
+
+  .Footer_last_text {
+    position: relative;
+    transform: unset;
+    left: 0;
+    top: 0;
+  }
+}
+
+@media(max-width:770px) {
+  .Footer_container {
+    .Footer_text {
+      font-size: 10px !important;
+    }
+  }
+}
+
+@media(max-width:540px) {
+  .MobileWalletButton {
+    font-size: 18px;
+  }
+
+  .Footer {
+    padding: 24px 0px 30px 0px;
+    border-radius: 0px !important;
+    margin-top: 0px !important;
+  }
+
+  .Footer_control {
+    flex-direction: column !important;
+  }
+
+  .Footer_main_text {
+    font-size: 24px;
+  }
+
+  .Footer_last_text {
+    font-size: 30px;
+    color: white;
+    font-weight: bold !important;
+    text-align: right;
+  }
+
+  .showMobile {
+    display: block !important;
+  }
+
+  .hideMobile {
+    display: none !important;
+  }
+}
+
+/*Footer Section End */

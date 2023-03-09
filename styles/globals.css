@@ -1,0 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=Coiny&family=Open+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans:wght@400;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-family: "Encode Sans";
+}
+
+* {
+  font-family: "Encode Sans" !important;
+  font-weight: 400 !important;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-family);
+  background: var(--clr-background);
+}
+
+.page-container {
+  width: 1660px;
+  margin: 0 auto;
+}
+
+@media(max-width:1660px) {
+  .page-container {
+    max-width: 1320px;
+    width: 100%;
+  }
+}
+
+@media(max-width:1400px) {
+  .page-container {
+    max-width: 1140px;
+    width: 100%;
+  }
+}
+
+@media(max-width:1200px) {
+  .page-container {
+    max-width: 960px;
+    width: 100%;
+  }
+}
+
+@media(max-width:768px) {
+  .page-container {
+    max-width: 540px;
+    width: 100%;
+  }
+}
+
+@media(max-width:576px) {
+  .page-container {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+
+
+.bm-burger-button {
+  display: none;
+  color: #49B7E5 !important;
+}
+
+@media(max-width:768px) {
+  .bm-burger-button {
+    display: block;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    right: 28px;
+    top: 50px;
+    color: #49B7E5 !important;
+  }
+
+  /* Color/shape of burger icon bars */
+  .bm-burger-bars {
+    background: #49B7E5;
+    color: #49B7E5 !important;
+  }
+
+  /* Color/shape of burger icon bars on hover*/
+  .bm-burger-bars-hover {
+    background: #1f495a;
+    color: #49B7E5 !important;
+  }
+
+  /* Position and sizing of clickable cross button */
+  .bm-cross-button {
+    height: 24px;
+    width: 24px;
+    right: 24px !important
+  }
+
+  /* Color/shape of close button cross */
+  .bm-cross {
+    background: #009cdc;
+    width: 6px !important;
+    height: 30px !important;
+  }
+
+  /*
+    Sidebar wrapper styles
+    Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+    */
+  .bm-menu-wrap {
+    position: fixed;
+    height: 100%;
+    width: 360px !important;
+  }
+
+  /* General sidebar styles */
+  .bm-menu {
+    background: white;
+    font-size: 1.15em;
+  }
+
+  /* Morph shape necessary with bubble or elastic */
+  .bm-morph-shape {
+    fill: #252525;
+    ;
+  }
+
+  /* Wrapper for item list */
+  .bm-item-list {
+    color: #b8b7ad;
+    padding: 0.8em;
+  }
+
+  /* Individual item */
+  .bm-item {
+    display: inline-block;
+  }
+
+  /* Styling of overlay */
+  .bm-overlay {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Slider Component Start */
+
+.customSlider {
+  max-width: 300px;
+  margin: auto;
+}
+
+.customSlider-track {
+  top: 8px;
+  height: 4px;
+  background: #ddd;
+}
+
+.customSlider-track.customSlider-track-0 {
+  background: rgb(104, 117, 217);
+}
+
+.customSlider-thumb {
+  cursor: pointer;
+  background: rgb(104, 117, 217);
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  outline: none;
+}
+
+.customSlider-thumb:hover {
+  box-shadow: 0 0 0 8px rgb(104, 117, 217, 0.2);
+  ;
+}
+
+.customSlider-mark {
+  cursor: pointer;
+  top: 6px;
+  width: 1.5px;
+  height: 8px;
+  background-color: #aaaaaa;
+}
+
+/* Slider Component End */
+
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  overflow: hidden;
+  background: black;
+  opacity: 0.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  color: white;
+}
+
+#preloader:before {
+  content: "";
+  position: fixed;
+  top: calc(50% - 30px);
+  left: calc(50% - 30px);
+  border: 6px solid #73469B;
+  border-top-color: #e2eefd;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: animate-preloader 1s linear infinite;
+  animation: animate-preloader 1s linear infinite;
+}
+
+@-webkit-keyframes animate-preloader {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes animate-preloader {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

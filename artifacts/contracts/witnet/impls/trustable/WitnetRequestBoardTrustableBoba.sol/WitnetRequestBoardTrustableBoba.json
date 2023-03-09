@@ -1,0 +1,2558 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "WitnetRequestBoardTrustableBoba",
+  "sourceName": "contracts/witnet/impls/trustable/WitnetRequestBoardTrustableBoba.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "_upgradable",
+          "type": "bool"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_versionTag",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_layer2ReportResultGasLimit",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_layer2GasPrice",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_oETH",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "queryId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "reason",
+          "type": "string"
+        }
+      ],
+      "name": "BatchReportError",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "queryId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        }
+      ],
+      "name": "DeletedQuery",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "queryId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        }
+      ],
+      "name": "PostedRequest",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "queryId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        }
+      ],
+      "name": "PostedResult",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Received",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address[]",
+          "name": "reporters",
+          "type": "address[]"
+        }
+      ],
+      "name": "ReportersSet",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address[]",
+          "name": "reporters",
+          "type": "address[]"
+        }
+      ],
+      "name": "ReportersUnset",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "baseAddr",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "baseCodehash",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "versionTag",
+          "type": "bytes32"
+        }
+      ],
+      "name": "Upgraded",
+      "type": "event"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "fallback"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "asBool",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "asBytes",
+      "outputs": [
+        {
+          "internalType": "bytes",
+          "name": "",
+          "type": "bytes"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "asBytes32",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "asErrorCode",
+      "outputs": [
+        {
+          "internalType": "enum Witnet.ErrorCodes",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "asErrorMessage",
+      "outputs": [
+        {
+          "internalType": "enum Witnet.ErrorCodes",
+          "name": "",
+          "type": "uint8"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "asFixed16",
+      "outputs": [
+        {
+          "internalType": "int32",
+          "name": "",
+          "type": "int32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "asFixed16Array",
+      "outputs": [
+        {
+          "internalType": "int32[]",
+          "name": "",
+          "type": "int32[]"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "asInt128",
+      "outputs": [
+        {
+          "internalType": "int128",
+          "name": "",
+          "type": "int128"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "asInt128Array",
+      "outputs": [
+        {
+          "internalType": "int128[]",
+          "name": "",
+          "type": "int128[]"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "asRawError",
+      "outputs": [
+        {
+          "internalType": "uint64[]",
+          "name": "",
+          "type": "uint64[]"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "asString",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "asStringArray",
+      "outputs": [
+        {
+          "internalType": "string[]",
+          "name": "",
+          "type": "string[]"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "asUint64",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "asUint64Array",
+      "outputs": [
+        {
+          "internalType": "uint64[]",
+          "name": "",
+          "type": "uint64[]"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "base",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "codehash",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_codehash",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "currency",
+      "outputs": [
+        {
+          "internalType": "contract IERC20",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        }
+      ],
+      "name": "deleteQuery",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "reporter",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "timestamp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "drTxHash",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bytes",
+              "name": "cborBytes",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct Witnet.Response",
+          "name": "_response",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "estimateReward",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getNextQueryId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getQueryData",
+      "outputs": [
+        {
+          "components": [
+            {
+              "components": [
+                {
+                  "internalType": "contract IWitnetRequest",
+                  "name": "addr",
+                  "type": "address"
+                },
+                {
+                  "internalType": "address",
+                  "name": "requester",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bytes32",
+                  "name": "hash",
+                  "type": "bytes32"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "gasprice",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "reward",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct Witnet.Request",
+              "name": "request",
+              "type": "tuple"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "reporter",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "timestamp",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "bytes32",
+                  "name": "drTxHash",
+                  "type": "bytes32"
+                },
+                {
+                  "internalType": "bytes",
+                  "name": "cborBytes",
+                  "type": "bytes"
+                }
+              ],
+              "internalType": "struct Witnet.Response",
+              "name": "response",
+              "type": "tuple"
+            },
+            {
+              "internalType": "address",
+              "name": "from",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct Witnet.Query",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getQueryStatus",
+      "outputs": [
+        {
+          "internalType": "enum Witnet.QueryStatus",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes",
+          "name": "_initData",
+          "type": "bytes"
+        }
+      ],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "isError",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "_result",
+          "type": "tuple"
+        }
+      ],
+      "name": "isOk",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_reporter",
+          "type": "address"
+        }
+      ],
+      "name": "isReporter",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "isUpgradable",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_from",
+          "type": "address"
+        }
+      ],
+      "name": "isUpgradableFrom",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "contract IWitnetRequest",
+          "name": "_request",
+          "type": "address"
+        }
+      ],
+      "name": "postRequest",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "proxiableUUID",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        }
+      ],
+      "name": "readRequest",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "contract IWitnetRequest",
+              "name": "addr",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "requester",
+              "type": "address"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "hash",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "uint256",
+              "name": "gasprice",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "reward",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct Witnet.Request",
+          "name": "_request",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        }
+      ],
+      "name": "readRequestBytecode",
+      "outputs": [
+        {
+          "internalType": "bytes",
+          "name": "_bytecode",
+          "type": "bytes"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        }
+      ],
+      "name": "readRequestGasPrice",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        }
+      ],
+      "name": "readRequestReward",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        }
+      ],
+      "name": "readResponse",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "reporter",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "timestamp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "drTxHash",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bytes",
+              "name": "cborBytes",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct Witnet.Response",
+          "name": "_response",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        }
+      ],
+      "name": "readResponseDrTxHash",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        }
+      ],
+      "name": "readResponseReporter",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        }
+      ],
+      "name": "readResponseResult",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        }
+      ],
+      "name": "readResponseTimestamp",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_drTxHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_cborBytes",
+          "type": "bytes"
+        }
+      ],
+      "name": "reportResult",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_timestamp",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_drTxHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_cborBytes",
+          "type": "bytes"
+        }
+      ],
+      "name": "reportResult",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "queryId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "timestamp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "drTxHash",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bytes",
+              "name": "cborBytes",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct IWitnetRequestBoardReporter.BatchResult[]",
+          "name": "_batchResults",
+          "type": "tuple[]"
+        },
+        {
+          "internalType": "bool",
+          "name": "_verbose",
+          "type": "bool"
+        }
+      ],
+      "name": "reportResultBatch",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes",
+          "name": "_cborBytes",
+          "type": "bytes"
+        }
+      ],
+      "name": "resultFromCborBytes",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "components": [
+                {
+                  "internalType": "bytes",
+                  "name": "data",
+                  "type": "bytes"
+                },
+                {
+                  "internalType": "uint32",
+                  "name": "cursor",
+                  "type": "uint32"
+                }
+              ],
+              "internalType": "struct Witnet.Buffer",
+              "name": "buffer",
+              "type": "tuple"
+            },
+            {
+              "internalType": "uint8",
+              "name": "initialByte",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "majorType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "additionalInformation",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint64",
+              "name": "len",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint64",
+              "name": "tag",
+              "type": "uint64"
+            }
+          ],
+          "internalType": "struct Witnet.CBOR",
+          "name": "_cborValue",
+          "type": "tuple"
+        }
+      ],
+      "name": "resultFromCborValue",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "success",
+              "type": "bool"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bytes",
+                      "name": "data",
+                      "type": "bytes"
+                    },
+                    {
+                      "internalType": "uint32",
+                      "name": "cursor",
+                      "type": "uint32"
+                    }
+                  ],
+                  "internalType": "struct Witnet.Buffer",
+                  "name": "buffer",
+                  "type": "tuple"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "initialByte",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "majorType",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "additionalInformation",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "len",
+                  "type": "uint64"
+                },
+                {
+                  "internalType": "uint64",
+                  "name": "tag",
+                  "type": "uint64"
+                }
+              ],
+              "internalType": "struct Witnet.CBOR",
+              "name": "value",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct Witnet.Result",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "_reporters",
+          "type": "address[]"
+        }
+      ],
+      "name": "setReporters",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "_exReporters",
+          "type": "address[]"
+        }
+      ],
+      "name": "unsetReporters",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queryId",
+          "type": "uint256"
+        }
+      ],
+      "name": "upgradeReward",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "version",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
+  ],
+  "bytecode": "0x6101606040523480156200001257600080fd5b5060405162004c3538038062004c35833981016040819052620000359162000140565b6001600160a01b03811660808190527ff595240b351bc8f951c2f53b26f4e78c32cb62122cf76c19b7fdda7d4968e18480546001600160a01b0319163390811790915560009081527fa6db7263983f337bae2c9fb315730227961d1c1153ae1e10a56b5791465dd6fd60205260409020805460ff191660011790553060a08190523f60c05285151560e0526101008590526200012e5760405162461bcd60e51b815260206004820152602e60248201527f5769746e657452657175657374426f617264547275737461626c65426f62613a60448201526d206e756c6c2063757272656e637960901b606482015260840160405180910390fd5b50610120526101405250620001ac9050565b600080600080600060a086880312156200015957600080fd5b855180151581146200016a57600080fd5b60208701516040880151606089015160808a0151939850919650945092506001600160a01b03811681146200019e57600080fd5b809150509295509295909350565b60805160a05160c05160e0516101005161012051610140516149e86200024d600039600061263a01526000818161265b01528181612eb60152612f990152600081816106e101526113f30152600081816106ae015261176a0152600081816108a30152611386015260008181610634015281816112ab0152818161133f01526113a7015260008181610aee01528181612dd20152612f4101526149e86000f3fe6080604052600436106102cd5760003560e01c80637c1fbda311610175578063c805dd0f116100dc578063d4da69ac11610095578063dc3c71cd1161006f578063dc3c71cd14610abc578063e5a6b10f14610adc578063e99e47f314610b10578063f2fde38b14610b3057610331565b8063d4da69ac14610a41578063d74803be14610a61578063db04f16d14610a8f57610331565b8063c805dd0f1461097f578063c87d969e14610994578063c8f5cdd5146109c1578063cf62d115146109e1578063d2e8756114610a01578063d4ced13214610a2157610331565b8063a9e954b91161012e578063a9e954b914610894578063b0768328146108c7578063b281a7bd146108e7578063bc7e25ff146108fa578063c2485ebd14610932578063c683b4651461095f57610331565b80637c1fbda3146107d257806381a398b5146107f25780638da5cb5b1461081257806399f65804146108275780639d96fced14610854578063a8604c1a1461087457610331565b8063439fab911161023457806354fd4d50116101ed5780636b58960a116101c75780636b58960a146107385780636f07abcc14610758578063754e5bea146107855780637780cde1146107b257610331565b806354fd4d50146106d25780636280bce81461070557806366bfdc751461072557610331565b8063439fab91146105b85780634c9f72e3146105d85780634dcffaf3146105f85780635001f3b51461062557806352d1902d1461066c5780635479d9401461069f57610331565b80632241f2db116102865780632241f2db146104c35780632565082b146104f657806328a78d9b146105235780632b905fbb146105455780633ae97295146105785780633b885f2a1461059857610331565b8063044ad7be1461039357806307e66852146103ee5780630f572d2c1461041b578063109a0e3c146104485780631dd27daf1461047557806320f9241e146104a357610331565b366103315760405162461bcd60e51b815260206004820152602960248201527f5769746e657452657175657374426f6172643a206e6f207472616e7366657273604482015268081858d8d95c1d195960ba1b60648201526084015b60405180910390fd5b60405162461bcd60e51b815260206004820152603160248201527f5769746e657452657175657374426f61726455706772616461626c65426173656044820152700e881b9bdd081a5b5c1b195b595b9d1959607a1b6064820152608401610328565b34801561039f57600080fd5b506103d96103ae3660046132cc565b6001600160a01b03166000908152600080516020614964833981519152602052604090205460ff1690565b60405190151581526020015b60405180910390f35b3480156103fa57600080fd5b5061040e610409366004613564565b610b50565b6040516103e591906135e7565b34801561042757600080fd5b5061043b610436366004613564565b610bd5565b6040516103e5919061362e565b34801561045457600080fd5b50610468610463366004613564565b610c54565b6040516103e591906136b9565b34801561048157600080fd5b506104956104903660046136cc565b610cd3565b6040519081526020016103e5565b3480156104af57600080fd5b506104956104be3660046136cc565b610d3f565b3480156104cf57600080fd5b506104e36104de366004613564565b610d9d565b60405160039190910b81526020016103e5565b34801561050257600080fd5b506105166105113660046136e5565b610e18565b6040516103e59190613721565b34801561052f57600080fd5b5061054361053e3660046137f4565b610e9c565b005b34801561055157600080fd5b50610565610560366004613564565b610f88565b604051600f9190910b81526020016103e5565b34801561058457600080fd5b506104956105933660046136cc565b611003565b3480156105a457600080fd5b506104686105b33660046136cc565b611070565b3480156105c457600080fd5b506105436105d3366004613898565b6111e7565b3480156105e457600080fd5b506105436105f33660046137f4565b61143e565b34801561060457600080fd5b50610618610613366004613564565b61151f565b6040516103e591906138cc565b34801561063157600080fd5b507f00000000000000000000000000000000000000000000000000000000000000005b6040516001600160a01b0390911681526020016103e5565b34801561067857600080fd5b507f9969c6aff411c5e5f0807500693e8f819ce88529615cfa6cab569b24788a1018610495565b3480156106ab57600080fd5b507f00000000000000000000000000000000000000000000000000000000000000006103d9565b3480156106de57600080fd5b507f0000000000000000000000000000000000000000000000000000000000000000610495565b34801561071157600080fd5b50610543610720366004613955565b61159e565b6105436107333660046136cc565b6116ed565b34801561074457600080fd5b506103d96107533660046132cc565b61174e565b34801561076457600080fd5b506107786107733660046136cc565b6117ad565b6040516103e591906139bd565b34801561079157600080fd5b506107a56107a03660046136cc565b6117b8565b6040516103e59190613a12565b3480156107be57600080fd5b506103d96107cd366004613564565b6118fb565b3480156107de57600080fd5b506107a56107ed3660046136cc565b611976565b3480156107fe57600080fd5b5061054361080d366004613a25565b611bf1565b34801561081e57600080fd5b50610654611ee3565b34801561083357600080fd5b506108476108423660046136cc565b611eff565b6040516103e59190613b7e565b34801561086057600080fd5b5061065461086f3660046136cc565b612001565b34801561088057600080fd5b506103d961088f366004613564565b612065565b3480156108a057600080fd5b507f0000000000000000000000000000000000000000000000000000000000000000610495565b3480156108d357600080fd5b506106186108e2366004613564565b61209f565b6104956108f53660046132cc565b6120d9565b34801561090657600080fd5b5061091a610915366004613564565b6120f7565b6040516001600160401b0390911681526020016103e5565b34801561093e57600080fd5b5061095261094d3660046136cc565b612172565b6040516103e59190613b8c565b34801561096b57600080fd5b5061046861097a366004613564565b61232c565b34801561098b57600080fd5b50610495612366565b3480156109a057600080fd5b506109b46109af366004613564565b612384565b6040516103e59190613bdb565b3480156109cd57600080fd5b506105436109dc366004613c3d565b612403565b3480156109ed57600080fd5b506104956109fc366004613564565b6125b8565b348015610a0d57600080fd5b50610495610a1c3660046136cc565b612633565b348015610a2d57600080fd5b506103d9610a3c366004613564565b61267f565b348015610a4d57600080fd5b50610516610a5c3660046136cc565b6126b9565b348015610a6d57600080fd5b50610a81610a7c366004613564565b61279e565b6040516103e5929190613cb2565b348015610a9b57600080fd5b50610aaf610aaa366004613564565b6128b0565b6040516103e59190613cd2565b348015610ac857600080fd5b50610495610ad73660046136cc565b61292b565b348015610ae857600080fd5b506106547f000000000000000000000000000000000000000000000000000000000000000081565b348015610b1c57600080fd5b50610516610b2b366004613898565b612989565b348015610b3c57600080fd5b50610543610b4b3660046132cc565b6129c8565b60405163fc853c3760e01b815260609073__$ea6a162dd0cd18b69b81164309824ac93c$__9063fc853c3790610b8a908590600401613d67565b600060405180830381865af4158015610ba7573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604052610bcf9190810190613da0565b92915050565b6040516308efc09760e01b815260609073__$ea6a162dd0cd18b69b81164309824ac93c$__906308efc09790610c0f908590600401613d67565b600060405180830381865af4158015610c2c573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604052610bcf9190810190613e49565b60405163f417daf560e01b815260609073__$ea6a162dd0cd18b69b81164309824ac93c$__9063f417daf590610c8e908590600401613d67565b600060405180830381865af4158015610cab573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604052610bcf9190810190613f2f565b600081600180610ce283612a78565b6003811115610cf357610cf36139a7565b14610cfd82612afa565b90610d1b5760405162461bcd60e51b815260040161032891906136b9565b50610d24612bdd565b60009485526003016020525050604090912060040154919050565b600081600280610d4e83612a78565b6003811115610d5f57610d5f6139a7565b14610d6982612afa565b90610d875760405162461bcd60e51b815260040161032891906136b9565b50610d9184612c01565b60010154949350505050565b604051636c4346db60e11b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__9063d8868db690610dd7908590600401613d67565b602060405180830381865af4158015610df4573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610bcf9190613f63565b610e2061320e565b60405163098141f760e11b815273__$ea6a162dd0cd18b69b81164309824ac93c$__9063130283ee90610e57908590600401613f7e565b600060405180830381865af4158015610e74573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604052610bcf9190810190613fa7565b610ea4612bdd565b600101546001600160a01b03163314610ecf5760405162461bcd60e51b8152600401610328906140f4565b60005b8151811015610f4d576000828281518110610eef57610eef61412b565b602002602001015190506000610f1060008051602061496483398151915290565b6001600160a01b039290921660009081526020929092526040909120805460ff191691151591909117905580610f4581614157565b915050610ed2565b507f646436560d9757cb3c0f01da0f62642c6040b00c9a80685f94ef1a7725cad5f181604051610f7d9190614170565b60405180910390a150565b60405163c71db52160e01b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__9063c71db52190610fc2908590600401613d67565b602060405180830381865af4158015610fdf573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610bcf91906141b1565b60008160018061101283612a78565b6003811115611023576110236139a7565b1461102d82612afa565b9061104b5760405162461bcd60e51b815260040161032891906136b9565b50611054612bdd565b6000858152600391820160205260409020015492505050919050565b6060600061107d83612a78565b600381111561108e5761108e6139a7565b036110e15760405162461bcd60e51b815260206004820152602f602482015260008051602061494483398151915260448201526e081b9bdd081e595d081c1bdcdd1959608a1b6064820152608401610328565b60006110ec83612c21565b80549091506001600160a01b0316156111e15780546040805163784a000160e11b815290516001600160a01b039092169163f0940002916004808201926000929091908290030181865afa158015611148573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f191682016040526111709190810190613f2f565b9150806002015461118083612c3e565b146111e15760405162461bcd60e51b815260206004820152603f602482015260008051602061494483398151915260448201527f2062797465636f6465206368616e67656420616674657220706f7374696e67006064820152608401610328565b50919050565b60006111f1612bdd565b600101546001600160a01b031690508061123657503380611210612bdd565b60010180546001600160a01b0319166001600160a01b0392909216919091179055611290565b336001600160a01b038216146112905760405162461bcd60e51b815260206004820152602b602482015260008051602061494483398151915260448201526a1037b7363c9037bbb732b960a91b6064820152608401610328565b600061129a612bdd565b546001600160a01b03161461133d577f00000000000000000000000000000000000000000000000000000000000000006001600160a01b03166112db612bdd565b546001600160a01b03160361133d5760405162461bcd60e51b8152602060048201526034602482015260008051602061494483398151915260448201527308185b1c9958591e481a5b9a5d1a585b1a5e995960621b6064820152608401610328565b7f0000000000000000000000000000000000000000000000000000000000000000611366612bdd565b80546001600160a01b0319166001600160a01b03929092169190911790557f00000000000000000000000000000000000000000000000000000000000000007f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316337f72d4b00d8e35b3717e384aef5f900256a106d6a423d88935a11579981333ba207f000000000000000000000000000000000000000000000000000000000000000060405190815260200160405180910390a461143a828060200190518101906105f391906141cc565b5050565b611446612bdd565b600101546001600160a01b031633146114715760405162461bcd60e51b8152600401610328906140f4565b60005b81518110156114ef5760008282815181106114915761149161412b565b6020026020010151905060016114b260008051602061496483398151915290565b6001600160a01b039290921660009081526020929092526040909120805460ff1916911515919091179055806114e781614157565b915050611474565b507f4d570ee36dec878006609360d34ac8d6a0b68d521871ae15a407b6340877ca0181604051610f7d9190614170565b60405163147e5c8f60e01b815260609073__$ea6a162dd0cd18b69b81164309824ac93c$__9063147e5c8f90611559908590600401613d67565b600060405180830381865af4158015611576573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604052610bcf9190810190614265565b336000908152600080516020614964833981519152602052604090205460ff166115da5760405162461bcd60e51b8152600401610328906142fe565b836001806115e783612a78565b60038111156115f8576115f86139a7565b1461160282612afa565b906116205760405162461bcd60e51b815260040161032891906136b9565b5060008590036116425760405162461bcd60e51b815260040161032890614348565b60008390036116635760405162461bcd60e51b8152600401610328906143b0565b6116ae336116a988428989898080601f016020809104026020016040519081016040528093929190818152602001838380828437600092019190915250612c9092505050565b612d26565b604080518781523360208201527ee9413c6321ec446a267b7ebf5bb108663f2ef58b35c4f6e18905ac8f205cb2910160405180910390a1505050505050565b806001806116fa83612a78565b600381111561170b5761170b6139a7565b1461171582612afa565b906117335760405162461bcd60e51b815260040161032891906136b9565b5061173d83612e3f565b505061174830612f1f565b60005550565b600080611759612bdd565b600101546001600160a01b031690507f000000000000000000000000000000000000000000000000000000000000000080156117a65750826001600160a01b0316816001600160a01b0316145b9392505050565b6000610bcf82612a78565b6040805160808101825260008082526020820181905291810191909152606080820152816002806117e883612a78565b60038111156117f9576117f96139a7565b1461180382612afa565b906118215760405162461bcd60e51b815260040161032891906136b9565b5061182b84612c01565b6040805160808101825282546001600160a01b03168152600183015460208201526002830154918101919091526003820180549192916060840191906118709061440d565b80601f016020809104026020016040519081016040528092919081815260200182805461189c9061440d565b80156118e95780601f106118be576101008083540402835291602001916118e9565b820191906000526020600020905b8154815290600101906020018083116118cc57829003601f168201915b50505050508152505092505050919050565b6040516350ea2eab60e11b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__9063a1d45d5690611935908590600401613d67565b602060405180830381865af4158015611952573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610bcf9190614441565b6040805160808101825260008082526020820181905291810191909152606080820152816002806119a683612a78565b60038111156119b7576119b76139a7565b146119c182612afa565b906119df5760405162461bcd60e51b815260040161032891906136b9565b5060006119ea612bdd565b60008681526003919091016020526040902060098101549091506001600160a01b03163314611a615760405162461bcd60e51b815260206004820152602f602482015260008051602061494483398151915260448201526e1037b7363c903932b8bab2b9ba32b960891b6064820152608401610328565b604080516080810182526005830180546001600160a01b0316825260068401546020830152600784015492820192909252600883018054919291606084019190611aaa9061440d565b80601f0160208091040260200160405190810160405280929190818152602001828054611ad69061440d565b8015611b235780601f10611af857610100808354040283529160200191611b23565b820191906000526020600020905b815481529060010190602001808311611b0657829003601f168201915b5050505050815250509350611b36612bdd565b600086815260039182016020526040812080546001600160a01b03199081168255600182018054821690556002820183905592810182905560048101829055600581018054909316835560068101829055600781018290559181611b9d6008850182613261565b50505060090180546001600160a01b0319169055604080518681523360208201527fdec847db058c9c012e0f3dbe2b99e05cfa4c693f61a7d8bc64652a68913cbfff910160405180910390a1505050919050565b336000908152600080516020614964833981519152602052604090205460ff16611c2d5760405162461bcd60e51b8152600401610328906142fe565b8151600090815b81811015611ecc576000858281518110611c5057611c5061412b565b6020026020010151905060016003811115611c6d57611c6d6139a7565b8151611c7890612a78565b6003811115611c8957611c896139a7565b14611cf5578415611cf05780516040805191825260208201819052602c9082015260008051602061494483398151915260608201526b08189859081c5d595c9e525960a21b60808201526000805160206148d88339815191529060a0015b60405180910390a15b611eb9565b6040810151600003611d5f578415611cf05780516040805191825260208201819052602d9082015260008051602061494483398151915260608201526c040c4c2c840c8e4a8f090c2e6d609b1b60808201526000805160206148d88339815191529060a001611ce7565b806060015151600003611dcb578415611cf05780516040805191825260208201819052602e9082015260008051602061494483398151915260608201526d206261642063626f72427974657360901b60808201526000805160206148d88339815191529060a001611ce7565b60008160200151118015611de25750428160200151115b15611e46578415611cf05780516040805191825260208201819052602e9082015260008051602061494483398151915260608201526d0206261642074696d657374616d760941b60808201526000805160206148d88339815191529060a001611ce7565b80516020820151611e72919015611e61578260200151611e63565b425b83604001518460600151612c90565b611e7c908561445e565b8151604080519182523360208301529195507ee9413c6321ec446a267b7ebf5bb108663f2ef58b35c4f6e18905ac8f205cb2910160405180910390a15b5080611ec481614157565b915050611c34565b508115611edd57611edd3383612d26565b50505050565b6000611eed612bdd565b600101546001600160a01b0316919050565b6040805160a08101825260008082526020820181905291810182905260608101829052608081019190915281600180611f3783612a78565b6003811115611f4857611f486139a7565b14611f5282612afa565b90611f705760405162461bcd60e51b815260040161032891906136b9565b506000611f7b612bdd565b600086815260039182016020908152604091829020825160a08101845281546001600160a01b03908116825260018301548116938201939093526002820154938101939093529283015460608301526004830154608083015260098301549196509192501615611ff95760098101546001600160a01b031660208501525b505050919050565b60008160028061201083612a78565b6003811115612021576120216139a7565b1461202b82612afa565b906120495760405162461bcd60e51b815260040161032891906136b9565b5061205384612c01565b546001600160a01b0316949350505050565b604051636646c11960e01b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__90636646c11990611935908590600401613d67565b604051630879730d60e01b815260609073__$ea6a162dd0cd18b69b81164309824ac93c$__90630879730d90611559908590600401613d67565b60006120e482612f8a565b90506120ef30612f1f565b600055919050565b604051638233f9b360e01b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__90638233f9b390612131908590600401613d67565b602060405180830381865af415801561214e573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610bcf9190614471565b6121dc6040805161010081019091526000606082018181526080830182905260a0830182905260c0830182905260e0830191909152819081526040805160808101825260008082526020828101829052928201526060808201529101908152600060209091015290565b6121e4612bdd565b60008381526003918201602090815260409182902082516101008101845281546001600160a01b03908116606080840191825260018501548316608080860191909152600286015460a08601529785015460c0850152600485015460e0850152908352855196870186526005840180549092168752600684015487860152600784015495870195909552600883018054929693959487019491929184019161228b9061440d565b80601f01602080910402602001604051908101604052809291908181526020018280546122b79061440d565b80156123045780601f106122d957610100808354040283529160200191612304565b820191906000526020600020905b8154815290600101906020018083116122e757829003601f168201915b505050919092525050508152600991909101546001600160a01b031660209091015292915050565b60405163a1b9089160e01b815260609073__$ea6a162dd0cd18b69b81164309824ac93c$__9063a1b9089190610c8e908590600401613d67565b6000612370612bdd565b6002015461237f90600161445e565b905090565b6040516316935cf160e11b815260609073__$ea6a162dd0cd18b69b81164309824ac93c$__90632d26b9e2906123be908590600401613d67565b600060405180830381865af41580156123db573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604052610bcf919081019061448e565b336000908152600080516020614964833981519152602052604090205460ff1661243f5760405162461bcd60e51b8152600401610328906142fe565b8460018061244c83612a78565b600381111561245d5761245d6139a7565b1461246782612afa565b906124855760405162461bcd60e51b815260040161032891906136b9565b50428611156124f05760405162461bcd60e51b815260206004820152603160248201527f5769746e657452657175657374426f617264547275737461626c65446566617560448201527006c743a206261642074696d657374616d7607c1b6064820152608401610328565b60008590036125115760405162461bcd60e51b815260040161032890614348565b60008390036125325760405162461bcd60e51b8152600401610328906143b0565b612578336116a989898989898080601f016020809104026020016040519081016040528093929190818152602001838380828437600092019190915250612c9092505050565b604080518881523360208201527ee9413c6321ec446a267b7ebf5bb108663f2ef58b35c4f6e18905ac8f205cb2910160405180910390a150505050505050565b60405163a2e8765560e01b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__9063a2e87655906125f2908590600401613d67565b602060405180830381865af415801561260f573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610bcf9190614549565b6000610bcf7f00000000000000000000000000000000000000000000000000000000000000007f0000000000000000000000000000000000000000000000000000000000000000614562565b604051632afe0bd360e21b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__9063abf82f4c90611935908590600401613d67565b6126c161320e565b816002806126ce83612a78565b60038111156126df576126df6139a7565b146126e982612afa565b906127075760405162461bcd60e51b815260040161032891906136b9565b50600061271385612c01565b60405163e99e47f360e01b815290915073__$ea6a162dd0cd18b69b81164309824ac93c$__9063e99e47f390612750906003850190600401614579565b600060405180830381865af415801561276d573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f191682016040526127959190810190613fa7565b95945050505050565b6040516323317ad560e21b815260009060609073__$ea6a162dd0cd18b69b81164309824ac93c$__90638cc5eb54906127db908690600401613d67565b600060405180830381865af492505050801561281957506040513d6000823e601f3d908101601f191682016040526128169190810190614614565b60015b6128a657612825614661565b806308c379a00361284f575061283961467d565b806128445750612851565b600094909350915050565b505b3d80801561287b576040519150601f19603f3d011682016040523d82523d6000602084013e612880565b606091505b5060ff6040518060600160405280602f8152602001614984602f91399250925050915091565b9094909350915050565b60405163d45d097d60e01b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__9063d45d097d906128ea908590600401613d67565b602060405180830381865af4158015612907573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610bcf9190614706565b60008160028061293a83612a78565b600381111561294b5761294b6139a7565b1461295582612afa565b906129735760405162461bcd60e51b815260040161032891906136b9565b5061297d84612c01565b60020154949350505050565b61299161320e565b60405163e99e47f360e01b815273__$ea6a162dd0cd18b69b81164309824ac93c$__9063e99e47f390610e579085906004016136b9565b6129d0612bdd565b600101546001600160a01b031633146129fb5760405162461bcd60e51b8152600401610328906140f4565b6000612a05612bdd565b600101546001600160a01b0390811691508216811461143a5781612a27612bdd565b60010180546001600160a01b0319166001600160a01b03928316179055604051838216918316907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e090600090a35050565b6000811580612a915750612a8a612bdd565b6002015482115b15612a9e57506000919050565b6000612aa8612bdd565b600084815260039190910160205260409020600781015490915015612ad05750600292915050565b60098101546001600160a01b031615612aec5750600192915050565b50600392915050565b919050565b60606001826003811115612b1057612b106139a7565b03612b34576040518060600160405280602581526020016148f86025913992915050565b6002826003811115612b4857612b486139a7565b03612b6c5760405180606001604052806027815260200161491d6027913992915050565b6003826003811115612b8057612b806139a7565b03612ba4576040518060600160405280602681526020016148b26026913992915050565b505060408051808201909152601981527f5769746e6574426f617264446174613a20626164206d6f6f6400000000000000602082015290565b7ff595240b351bc8f951c2f53b26f4e78c32cb62122cf76c19b7fdda7d4968e18390565b6000612c0b612bdd565b6000928352600301602052506040902060050190565b6000612c2b612bdd565b6000928352600301602052506040902090565b6000600282604051612c509190614721565b602060405180830381855afa158015612c6d573d6000803e3d6000fd5b5050506040513d601f19601f82011682018060405250810190610bcf9190614549565b600080612c9b612bdd565b60008781526003919091016020526040902060068101869055600781018590556005810180546001600160a01b03191633178155909150819060088201612ce2868261478c565b505060049081015482546001600160a01b03199081168455600184018054909116905560006002840181905560038401819055929091019190915595945050505050565b6000612d3130612f1f565b905080821115612d9f5760405162461bcd60e51b815260206004820152603360248201527f5769746e657452657175657374426f617264547275737461626c65426f62613a60448201527220696e73756666696369656e742066756e647360681b6064820152608401610328565b612da9828261484b565b60005560405163a9059cbb60e01b81526001600160a01b038481166004830152602482018490527f0000000000000000000000000000000000000000000000000000000000000000169063a9059cbb906044016020604051808303816000875af1158015612e1b573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190611edd9190614441565b80600180612e4c83612a78565b6003811115612e5d57612e5d6139a7565b14612e6782612afa565b90612e855760405162461bcd60e51b815260040161032891906136b9565b506000612e9184612c21565b90506000612e9d6131db565b8260040154612eac919061445e565b60038301549091507f000000000000000000000000000000000000000000000000000000000000000090811115612f13576000612ee882612633565b905080831015612f0a5760405162461bcd60e51b81526004016103289061485e565b50600383018190555b50600490910155505050565b6040516370a0823160e01b81526001600160a01b0382811660048301526000917f0000000000000000000000000000000000000000000000000000000000000000909116906370a0823190602401602060405180830381865afa15801561260f573d6000803e3d6000fd5b600080612f956131db565b90507f00000000000000000000000000000000000000000000000000000000000000006000612fc382612633565b905080831015612fe55760405162461bcd60e51b81526004016103289061485e565b6001600160a01b03851661303e5760405162461bcd60e51b815260206004820152602c602482015260008051602061494483398151915260448201526b081b9d5b1b081cd8dc9a5c1d60a21b6064820152608401610328565b6000856001600160a01b031663f09400026040518163ffffffff1660e01b8152600401600060405180830381865afa15801561307e573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f191682016040526130a69190810190613f2f565b905060008151116130fd5760405162461bcd60e51b815260206004820152602d602482015260008051602061494483398151915260448201526c08195b5c1d1e481cd8dc9a5c1d609a1b6064820152608401610328565b613105612bdd565b6002016000815461311590614157565b9182905550945033613125612bdd565b60008781526003919091016020526040812060090180546001600160a01b0319166001600160a01b03939093169290921790915561316286612c21565b80546001600160a01b0319166001600160a01b038916178155905061318682612c3e565b60028201556003810184905560048101859055604080518781523360208201527fcabaf9c102f83746b27ae932f638eebfaf5ea7d014edd20ab14dec3768a8f55c910160405180910390a15050505050919050565b6000806131e730612f1f565b90506000548110156131fb576131fb61489b565b600054613208908261484b565b91505090565b6040805180820182526000808252825161010081018452606060c0820181815260e083018490528252602082810184905294820183905281018290526080810182905260a0810191909152909182015290565b50805461326d9061440d565b6000825580601f1061327d575050565b601f01602090049060005260206000209081019061329b919061329e565b50565b5b808211156132b3576000815560010161329f565b5090565b6001600160a01b038116811461329b57600080fd5b6000602082840312156132de57600080fd5b81356117a6816132b7565b634e487b7160e01b600052604160045260246000fd5b60c081018181106001600160401b038211171561331e5761331e6132e9565b60405250565b604081018181106001600160401b038211171561331e5761331e6132e9565b608081018181106001600160401b038211171561331e5761331e6132e9565b601f8201601f191681016001600160401b0381118282101715613387576133876132e9565b6040525050565b801515811461329b57600080fd5b8035612af58161338e565b60006001600160401b038211156133c0576133c06132e9565b50601f01601f191660200190565b600082601f8301126133df57600080fd5b81356133ea816133a7565b6040516133f78282613362565b82815285602084870101111561340c57600080fd5b82602086016020830137600092810160200192909252509392505050565b63ffffffff8116811461329b57600080fd5b60ff8116811461329b57600080fd5b8035612af58161343c565b6001600160401b038116811461329b57600080fd5b8035612af581613456565b600060c0828403121561348857600080fd5b604051613494816132ff565b80915082356001600160401b03808211156134ae57600080fd5b90840190604082870312156134c257600080fd5b6040516134ce81613324565b8235828111156134dd57600080fd5b6134e9888286016133ce565b825250602083013592506134fc8361342a565b8260208201528084525050506135146020840161344b565b60208201526135256040840161344b565b60408201526135366060840161344b565b60608201526135476080840161346b565b608082015261355860a0840161346b565b60a08201525092915050565b60006020828403121561357657600080fd5b81356001600160401b038082111561358d57600080fd5b90830190604082860312156135a157600080fd5b6040516135ad81613324565b82356135b88161338e565b81526020830135828111156135cc57600080fd5b6135d887828601613476565b60208301525095945050505050565b6020808252825182820181905260009190848201906040850190845b81811015613622578351600f0b83529284019291840191600101613603565b50909695505050505050565b6020808252825182820181905260009190848201906040850190845b8181101561362257835160030b8352928401929184019160010161364a565b60005b8381101561368457818101518382015260200161366c565b50506000910152565b600081518084526136a5816020860160208601613669565b601f01601f19169290920160200192915050565b6020815260006117a6602083018461368d565b6000602082840312156136de57600080fd5b5035919050565b6000602082840312156136f757600080fd5b81356001600160401b0381111561370d57600080fd5b61371984828501613476565b949350505050565b6020815281511515602082015260006020830151604080840152805160c060608501528051604061012086015261375c61016086018261368d565b60209283015163ffffffff166101408701529183015160ff81166080870152919050604083015160ff811660a08701529150606083015160ff811660c0870152915060808301516001600160401b03811660e0870152915060a083015192506127956101008601846001600160401b03169052565b60006001600160401b038211156137ea576137ea6132e9565b5060051b60200190565b6000602080838503121561380757600080fd5b82356001600160401b0381111561381d57600080fd5b8301601f8101851361382e57600080fd5b8035613839816137d1565b6040516138468282613362565b82815260059290921b830184019184810191508783111561386657600080fd5b928401925b8284101561388d57833561387e816132b7565b8252928401929084019061386b565b979650505050505050565b6000602082840312156138aa57600080fd5b81356001600160401b038111156138c057600080fd5b613719848285016133ce565b6020808252825182820181905260009190848201906040850190845b818110156136225783516001600160401b0316835292840192918401916001016138e8565b60008083601f84011261391f57600080fd5b5081356001600160401b0381111561393657600080fd5b60208301915083602082850101111561394e57600080fd5b9250929050565b6000806000806060858703121561396b57600080fd5b843593506020850135925060408501356001600160401b0381111561398f57600080fd5b61399b8782880161390d565b95989497509550505050565b634e487b7160e01b600052602160045260246000fd5b60208101600483106139d1576139d16139a7565b91905290565b60018060a01b03815116825260208101516020830152604081015160408301526000606082015160806060850152613719608085018261368d565b6020815260006117a660208301846139d7565b6000806040808486031215613a3957600080fd5b83356001600160401b0380821115613a5057600080fd5b818601915086601f830112613a6457600080fd5b81356020613a71826137d1565b8551613a7d8282613362565b83815260059390931b850182019282810191508a841115613a9d57600080fd5b8286015b84811015613b2557803586811115613ab857600080fd5b87016080818e03601f19011215613ace57600080fd5b8851613ad981613343565b858201358152898201358682015260608201358a820152608082013588811115613b035760008081fd5b613b118f88838601016133ce565b606083015250845250918301918301613aa1565b509750613b35905088820161339c565b955050505050509250929050565b80516001600160a01b039081168352602080830151909116908301526040808201519083015260608082015190830152608090810151910152565b60a08101610bcf8284613b43565b60208152613b9e602082018351613b43565b6000602083015160e060c0840152613bba6101008401826139d7565b604094909401516001600160a01b031660e093909301929092525090919050565b6000602080830181845280855180835260408601915060408160051b870101925083870160005b82811015613c3057603f19888603018452613c1e85835161368d565b94509285019290850190600101613c02565b5092979650505050505050565b600080600080600060808688031215613c5557600080fd5b85359450602086013593506040860135925060608601356001600160401b03811115613c8057600080fd5b613c8c8882890161390d565b969995985093965092949392505050565b6101008110613cae57613cae6139a7565b9052565b613cbc8184613c9d565b604060208201526000613719604083018461368d565b60208101610bcf8284613c9d565b6000815160c084528051604060c0860152613cff61010086018261368d565b905063ffffffff60208301511660e086015260ff602085015116602086015260ff604085015116604086015260ff60608501511660608601526001600160401b03608085015116608086015260a0840151915061371960a08601836001600160401b03169052565b60208152815115156020820152600060208301516040808401526137196060840182613ce0565b8051600f81900b8114612af557600080fd5b60006020808385031215613db357600080fd5b82516001600160401b03811115613dc957600080fd5b8301601f81018513613dda57600080fd5b8051613de5816137d1565b604051613df28282613362565b82815260059290921b8301840191848101915087831115613e1257600080fd5b928401925b8284101561388d57613e2884613d8e565b82529284019290840190613e17565b8051600381900b8114612af557600080fd5b60006020808385031215613e5c57600080fd5b82516001600160401b03811115613e7257600080fd5b8301601f81018513613e8357600080fd5b8051613e8e816137d1565b604051613e9b8282613362565b82815260059290921b8301840191848101915087831115613ebb57600080fd5b928401925b8284101561388d57613ed184613e37565b82529284019290840190613ec0565b600082601f830112613ef157600080fd5b8151613efc816133a7565b604051613f098282613362565b828152856020848701011115613f1e57600080fd5b612795836020830160208801613669565b600060208284031215613f4157600080fd5b81516001600160401b03811115613f5757600080fd5b61371984828501613ee0565b600060208284031215613f7557600080fd5b6117a682613e37565b6020815260006117a66020830184613ce0565b8051612af58161343c565b8051612af581613456565b60006020808385031215613fba57600080fd5b82516001600160401b0380821115613fd157600080fd5b81850191506040808388031215613fe757600080fd5b8051613ff281613324565b8351613ffd8161338e565b8152838501518381111561401057600080fd5b939093019260c0848903121561402557600080fd5b8151614030816132ff565b84518481111561403f57600080fd5b8501808a0384131561405057600080fd5b835161405b81613324565b81518681111561406a57600080fd5b6140768c828501613ee0565b8252508782015195506140888661342a565b80880186905282525061409c858701613f91565b868201526140ab838601613f91565b838201526140bb60608601613f91565b60608201526140cc60808601613f9c565b60808201526140dd60a08601613f9c565b60a082015294810194909452509195945050505050565b6020808252601b908201527f5769746e6574426f617264446174613a206f6e6c79206f776e65720000000000604082015260600190565b634e487b7160e01b600052603260045260246000fd5b634e487b7160e01b600052601160045260246000fd5b60006001820161416957614169614141565b5060010190565b6020808252825182820181905260009190848201906040850190845b818110156136225783516001600160a01b03168352928401929184019160010161418c565b6000602082840312156141c357600080fd5b6117a682613d8e565b600060208083850312156141df57600080fd5b82516001600160401b038111156141f557600080fd5b8301601f8101851361420657600080fd5b8051614211816137d1565b60405161421e8282613362565b82815260059290921b830184019184810191508783111561423e57600080fd5b928401925b8284101561388d578351614256816132b7565b82529284019290840190614243565b6000602080838503121561427857600080fd5b82516001600160401b0381111561428e57600080fd5b8301601f8101851361429f57600080fd5b80516142aa816137d1565b6040516142b78282613362565b82815260059290921b83018401918481019150878311156142d757600080fd5b928401925b8284101561388d5783516142ef81613456565b825292840192908401906142dc565b6020808252602a908201527f5769746e6574426f6172644461746141434c733a20756e617574686f72697a6560408201526932103932b837b93a32b960b11b606082015260800190565b60208082526042908201527f5769746e657452657175657374426f617264547275737461626c65446566617560408201527f6c743a205769746e65742064725478486173682063616e6e6f74206265207a65606082015261726f60f01b608082015260a00190565b6020808252603a908201527f5769746e657452657175657374426f617264547275737461626c65446566617560408201527f6c743a20726573756c742063616e6e6f7420626520656d707479000000000000606082015260800190565b600181811c9082168061442157607f821691505b6020821081036111e157634e487b7160e01b600052602260045260246000fd5b60006020828403121561445357600080fd5b81516117a68161338e565b80820180821115610bcf57610bcf614141565b60006020828403121561448357600080fd5b81516117a681613456565b600060208083850312156144a157600080fd5b82516001600160401b03808211156144b857600080fd5b818501915085601f8301126144cc57600080fd5b81516144d7816137d1565b6040516144e48282613362565b82815260059290921b840185019185810191508883111561450457600080fd5b8585015b8381101561453c578051858111156145205760008081fd5b61452e8b89838a0101613ee0565b845250918601918601614508565b5098975050505050505050565b60006020828403121561455b57600080fd5b5051919050565b8082028115828204841417610bcf57610bcf614141565b600060208083526000845461458d8161440d565b808487015260406001808416600081146145ae57600181146145c8576145f6565b60ff1985168984015283151560051b8901830195506145f6565b896000528660002060005b858110156145ee5781548b82018601529083019088016145d3565b8a0184019650505b509398975050505050505050565b80516101008110612af557600080fd5b6000806040838503121561462757600080fd5b61463083614604565b915060208301516001600160401b0381111561464b57600080fd5b61465785828601613ee0565b9150509250929050565b600060033d111561467a5760046000803e5060005160e01c5b90565b600060443d101561468b5790565b6040516003193d81016004833e81513d6001600160401b0381602484011181841117156146ba57505050505090565b82850191508151818111156146d25750505050505090565b843d87010160208285010111156146ec5750505050505090565b6146fb60208286010187613362565b509095945050505050565b60006020828403121561471857600080fd5b6117a682614604565b60008251614733818460208701613669565b9190910192915050565b601f82111561478757600081815260208120601f850160051c810160208610156147645750805b601f850160051c820191505b8181101561478357828155600101614770565b5050505b505050565b81516001600160401b038111156147a5576147a56132e9565b6147b9816147b3845461440d565b8461473d565b602080601f8311600181146147ee57600084156147d65750858301515b600019600386901b1c1916600185901b178555614783565b600085815260208120601f198616915b8281101561481d578886015182559484019460019091019084016147fe565b508582101561483b5787850151600019600388901b60f8161c191681555b5050505050600190811b01905550565b81810381811115610bcf57610bcf614141565b6020808252602f9082015260008051602061494483398151915260408201526e2072657761726420746f6f206c6f7760881b606082015260800190565b634e487b7160e01b600052600160045260246000fdfe5769746e6574426f617264446174613a206e6f7420696e2044656c65746564207374617475734df64445edc775fba59db44b8001852fb1b777eea88fd54f04572dd114e3ff7f5769746e6574426f617264446174613a206e6f7420696e20506f73746564207374617475735769746e6574426f617264446174613a206e6f7420696e205265706f72746564207374617475735769746e657452657175657374426f617264547275737461626c65426173653aa6db7263983f337bae2c9fb315730227961d1c1153ae1e10a56b5791465dd6fd5769746e657452657175657374426f617264547275737461626c65426173653a206661696c696e6720617373657274a2646970667358221220bf3dc26268b6770a1de21f1b1027906f6daabd607b882f92a01b7071388705e064736f6c63430008110033",
+  "deployedBytecode": "0x6080604052600436106102cd5760003560e01c80637c1fbda311610175578063c805dd0f116100dc578063d4da69ac11610095578063dc3c71cd1161006f578063dc3c71cd14610abc578063e5a6b10f14610adc578063e99e47f314610b10578063f2fde38b14610b3057610331565b8063d4da69ac14610a41578063d74803be14610a61578063db04f16d14610a8f57610331565b8063c805dd0f1461097f578063c87d969e14610994578063c8f5cdd5146109c1578063cf62d115146109e1578063d2e8756114610a01578063d4ced13214610a2157610331565b8063a9e954b91161012e578063a9e954b914610894578063b0768328146108c7578063b281a7bd146108e7578063bc7e25ff146108fa578063c2485ebd14610932578063c683b4651461095f57610331565b80637c1fbda3146107d257806381a398b5146107f25780638da5cb5b1461081257806399f65804146108275780639d96fced14610854578063a8604c1a1461087457610331565b8063439fab911161023457806354fd4d50116101ed5780636b58960a116101c75780636b58960a146107385780636f07abcc14610758578063754e5bea146107855780637780cde1146107b257610331565b806354fd4d50146106d25780636280bce81461070557806366bfdc751461072557610331565b8063439fab91146105b85780634c9f72e3146105d85780634dcffaf3146105f85780635001f3b51461062557806352d1902d1461066c5780635479d9401461069f57610331565b80632241f2db116102865780632241f2db146104c35780632565082b146104f657806328a78d9b146105235780632b905fbb146105455780633ae97295146105785780633b885f2a1461059857610331565b8063044ad7be1461039357806307e66852146103ee5780630f572d2c1461041b578063109a0e3c146104485780631dd27daf1461047557806320f9241e146104a357610331565b366103315760405162461bcd60e51b815260206004820152602960248201527f5769746e657452657175657374426f6172643a206e6f207472616e7366657273604482015268081858d8d95c1d195960ba1b60648201526084015b60405180910390fd5b60405162461bcd60e51b815260206004820152603160248201527f5769746e657452657175657374426f61726455706772616461626c65426173656044820152700e881b9bdd081a5b5c1b195b595b9d1959607a1b6064820152608401610328565b34801561039f57600080fd5b506103d96103ae3660046132cc565b6001600160a01b03166000908152600080516020614964833981519152602052604090205460ff1690565b60405190151581526020015b60405180910390f35b3480156103fa57600080fd5b5061040e610409366004613564565b610b50565b6040516103e591906135e7565b34801561042757600080fd5b5061043b610436366004613564565b610bd5565b6040516103e5919061362e565b34801561045457600080fd5b50610468610463366004613564565b610c54565b6040516103e591906136b9565b34801561048157600080fd5b506104956104903660046136cc565b610cd3565b6040519081526020016103e5565b3480156104af57600080fd5b506104956104be3660046136cc565b610d3f565b3480156104cf57600080fd5b506104e36104de366004613564565b610d9d565b60405160039190910b81526020016103e5565b34801561050257600080fd5b506105166105113660046136e5565b610e18565b6040516103e59190613721565b34801561052f57600080fd5b5061054361053e3660046137f4565b610e9c565b005b34801561055157600080fd5b50610565610560366004613564565b610f88565b604051600f9190910b81526020016103e5565b34801561058457600080fd5b506104956105933660046136cc565b611003565b3480156105a457600080fd5b506104686105b33660046136cc565b611070565b3480156105c457600080fd5b506105436105d3366004613898565b6111e7565b3480156105e457600080fd5b506105436105f33660046137f4565b61143e565b34801561060457600080fd5b50610618610613366004613564565b61151f565b6040516103e591906138cc565b34801561063157600080fd5b507f00000000000000000000000000000000000000000000000000000000000000005b6040516001600160a01b0390911681526020016103e5565b34801561067857600080fd5b507f9969c6aff411c5e5f0807500693e8f819ce88529615cfa6cab569b24788a1018610495565b3480156106ab57600080fd5b507f00000000000000000000000000000000000000000000000000000000000000006103d9565b3480156106de57600080fd5b507f0000000000000000000000000000000000000000000000000000000000000000610495565b34801561071157600080fd5b50610543610720366004613955565b61159e565b6105436107333660046136cc565b6116ed565b34801561074457600080fd5b506103d96107533660046132cc565b61174e565b34801561076457600080fd5b506107786107733660046136cc565b6117ad565b6040516103e591906139bd565b34801561079157600080fd5b506107a56107a03660046136cc565b6117b8565b6040516103e59190613a12565b3480156107be57600080fd5b506103d96107cd366004613564565b6118fb565b3480156107de57600080fd5b506107a56107ed3660046136cc565b611976565b3480156107fe57600080fd5b5061054361080d366004613a25565b611bf1565b34801561081e57600080fd5b50610654611ee3565b34801561083357600080fd5b506108476108423660046136cc565b611eff565b6040516103e59190613b7e565b34801561086057600080fd5b5061065461086f3660046136cc565b612001565b34801561088057600080fd5b506103d961088f366004613564565b612065565b3480156108a057600080fd5b507f0000000000000000000000000000000000000000000000000000000000000000610495565b3480156108d357600080fd5b506106186108e2366004613564565b61209f565b6104956108f53660046132cc565b6120d9565b34801561090657600080fd5b5061091a610915366004613564565b6120f7565b6040516001600160401b0390911681526020016103e5565b34801561093e57600080fd5b5061095261094d3660046136cc565b612172565b6040516103e59190613b8c565b34801561096b57600080fd5b5061046861097a366004613564565b61232c565b34801561098b57600080fd5b50610495612366565b3480156109a057600080fd5b506109b46109af366004613564565b612384565b6040516103e59190613bdb565b3480156109cd57600080fd5b506105436109dc366004613c3d565b612403565b3480156109ed57600080fd5b506104956109fc366004613564565b6125b8565b348015610a0d57600080fd5b50610495610a1c3660046136cc565b612633565b348015610a2d57600080fd5b506103d9610a3c366004613564565b61267f565b348015610a4d57600080fd5b50610516610a5c3660046136cc565b6126b9565b348015610a6d57600080fd5b50610a81610a7c366004613564565b61279e565b6040516103e5929190613cb2565b348015610a9b57600080fd5b50610aaf610aaa366004613564565b6128b0565b6040516103e59190613cd2565b348015610ac857600080fd5b50610495610ad73660046136cc565b61292b565b348015610ae857600080fd5b506106547f000000000000000000000000000000000000000000000000000000000000000081565b348015610b1c57600080fd5b50610516610b2b366004613898565b612989565b348015610b3c57600080fd5b50610543610b4b3660046132cc565b6129c8565b60405163fc853c3760e01b815260609073__$ea6a162dd0cd18b69b81164309824ac93c$__9063fc853c3790610b8a908590600401613d67565b600060405180830381865af4158015610ba7573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604052610bcf9190810190613da0565b92915050565b6040516308efc09760e01b815260609073__$ea6a162dd0cd18b69b81164309824ac93c$__906308efc09790610c0f908590600401613d67565b600060405180830381865af4158015610c2c573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604052610bcf9190810190613e49565b60405163f417daf560e01b815260609073__$ea6a162dd0cd18b69b81164309824ac93c$__9063f417daf590610c8e908590600401613d67565b600060405180830381865af4158015610cab573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604052610bcf9190810190613f2f565b600081600180610ce283612a78565b6003811115610cf357610cf36139a7565b14610cfd82612afa565b90610d1b5760405162461bcd60e51b815260040161032891906136b9565b50610d24612bdd565b60009485526003016020525050604090912060040154919050565b600081600280610d4e83612a78565b6003811115610d5f57610d5f6139a7565b14610d6982612afa565b90610d875760405162461bcd60e51b815260040161032891906136b9565b50610d9184612c01565b60010154949350505050565b604051636c4346db60e11b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__9063d8868db690610dd7908590600401613d67565b602060405180830381865af4158015610df4573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610bcf9190613f63565b610e2061320e565b60405163098141f760e11b815273__$ea6a162dd0cd18b69b81164309824ac93c$__9063130283ee90610e57908590600401613f7e565b600060405180830381865af4158015610e74573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604052610bcf9190810190613fa7565b610ea4612bdd565b600101546001600160a01b03163314610ecf5760405162461bcd60e51b8152600401610328906140f4565b60005b8151811015610f4d576000828281518110610eef57610eef61412b565b602002602001015190506000610f1060008051602061496483398151915290565b6001600160a01b039290921660009081526020929092526040909120805460ff191691151591909117905580610f4581614157565b915050610ed2565b507f646436560d9757cb3c0f01da0f62642c6040b00c9a80685f94ef1a7725cad5f181604051610f7d9190614170565b60405180910390a150565b60405163c71db52160e01b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__9063c71db52190610fc2908590600401613d67565b602060405180830381865af4158015610fdf573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610bcf91906141b1565b60008160018061101283612a78565b6003811115611023576110236139a7565b1461102d82612afa565b9061104b5760405162461bcd60e51b815260040161032891906136b9565b50611054612bdd565b6000858152600391820160205260409020015492505050919050565b6060600061107d83612a78565b600381111561108e5761108e6139a7565b036110e15760405162461bcd60e51b815260206004820152602f602482015260008051602061494483398151915260448201526e081b9bdd081e595d081c1bdcdd1959608a1b6064820152608401610328565b60006110ec83612c21565b80549091506001600160a01b0316156111e15780546040805163784a000160e11b815290516001600160a01b039092169163f0940002916004808201926000929091908290030181865afa158015611148573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f191682016040526111709190810190613f2f565b9150806002015461118083612c3e565b146111e15760405162461bcd60e51b815260206004820152603f602482015260008051602061494483398151915260448201527f2062797465636f6465206368616e67656420616674657220706f7374696e67006064820152608401610328565b50919050565b60006111f1612bdd565b600101546001600160a01b031690508061123657503380611210612bdd565b60010180546001600160a01b0319166001600160a01b0392909216919091179055611290565b336001600160a01b038216146112905760405162461bcd60e51b815260206004820152602b602482015260008051602061494483398151915260448201526a1037b7363c9037bbb732b960a91b6064820152608401610328565b600061129a612bdd565b546001600160a01b03161461133d577f00000000000000000000000000000000000000000000000000000000000000006001600160a01b03166112db612bdd565b546001600160a01b03160361133d5760405162461bcd60e51b8152602060048201526034602482015260008051602061494483398151915260448201527308185b1c9958591e481a5b9a5d1a585b1a5e995960621b6064820152608401610328565b7f0000000000000000000000000000000000000000000000000000000000000000611366612bdd565b80546001600160a01b0319166001600160a01b03929092169190911790557f00000000000000000000000000000000000000000000000000000000000000007f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316337f72d4b00d8e35b3717e384aef5f900256a106d6a423d88935a11579981333ba207f000000000000000000000000000000000000000000000000000000000000000060405190815260200160405180910390a461143a828060200190518101906105f391906141cc565b5050565b611446612bdd565b600101546001600160a01b031633146114715760405162461bcd60e51b8152600401610328906140f4565b60005b81518110156114ef5760008282815181106114915761149161412b565b6020026020010151905060016114b260008051602061496483398151915290565b6001600160a01b039290921660009081526020929092526040909120805460ff1916911515919091179055806114e781614157565b915050611474565b507f4d570ee36dec878006609360d34ac8d6a0b68d521871ae15a407b6340877ca0181604051610f7d9190614170565b60405163147e5c8f60e01b815260609073__$ea6a162dd0cd18b69b81164309824ac93c$__9063147e5c8f90611559908590600401613d67565b600060405180830381865af4158015611576573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604052610bcf9190810190614265565b336000908152600080516020614964833981519152602052604090205460ff166115da5760405162461bcd60e51b8152600401610328906142fe565b836001806115e783612a78565b60038111156115f8576115f86139a7565b1461160282612afa565b906116205760405162461bcd60e51b815260040161032891906136b9565b5060008590036116425760405162461bcd60e51b815260040161032890614348565b60008390036116635760405162461bcd60e51b8152600401610328906143b0565b6116ae336116a988428989898080601f016020809104026020016040519081016040528093929190818152602001838380828437600092019190915250612c9092505050565b612d26565b604080518781523360208201527ee9413c6321ec446a267b7ebf5bb108663f2ef58b35c4f6e18905ac8f205cb2910160405180910390a1505050505050565b806001806116fa83612a78565b600381111561170b5761170b6139a7565b1461171582612afa565b906117335760405162461bcd60e51b815260040161032891906136b9565b5061173d83612e3f565b505061174830612f1f565b60005550565b600080611759612bdd565b600101546001600160a01b031690507f000000000000000000000000000000000000000000000000000000000000000080156117a65750826001600160a01b0316816001600160a01b0316145b9392505050565b6000610bcf82612a78565b6040805160808101825260008082526020820181905291810191909152606080820152816002806117e883612a78565b60038111156117f9576117f96139a7565b1461180382612afa565b906118215760405162461bcd60e51b815260040161032891906136b9565b5061182b84612c01565b6040805160808101825282546001600160a01b03168152600183015460208201526002830154918101919091526003820180549192916060840191906118709061440d565b80601f016020809104026020016040519081016040528092919081815260200182805461189c9061440d565b80156118e95780601f106118be576101008083540402835291602001916118e9565b820191906000526020600020905b8154815290600101906020018083116118cc57829003601f168201915b50505050508152505092505050919050565b6040516350ea2eab60e11b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__9063a1d45d5690611935908590600401613d67565b602060405180830381865af4158015611952573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610bcf9190614441565b6040805160808101825260008082526020820181905291810191909152606080820152816002806119a683612a78565b60038111156119b7576119b76139a7565b146119c182612afa565b906119df5760405162461bcd60e51b815260040161032891906136b9565b5060006119ea612bdd565b60008681526003919091016020526040902060098101549091506001600160a01b03163314611a615760405162461bcd60e51b815260206004820152602f602482015260008051602061494483398151915260448201526e1037b7363c903932b8bab2b9ba32b960891b6064820152608401610328565b604080516080810182526005830180546001600160a01b0316825260068401546020830152600784015492820192909252600883018054919291606084019190611aaa9061440d565b80601f0160208091040260200160405190810160405280929190818152602001828054611ad69061440d565b8015611b235780601f10611af857610100808354040283529160200191611b23565b820191906000526020600020905b815481529060010190602001808311611b0657829003601f168201915b5050505050815250509350611b36612bdd565b600086815260039182016020526040812080546001600160a01b03199081168255600182018054821690556002820183905592810182905560048101829055600581018054909316835560068101829055600781018290559181611b9d6008850182613261565b50505060090180546001600160a01b0319169055604080518681523360208201527fdec847db058c9c012e0f3dbe2b99e05cfa4c693f61a7d8bc64652a68913cbfff910160405180910390a1505050919050565b336000908152600080516020614964833981519152602052604090205460ff16611c2d5760405162461bcd60e51b8152600401610328906142fe565b8151600090815b81811015611ecc576000858281518110611c5057611c5061412b565b6020026020010151905060016003811115611c6d57611c6d6139a7565b8151611c7890612a78565b6003811115611c8957611c896139a7565b14611cf5578415611cf05780516040805191825260208201819052602c9082015260008051602061494483398151915260608201526b08189859081c5d595c9e525960a21b60808201526000805160206148d88339815191529060a0015b60405180910390a15b611eb9565b6040810151600003611d5f578415611cf05780516040805191825260208201819052602d9082015260008051602061494483398151915260608201526c040c4c2c840c8e4a8f090c2e6d609b1b60808201526000805160206148d88339815191529060a001611ce7565b806060015151600003611dcb578415611cf05780516040805191825260208201819052602e9082015260008051602061494483398151915260608201526d206261642063626f72427974657360901b60808201526000805160206148d88339815191529060a001611ce7565b60008160200151118015611de25750428160200151115b15611e46578415611cf05780516040805191825260208201819052602e9082015260008051602061494483398151915260608201526d0206261642074696d657374616d760941b60808201526000805160206148d88339815191529060a001611ce7565b80516020820151611e72919015611e61578260200151611e63565b425b83604001518460600151612c90565b611e7c908561445e565b8151604080519182523360208301529195507ee9413c6321ec446a267b7ebf5bb108663f2ef58b35c4f6e18905ac8f205cb2910160405180910390a15b5080611ec481614157565b915050611c34565b508115611edd57611edd3383612d26565b50505050565b6000611eed612bdd565b600101546001600160a01b0316919050565b6040805160a08101825260008082526020820181905291810182905260608101829052608081019190915281600180611f3783612a78565b6003811115611f4857611f486139a7565b14611f5282612afa565b90611f705760405162461bcd60e51b815260040161032891906136b9565b506000611f7b612bdd565b600086815260039182016020908152604091829020825160a08101845281546001600160a01b03908116825260018301548116938201939093526002820154938101939093529283015460608301526004830154608083015260098301549196509192501615611ff95760098101546001600160a01b031660208501525b505050919050565b60008160028061201083612a78565b6003811115612021576120216139a7565b1461202b82612afa565b906120495760405162461bcd60e51b815260040161032891906136b9565b5061205384612c01565b546001600160a01b0316949350505050565b604051636646c11960e01b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__90636646c11990611935908590600401613d67565b604051630879730d60e01b815260609073__$ea6a162dd0cd18b69b81164309824ac93c$__90630879730d90611559908590600401613d67565b60006120e482612f8a565b90506120ef30612f1f565b600055919050565b604051638233f9b360e01b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__90638233f9b390612131908590600401613d67565b602060405180830381865af415801561214e573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610bcf9190614471565b6121dc6040805161010081019091526000606082018181526080830182905260a0830182905260c0830182905260e0830191909152819081526040805160808101825260008082526020828101829052928201526060808201529101908152600060209091015290565b6121e4612bdd565b60008381526003918201602090815260409182902082516101008101845281546001600160a01b03908116606080840191825260018501548316608080860191909152600286015460a08601529785015460c0850152600485015460e0850152908352855196870186526005840180549092168752600684015487860152600784015495870195909552600883018054929693959487019491929184019161228b9061440d565b80601f01602080910402602001604051908101604052809291908181526020018280546122b79061440d565b80156123045780601f106122d957610100808354040283529160200191612304565b820191906000526020600020905b8154815290600101906020018083116122e757829003601f168201915b505050919092525050508152600991909101546001600160a01b031660209091015292915050565b60405163a1b9089160e01b815260609073__$ea6a162dd0cd18b69b81164309824ac93c$__9063a1b9089190610c8e908590600401613d67565b6000612370612bdd565b6002015461237f90600161445e565b905090565b6040516316935cf160e11b815260609073__$ea6a162dd0cd18b69b81164309824ac93c$__90632d26b9e2906123be908590600401613d67565b600060405180830381865af41580156123db573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604052610bcf919081019061448e565b336000908152600080516020614964833981519152602052604090205460ff1661243f5760405162461bcd60e51b8152600401610328906142fe565b8460018061244c83612a78565b600381111561245d5761245d6139a7565b1461246782612afa565b906124855760405162461bcd60e51b815260040161032891906136b9565b50428611156124f05760405162461bcd60e51b815260206004820152603160248201527f5769746e657452657175657374426f617264547275737461626c65446566617560448201527006c743a206261642074696d657374616d7607c1b6064820152608401610328565b60008590036125115760405162461bcd60e51b815260040161032890614348565b60008390036125325760405162461bcd60e51b8152600401610328906143b0565b612578336116a989898989898080601f016020809104026020016040519081016040528093929190818152602001838380828437600092019190915250612c9092505050565b604080518881523360208201527ee9413c6321ec446a267b7ebf5bb108663f2ef58b35c4f6e18905ac8f205cb2910160405180910390a150505050505050565b60405163a2e8765560e01b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__9063a2e87655906125f2908590600401613d67565b602060405180830381865af415801561260f573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610bcf9190614549565b6000610bcf7f00000000000000000000000000000000000000000000000000000000000000007f0000000000000000000000000000000000000000000000000000000000000000614562565b604051632afe0bd360e21b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__9063abf82f4c90611935908590600401613d67565b6126c161320e565b816002806126ce83612a78565b60038111156126df576126df6139a7565b146126e982612afa565b906127075760405162461bcd60e51b815260040161032891906136b9565b50600061271385612c01565b60405163e99e47f360e01b815290915073__$ea6a162dd0cd18b69b81164309824ac93c$__9063e99e47f390612750906003850190600401614579565b600060405180830381865af415801561276d573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f191682016040526127959190810190613fa7565b95945050505050565b6040516323317ad560e21b815260009060609073__$ea6a162dd0cd18b69b81164309824ac93c$__90638cc5eb54906127db908690600401613d67565b600060405180830381865af492505050801561281957506040513d6000823e601f3d908101601f191682016040526128169190810190614614565b60015b6128a657612825614661565b806308c379a00361284f575061283961467d565b806128445750612851565b600094909350915050565b505b3d80801561287b576040519150601f19603f3d011682016040523d82523d6000602084013e612880565b606091505b5060ff6040518060600160405280602f8152602001614984602f91399250925050915091565b9094909350915050565b60405163d45d097d60e01b815260009073__$ea6a162dd0cd18b69b81164309824ac93c$__9063d45d097d906128ea908590600401613d67565b602060405180830381865af4158015612907573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610bcf9190614706565b60008160028061293a83612a78565b600381111561294b5761294b6139a7565b1461295582612afa565b906129735760405162461bcd60e51b815260040161032891906136b9565b5061297d84612c01565b60020154949350505050565b61299161320e565b60405163e99e47f360e01b815273__$ea6a162dd0cd18b69b81164309824ac93c$__9063e99e47f390610e579085906004016136b9565b6129d0612bdd565b600101546001600160a01b031633146129fb5760405162461bcd60e51b8152600401610328906140f4565b6000612a05612bdd565b600101546001600160a01b0390811691508216811461143a5781612a27612bdd565b60010180546001600160a01b0319166001600160a01b03928316179055604051838216918316907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e090600090a35050565b6000811580612a915750612a8a612bdd565b6002015482115b15612a9e57506000919050565b6000612aa8612bdd565b600084815260039190910160205260409020600781015490915015612ad05750600292915050565b60098101546001600160a01b031615612aec5750600192915050565b50600392915050565b919050565b60606001826003811115612b1057612b106139a7565b03612b34576040518060600160405280602581526020016148f86025913992915050565b6002826003811115612b4857612b486139a7565b03612b6c5760405180606001604052806027815260200161491d6027913992915050565b6003826003811115612b8057612b806139a7565b03612ba4576040518060600160405280602681526020016148b26026913992915050565b505060408051808201909152601981527f5769746e6574426f617264446174613a20626164206d6f6f6400000000000000602082015290565b7ff595240b351bc8f951c2f53b26f4e78c32cb62122cf76c19b7fdda7d4968e18390565b6000612c0b612bdd565b6000928352600301602052506040902060050190565b6000612c2b612bdd565b6000928352600301602052506040902090565b6000600282604051612c509190614721565b602060405180830381855afa158015612c6d573d6000803e3d6000fd5b5050506040513d601f19601f82011682018060405250810190610bcf9190614549565b600080612c9b612bdd565b60008781526003919091016020526040902060068101869055600781018590556005810180546001600160a01b03191633178155909150819060088201612ce2868261478c565b505060049081015482546001600160a01b03199081168455600184018054909116905560006002840181905560038401819055929091019190915595945050505050565b6000612d3130612f1f565b905080821115612d9f5760405162461bcd60e51b815260206004820152603360248201527f5769746e657452657175657374426f617264547275737461626c65426f62613a60448201527220696e73756666696369656e742066756e647360681b6064820152608401610328565b612da9828261484b565b60005560405163a9059cbb60e01b81526001600160a01b038481166004830152602482018490527f0000000000000000000000000000000000000000000000000000000000000000169063a9059cbb906044016020604051808303816000875af1158015612e1b573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190611edd9190614441565b80600180612e4c83612a78565b6003811115612e5d57612e5d6139a7565b14612e6782612afa565b90612e855760405162461bcd60e51b815260040161032891906136b9565b506000612e9184612c21565b90506000612e9d6131db565b8260040154612eac919061445e565b60038301549091507f000000000000000000000000000000000000000000000000000000000000000090811115612f13576000612ee882612633565b905080831015612f0a5760405162461bcd60e51b81526004016103289061485e565b50600383018190555b50600490910155505050565b6040516370a0823160e01b81526001600160a01b0382811660048301526000917f0000000000000000000000000000000000000000000000000000000000000000909116906370a0823190602401602060405180830381865afa15801561260f573d6000803e3d6000fd5b600080612f956131db565b90507f00000000000000000000000000000000000000000000000000000000000000006000612fc382612633565b905080831015612fe55760405162461bcd60e51b81526004016103289061485e565b6001600160a01b03851661303e5760405162461bcd60e51b815260206004820152602c602482015260008051602061494483398151915260448201526b081b9d5b1b081cd8dc9a5c1d60a21b6064820152608401610328565b6000856001600160a01b031663f09400026040518163ffffffff1660e01b8152600401600060405180830381865afa15801561307e573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f191682016040526130a69190810190613f2f565b905060008151116130fd5760405162461bcd60e51b815260206004820152602d602482015260008051602061494483398151915260448201526c08195b5c1d1e481cd8dc9a5c1d609a1b6064820152608401610328565b613105612bdd565b6002016000815461311590614157565b9182905550945033613125612bdd565b60008781526003919091016020526040812060090180546001600160a01b0319166001600160a01b03939093169290921790915561316286612c21565b80546001600160a01b0319166001600160a01b038916178155905061318682612c3e565b60028201556003810184905560048101859055604080518781523360208201527fcabaf9c102f83746b27ae932f638eebfaf5ea7d014edd20ab14dec3768a8f55c910160405180910390a15050505050919050565b6000806131e730612f1f565b90506000548110156131fb576131fb61489b565b600054613208908261484b565b91505090565b6040805180820182526000808252825161010081018452606060c0820181815260e083018490528252602082810184905294820183905281018290526080810182905260a0810191909152909182015290565b50805461326d9061440d565b6000825580601f1061327d575050565b601f01602090049060005260206000209081019061329b919061329e565b50565b5b808211156132b3576000815560010161329f565b5090565b6001600160a01b038116811461329b57600080fd5b6000602082840312156132de57600080fd5b81356117a6816132b7565b634e487b7160e01b600052604160045260246000fd5b60c081018181106001600160401b038211171561331e5761331e6132e9565b60405250565b604081018181106001600160401b038211171561331e5761331e6132e9565b608081018181106001600160401b038211171561331e5761331e6132e9565b601f8201601f191681016001600160401b0381118282101715613387576133876132e9565b6040525050565b801515811461329b57600080fd5b8035612af58161338e565b60006001600160401b038211156133c0576133c06132e9565b50601f01601f191660200190565b600082601f8301126133df57600080fd5b81356133ea816133a7565b6040516133f78282613362565b82815285602084870101111561340c57600080fd5b82602086016020830137600092810160200192909252509392505050565b63ffffffff8116811461329b57600080fd5b60ff8116811461329b57600080fd5b8035612af58161343c565b6001600160401b038116811461329b57600080fd5b8035612af581613456565b600060c0828403121561348857600080fd5b604051613494816132ff565b80915082356001600160401b03808211156134ae57600080fd5b90840190604082870312156134c257600080fd5b6040516134ce81613324565b8235828111156134dd57600080fd5b6134e9888286016133ce565b825250602083013592506134fc8361342a565b8260208201528084525050506135146020840161344b565b60208201526135256040840161344b565b60408201526135366060840161344b565b60608201526135476080840161346b565b608082015261355860a0840161346b565b60a08201525092915050565b60006020828403121561357657600080fd5b81356001600160401b038082111561358d57600080fd5b90830190604082860312156135a157600080fd5b6040516135ad81613324565b82356135b88161338e565b81526020830135828111156135cc57600080fd5b6135d887828601613476565b60208301525095945050505050565b6020808252825182820181905260009190848201906040850190845b81811015613622578351600f0b83529284019291840191600101613603565b50909695505050505050565b6020808252825182820181905260009190848201906040850190845b8181101561362257835160030b8352928401929184019160010161364a565b60005b8381101561368457818101518382015260200161366c565b50506000910152565b600081518084526136a5816020860160208601613669565b601f01601f19169290920160200192915050565b6020815260006117a6602083018461368d565b6000602082840312156136de57600080fd5b5035919050565b6000602082840312156136f757600080fd5b81356001600160401b0381111561370d57600080fd5b61371984828501613476565b949350505050565b6020815281511515602082015260006020830151604080840152805160c060608501528051604061012086015261375c61016086018261368d565b60209283015163ffffffff166101408701529183015160ff81166080870152919050604083015160ff811660a08701529150606083015160ff811660c0870152915060808301516001600160401b03811660e0870152915060a083015192506127956101008601846001600160401b03169052565b60006001600160401b038211156137ea576137ea6132e9565b5060051b60200190565b6000602080838503121561380757600080fd5b82356001600160401b0381111561381d57600080fd5b8301601f8101851361382e57600080fd5b8035613839816137d1565b6040516138468282613362565b82815260059290921b830184019184810191508783111561386657600080fd5b928401925b8284101561388d57833561387e816132b7565b8252928401929084019061386b565b979650505050505050565b6000602082840312156138aa57600080fd5b81356001600160401b038111156138c057600080fd5b613719848285016133ce565b6020808252825182820181905260009190848201906040850190845b818110156136225783516001600160401b0316835292840192918401916001016138e8565b60008083601f84011261391f57600080fd5b5081356001600160401b0381111561393657600080fd5b60208301915083602082850101111561394e57600080fd5b9250929050565b6000806000806060858703121561396b57600080fd5b843593506020850135925060408501356001600160401b0381111561398f57600080fd5b61399b8782880161390d565b95989497509550505050565b634e487b7160e01b600052602160045260246000fd5b60208101600483106139d1576139d16139a7565b91905290565b60018060a01b03815116825260208101516020830152604081015160408301526000606082015160806060850152613719608085018261368d565b6020815260006117a660208301846139d7565b6000806040808486031215613a3957600080fd5b83356001600160401b0380821115613a5057600080fd5b818601915086601f830112613a6457600080fd5b81356020613a71826137d1565b8551613a7d8282613362565b83815260059390931b850182019282810191508a841115613a9d57600080fd5b8286015b84811015613b2557803586811115613ab857600080fd5b87016080818e03601f19011215613ace57600080fd5b8851613ad981613343565b858201358152898201358682015260608201358a820152608082013588811115613b035760008081fd5b613b118f88838601016133ce565b606083015250845250918301918301613aa1565b509750613b35905088820161339c565b955050505050509250929050565b80516001600160a01b039081168352602080830151909116908301526040808201519083015260608082015190830152608090810151910152565b60a08101610bcf8284613b43565b60208152613b9e602082018351613b43565b6000602083015160e060c0840152613bba6101008401826139d7565b604094909401516001600160a01b031660e093909301929092525090919050565b6000602080830181845280855180835260408601915060408160051b870101925083870160005b82811015613c3057603f19888603018452613c1e85835161368d565b94509285019290850190600101613c02565b5092979650505050505050565b600080600080600060808688031215613c5557600080fd5b85359450602086013593506040860135925060608601356001600160401b03811115613c8057600080fd5b613c8c8882890161390d565b969995985093965092949392505050565b6101008110613cae57613cae6139a7565b9052565b613cbc8184613c9d565b604060208201526000613719604083018461368d565b60208101610bcf8284613c9d565b6000815160c084528051604060c0860152613cff61010086018261368d565b905063ffffffff60208301511660e086015260ff602085015116602086015260ff604085015116604086015260ff60608501511660608601526001600160401b03608085015116608086015260a0840151915061371960a08601836001600160401b03169052565b60208152815115156020820152600060208301516040808401526137196060840182613ce0565b8051600f81900b8114612af557600080fd5b60006020808385031215613db357600080fd5b82516001600160401b03811115613dc957600080fd5b8301601f81018513613dda57600080fd5b8051613de5816137d1565b604051613df28282613362565b82815260059290921b8301840191848101915087831115613e1257600080fd5b928401925b8284101561388d57613e2884613d8e565b82529284019290840190613e17565b8051600381900b8114612af557600080fd5b60006020808385031215613e5c57600080fd5b82516001600160401b03811115613e7257600080fd5b8301601f81018513613e8357600080fd5b8051613e8e816137d1565b604051613e9b8282613362565b82815260059290921b8301840191848101915087831115613ebb57600080fd5b928401925b8284101561388d57613ed184613e37565b82529284019290840190613ec0565b600082601f830112613ef157600080fd5b8151613efc816133a7565b604051613f098282613362565b828152856020848701011115613f1e57600080fd5b612795836020830160208801613669565b600060208284031215613f4157600080fd5b81516001600160401b03811115613f5757600080fd5b61371984828501613ee0565b600060208284031215613f7557600080fd5b6117a682613e37565b6020815260006117a66020830184613ce0565b8051612af58161343c565b8051612af581613456565b60006020808385031215613fba57600080fd5b82516001600160401b0380821115613fd157600080fd5b81850191506040808388031215613fe757600080fd5b8051613ff281613324565b8351613ffd8161338e565b8152838501518381111561401057600080fd5b939093019260c0848903121561402557600080fd5b8151614030816132ff565b84518481111561403f57600080fd5b8501808a0384131561405057600080fd5b835161405b81613324565b81518681111561406a57600080fd5b6140768c828501613ee0565b8252508782015195506140888661342a565b80880186905282525061409c858701613f91565b868201526140ab838601613f91565b838201526140bb60608601613f91565b60608201526140cc60808601613f9c565b60808201526140dd60a08601613f9c565b60a082015294810194909452509195945050505050565b6020808252601b908201527f5769746e6574426f617264446174613a206f6e6c79206f776e65720000000000604082015260600190565b634e487b7160e01b600052603260045260246000fd5b634e487b7160e01b600052601160045260246000fd5b60006001820161416957614169614141565b5060010190565b6020808252825182820181905260009190848201906040850190845b818110156136225783516001600160a01b03168352928401929184019160010161418c565b6000602082840312156141c357600080fd5b6117a682613d8e565b600060208083850312156141df57600080fd5b82516001600160401b038111156141f557600080fd5b8301601f8101851361420657600080fd5b8051614211816137d1565b60405161421e8282613362565b82815260059290921b830184019184810191508783111561423e57600080fd5b928401925b8284101561388d578351614256816132b7565b82529284019290840190614243565b6000602080838503121561427857600080fd5b82516001600160401b0381111561428e57600080fd5b8301601f8101851361429f57600080fd5b80516142aa816137d1565b6040516142b78282613362565b82815260059290921b83018401918481019150878311156142d757600080fd5b928401925b8284101561388d5783516142ef81613456565b825292840192908401906142dc565b6020808252602a908201527f5769746e6574426f6172644461746141434c733a20756e617574686f72697a6560408201526932103932b837b93a32b960b11b606082015260800190565b60208082526042908201527f5769746e657452657175657374426f617264547275737461626c65446566617560408201527f6c743a205769746e65742064725478486173682063616e6e6f74206265207a65606082015261726f60f01b608082015260a00190565b6020808252603a908201527f5769746e657452657175657374426f617264547275737461626c65446566617560408201527f6c743a20726573756c742063616e6e6f7420626520656d707479000000000000606082015260800190565b600181811c9082168061442157607f821691505b6020821081036111e157634e487b7160e01b600052602260045260246000fd5b60006020828403121561445357600080fd5b81516117a68161338e565b80820180821115610bcf57610bcf614141565b60006020828403121561448357600080fd5b81516117a681613456565b600060208083850312156144a157600080fd5b82516001600160401b03808211156144b857600080fd5b818501915085601f8301126144cc57600080fd5b81516144d7816137d1565b6040516144e48282613362565b82815260059290921b840185019185810191508883111561450457600080fd5b8585015b8381101561453c578051858111156145205760008081fd5b61452e8b89838a0101613ee0565b845250918601918601614508565b5098975050505050505050565b60006020828403121561455b57600080fd5b5051919050565b8082028115828204841417610bcf57610bcf614141565b600060208083526000845461458d8161440d565b808487015260406001808416600081146145ae57600181146145c8576145f6565b60ff1985168984015283151560051b8901830195506145f6565b896000528660002060005b858110156145ee5781548b82018601529083019088016145d3565b8a0184019650505b509398975050505050505050565b80516101008110612af557600080fd5b6000806040838503121561462757600080fd5b61463083614604565b915060208301516001600160401b0381111561464b57600080fd5b61465785828601613ee0565b9150509250929050565b600060033d111561467a5760046000803e5060005160e01c5b90565b600060443d101561468b5790565b6040516003193d81016004833e81513d6001600160401b0381602484011181841117156146ba57505050505090565b82850191508151818111156146d25750505050505090565b843d87010160208285010111156146ec5750505050505090565b6146fb60208286010187613362565b509095945050505050565b60006020828403121561471857600080fd5b6117a682614604565b60008251614733818460208701613669565b9190910192915050565b601f82111561478757600081815260208120601f850160051c810160208610156147645750805b601f850160051c820191505b8181101561478357828155600101614770565b5050505b505050565b81516001600160401b038111156147a5576147a56132e9565b6147b9816147b3845461440d565b8461473d565b602080601f8311600181146147ee57600084156147d65750858301515b600019600386901b1c1916600185901b178555614783565b600085815260208120601f198616915b8281101561481d578886015182559484019460019091019084016147fe565b508582101561483b5787850151600019600388901b60f8161c191681555b5050505050600190811b01905550565b81810381811115610bcf57610bcf614141565b6020808252602f9082015260008051602061494483398151915260408201526e2072657761726420746f6f206c6f7760881b606082015260800190565b634e487b7160e01b600052600160045260246000fdfe5769746e6574426f617264446174613a206e6f7420696e2044656c65746564207374617475734df64445edc775fba59db44b8001852fb1b777eea88fd54f04572dd114e3ff7f5769746e6574426f617264446174613a206e6f7420696e20506f73746564207374617475735769746e6574426f617264446174613a206e6f7420696e205265706f72746564207374617475735769746e657452657175657374426f617264547275737461626c65426173653aa6db7263983f337bae2c9fb315730227961d1c1153ae1e10a56b5791465dd6fd5769746e657452657175657374426f617264547275737461626c65426173653a206661696c696e6720617373657274a2646970667358221220bf3dc26268b6770a1de21f1b1027906f6daabd607b882f92a01b7071388705e064736f6c63430008110033",
+  "linkReferences": {
+    "contracts/witnet/libs/WitnetParserLib.sol": {
+      "WitnetParserLib": [
+        {
+          "length": 20,
+          "start": 3503
+        },
+        {
+          "length": 20,
+          "start": 3636
+        },
+        {
+          "length": 20,
+          "start": 3763
+        },
+        {
+          "length": 20,
+          "start": 4092
+        },
+        {
+          "length": 20,
+          "start": 4220
+        },
+        {
+          "length": 20,
+          "start": 4583
+        },
+        {
+          "length": 20,
+          "start": 6014
+        },
+        {
+          "length": 20,
+          "start": 7002
+        },
+        {
+          "length": 20,
+          "start": 8900
+        },
+        {
+          "length": 20,
+          "start": 8958
+        },
+        {
+          "length": 20,
+          "start": 9046
+        },
+        {
+          "length": 20,
+          "start": 9611
+        },
+        {
+          "length": 20,
+          "start": 9699
+        },
+        {
+          "length": 20,
+          "start": 10263
+        },
+        {
+          "length": 20,
+          "start": 10462
+        },
+        {
+          "length": 20,
+          "start": 10610
+        },
+        {
+          "length": 20,
+          "start": 10752
+        },
+        {
+          "length": 20,
+          "start": 11023
+        },
+        {
+          "length": 20,
+          "start": 11245
+        }
+      ]
+    }
+  },
+  "deployedLinkReferences": {
+    "contracts/witnet/libs/WitnetParserLib.sol": {
+      "WitnetParserLib": [
+        {
+          "length": 20,
+          "start": 2914
+        },
+        {
+          "length": 20,
+          "start": 3047
+        },
+        {
+          "length": 20,
+          "start": 3174
+        },
+        {
+          "length": 20,
+          "start": 3503
+        },
+        {
+          "length": 20,
+          "start": 3631
+        },
+        {
+          "length": 20,
+          "start": 3994
+        },
+        {
+          "length": 20,
+          "start": 5425
+        },
+        {
+          "length": 20,
+          "start": 6413
+        },
+        {
+          "length": 20,
+          "start": 8311
+        },
+        {
+          "length": 20,
+          "start": 8369
+        },
+        {
+          "length": 20,
+          "start": 8457
+        },
+        {
+          "length": 20,
+          "start": 9022
+        },
+        {
+          "length": 20,
+          "start": 9110
+        },
+        {
+          "length": 20,
+          "start": 9674
+        },
+        {
+          "length": 20,
+          "start": 9873
+        },
+        {
+          "length": 20,
+          "start": 10021
+        },
+        {
+          "length": 20,
+          "start": 10163
+        },
+        {
+          "length": 20,
+          "start": 10434
+        },
+        {
+          "length": 20,
+          "start": 10656
+        }
+      ]
+    }
+  }
+}

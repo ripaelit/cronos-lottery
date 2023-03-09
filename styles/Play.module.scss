@@ -1,0 +1,310 @@
+.Playpage {
+  background: #dbf5ff;
+  border-radius: 35px;
+  padding-bottom: 120px;
+}
+
+.Play_top {
+  height: 200px;
+  background: #6dcef4;
+  border-radius: 35px;
+}
+
+.Play_control {
+  /* margin-top: -400px; */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  padding-top: 151px;
+}
+
+.Play_img {
+  position: absolute;
+  width: 350px !important;
+  height: 350px !important;
+  top: -200px;
+  right: calc(50% - 175px) !important;
+}
+
+.Play_bottom {
+  width: 843px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  margin: 0 auto;
+  text-align: center;
+  justify-content: center;
+}
+
+.Play_title {
+  font-size: 70px;
+  color: #0063b0;
+  font-weight: bold !important;
+  line-height: 70px;
+  text-align: center;
+}
+
+.Play_time {
+  font-size: 50px;
+  color: #0063b0;
+  font-weight: bold !important;
+  line-height: 70px;
+  text-align: center;
+}
+
+.Play_price {
+  font-size: 30px;
+  color: #0063b0;
+  font-weight: bold !important;
+  line-height: 30px;
+  text-align: center;
+}
+
+.Play_countPanel {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+  width: auto;
+  justify-content: center;
+}
+
+.Play_countChangeButton {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ED4C14;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.Play_countLabel {
+  font-size: 70px;
+  line-height: 70px;
+  color: #0063B0;
+  font-weight: bold !important;
+  text-align: center;
+}
+
+.Play_trpzOption {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.Play_trpzLabel {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #0063B0;
+}
+
+.Play_trpzCheck {
+  border: 1px solid #6DCEF4 !important;
+}
+
+.Play_pricePanel {
+  width: 314px;
+  height: 64px;
+  border: 2px solid #5dcef4;
+  background-color: white;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 30px;
+  color: #0063B0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.Play_context {
+  font-size: 30px;
+  color: #0063b0;
+  margin-top: 35px;
+  font-weight: 400 !important;
+  text-align: center;
+  line-height: 30px;
+}
+
+.Play_sliderGroup {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px
+}
+
+.Play_sliderItem {
+  margin: 24px 0px
+}
+
+.Play_sliderLabel {
+  text-align: right;
+}
+
+.Play_playBtnGroup {
+  display: flex;
+  gap: 24px;
+}
+
+.Play_playBtn {
+  background: #ed4c14;
+  border-radius: 50px;
+  padding: 21px 0px;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  width: 380px;
+  height: 72px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.currentInfoControl {
+  display: flex;
+  flex-direction: column;
+  gap: 16px
+}
+
+.currentInfoGroup {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.currentInfoTitle {
+  font-size: 18px;
+  color: #0063b0;
+  font-weight: 700;
+}
+
+.currentInfoValue {
+  font-size: 16px;
+  color: #0063b0;
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.potName {
+  font-size: 16px;
+  font-weight: 600 !important;
+}
+
+.burnTrpzOption {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+@media(max-width:1444px) {
+  .Play_title {
+    font-size: 45px;
+  }
+
+  .Play_time {
+    font-size: 35px;
+  }
+}
+
+@media(max-width:768px) {
+  .Play_control {
+    margin-top: -300px;
+  }
+
+  .Play_title {
+    font-size: 35px;
+    margin-top: 200px;
+  }
+
+  .Play_time {
+    font-size: 25px;
+  }
+
+  .Play_bottom {
+    width: 90%;
+    text-align: center;
+  }
+
+  .Play_playBtnGroup {
+    flex-direction: column;
+  }
+
+  .Play_sliderGroup {
+    width: 100%;
+  }
+
+  .Play_playBtn {
+    width: 100%;
+  }
+
+  .Play_img {
+    top: 100px;
+  }
+}
+
+@media screen and (max-width:576px) {
+  .Play_bottom {
+    margin-top: 100px !important;
+  }
+
+  .Play_context {
+    margin-top: 6px !important;
+  }
+}
+
+@media(max-width:540px) {
+
+  .Play_context {
+    font-size: 18px;
+  }
+
+  .Play_playBtn {
+    font-size: 18px;
+  }
+
+  .Play_title {
+    margin-bottom: 20px;
+  }
+
+  .Play_time {
+    margin-bottom: 15px;
+  }
+
+  .Play_price {
+    margin-bottom: 30px;
+  }
+
+  .Play_countPanel {
+    margin-bottom: 50px;
+  }
+
+  .Play_trpzOption {
+    margin-bottom: 30px;
+  }
+
+  .Play_pricePanel {
+    margin-bottom: 30px;
+  }
+
+  .Play_img {
+    top: 100px;
+  }
+}

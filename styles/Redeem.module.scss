@@ -1,0 +1,140 @@
+.Redeempage {
+  background: #dbf5ff;
+  border-radius: 35px;
+  padding-bottom: 90.5px;
+}
+
+.Redeem_top {
+  height: 200px;
+  background: #6dcef4;
+  border-radius: 35px;
+}
+
+.Redeem_control {
+  margin-top: -200px;
+}
+
+.Redeem_img {
+  margin: 0 auto;
+  width: 350px !important;
+  height: 350px !important;
+}
+
+.Redeem_bottom {
+  width: 843px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.Redeem_title {
+  font-size: 70px;
+  color: #0063b0;
+  font-weight: bold !important;
+  line-height: 70px;
+  text-align: center;
+}
+
+.Redeem_context {
+  font-size: 30px;
+  color: #0063b0;
+  margin-top: 35px;
+  font-weight: 400;
+  text-align: center;
+  line-height: 30px;
+  margin-bottom: 30px;
+}
+
+.Redeem_sliderGroup {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px
+}
+
+.Redeem_sliderItem {
+  margin: 24px 0px
+}
+
+.Redeem_sliderLabel {
+  text-align: right;
+}
+
+.Redeem_playBtnGroup {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.Redeem_RedeemBtn {
+  max-width: fit-content;
+  margin: 0 auto;
+  background: #ed4c14;
+  border-radius: 50px;
+  padding: 21px;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.Redeem_playBtn {
+  background: #ed4c14;
+  border-radius: 50px;
+  padding: 21px 0px;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+@media(max-width:1444px) {
+  .Redeem_title {
+    font-size: 45px;
+  }
+}
+
+@media(max-width:768px) {
+  .Redeem_control {
+    margin-top: -160px;
+  }
+
+  .Redeem_title {
+    font-size: 35px;
+  }
+
+  .Redeem_bottom {
+    width: 90%;
+    text-align: center;
+  }
+
+  .Redeem_playBtnGroup {
+    flex-direction: column;
+  }
+
+  .Redeem_sliderGroup {
+    width: 100%;
+  }
+
+  .Redeem_playBtn {
+    width: 100%;
+  }
+}
+
+@media(max-width:768px) {
+  .Redeem_bottom {
+    gap: 0px
+  }
+
+  .Redeem_context {
+    font-size: 18px;
+  }
+
+  .Redeem_playBtn {
+    font-size: 18px;
+  }
+
+  .Redeempage {
+    padding-bottom: 60px;
+  }
+}
