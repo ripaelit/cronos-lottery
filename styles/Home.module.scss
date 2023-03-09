@@ -186,7 +186,7 @@
 
 .distTableHeader {
   font-size: 30px;
-  font-weight: 400;
+  font-weight: 700 !important;
   text-align: center;
   line-height: 30px;
   color: #0063B0;
@@ -505,6 +505,7 @@
     font-weight: 400;
     text-align: center;
     line-height: 16px;
+    font-weight: bold !important;
   }
 
   .Ranking_first_tr_td {
@@ -516,7 +517,7 @@
   .Ranking_remain_tr_td {
     color: #0063B0;
     font-size: 13px;
-    font-weight: bold !important;
+    font-weight: 700;
   }
 
   .Ranking_table {
@@ -1005,7 +1006,7 @@
 .Ranking_remain_tr_td {
   color: #0063b0;
   font-size: 30px;
-  font-weight: bold !important;
+  font-weight: 700;
 }
 
 .Ranking_context {
