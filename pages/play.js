@@ -432,15 +432,7 @@ const Play = () => {
                 }} className={styles.Play_trpzCheck} />
                 <label className={styles.Play_trpzLabel}>Burn {discountTokenPrice} $TRPZ tokens per ticket purchased to receive a {discountRate / 10}% discount.</label>
               </div>
-              <label className={styles.Play_trpzLabel}>To learn more about the $TRPZ token and the Troopz Community Staking platform head over to the Troopz n Friendz discord.</label>
-              <a
-                className={styles.Play_playBtn}
-                target='_blank'
-                rel="noreferrer"
-                href='/'
-              >
-                Join the Discord
-              </a>
+              
             </div>
             <div className={styles.Play_pricePanel}>
               {totalPrice} CRO
