@@ -265,7 +265,7 @@ const Home = () => {
                   Burn 100 $TRPZ tokens per ticket purchased to receive a 10% discount.
                 </p>
                 <p className={styles.learn_text}>
-                  To learn more about the $TRPZ token and the Troopz Community Staking Platform head over to the <span className={styles.Troopz_context}>Troopz n Friendz Discord.</span>
+                  To learn more about the $TRPZ token and the Troopz Community Staking Platform head over to the <span className={styles.Troopz_context}><a target="_blank" rel="noreferrer" href="https://discord.gg/trooprz ">Troopz n Friendz Discord. </a> </span>
                 </p>
                 <Link href="/play">
                   <button className={styles.stakeButton}>PLAY NOW</button>
