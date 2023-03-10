@@ -446,6 +446,8 @@ const Play = () => {
 
             {!!timeStr && <p className={styles.Play_time}>{timeStr}</p>}
 
+///
+
             <div className={styles.currentInfoControl}>
               <div className={styles.currentInfoGroup}>
                 <p className={styles.currentInfoTitle}>Total Buy Amount : </p>
