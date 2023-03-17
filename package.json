@@ -1,5 +1,5 @@
 {
-  "name": "CodyPeace",
+  "name": "codypeace",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -62,5 +62,20 @@
     "eslint-config-next": "12.1.0",
     "postcss": "^8.4.7",
     "tailwindcss": "^3.0.23"
-  }
+  },
+  "description": "This a complete example of fullstack NFT minting dApp. **CroDraw** is built with the purpose of providing an _entry point for future NFT Minting Website_ projects.",
+  "main": "Crosmo.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crmax-it/cro-draw-final.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/crmax-it/cro-draw-final/issues"
+  },
+  "homepage": "https://github.com/crmax-it/cro-draw-final#readme"
 }
