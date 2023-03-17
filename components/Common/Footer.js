@@ -11,7 +11,7 @@ const Footer = () => {
           <a target='_blank' rel="noreferrer" href='https://discord.gg/trooprz '><img src='/images/discord.png' /></a>
         </div>
         <div className={styles.Footer_text}>
-          Copyright © 2023  | Developed for Trooprz | Powered by the&nbsp;<a target='_blank' rel="noreferrer" href='https://witnet.io/'>Witnet oracle</a>
+          Copyright <a target='_blank' rel="noreferrer" href='https://discord.gg/trooprz'> Trooprz</a> © 2023  | Developed for Trooprz | Powered by the&nbsp;<a target='_blank' rel="noreferrer" href='https://witnet.io/'>Witnet oracle</a>
         </div>
       </div>
     </div>
