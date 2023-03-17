@@ -16,7 +16,7 @@ const errorAlert = (title, err) => {
 }
 
 const Header = () => {
-  const [activeId, setActiveId] = useState(0)
+  const [activeId, setActiveId] = useState(0);
 
   const router = useRouter();
 
@@ -77,8 +77,8 @@ const Header = () => {
           <div className={styles.HeaderLeft} >
             <Link href='/home'>
               <div className={styles.Logo} >
-                <img src='images/logo.png' className={styles.hideMobile} />
-                <img src='images/small_logo.png' className={`${styles.showMobile} ${styles.mobileLogo}`} />
+                <img src='images/logo.png' alt='' className={styles.hideMobile} />
+                <img src='images/small_logo.png' alt='' className={`${styles.showMobile} ${styles.mobileLogo}`} />
               </div>
             </Link>
             <div className={styles.HeaderMenu} >

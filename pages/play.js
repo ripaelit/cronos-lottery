@@ -90,7 +90,7 @@ const Play = () => {
 
       if (get_walletBalance.lt(get_ticketBalance)) {
         // "lt" mean A < B (lessthan)
-        toast.error(`Insufficient Fund`)
+        toast.error(`Insufficient Funds`)
         return
       }
 
@@ -128,7 +128,7 @@ const Play = () => {
         .then((blnc) =>
           dispatch(accountChanged({ balance: ethers.utils.formatEther(blnc) }))
         )
-      toast.success('Successfully buy tickets')
+      toast.success('Successfully bought tickets')
       setLoading(false)
     } catch (error) {
       console.log('error', { error })
@@ -151,7 +151,7 @@ const Play = () => {
     }
 
     if (remainTime <= 0) {
-      return toast.error('Lottery has ended')
+      return toast.error('The lottery has ended')
     }
 
     try {
@@ -171,13 +171,13 @@ const Play = () => {
         .mul(BN.from(10).pow(discountTokenkDecimals))
 
       if (BN.from(discountTokenBlnc).lt(request_tokenAmount)) {
-        toast.error('Insufficient Token')
+        toast.error('You dont have enough $TRPZ. Reduce the number of tickets or un-check the box.')
         setLoading(false)
         return
       }
 
       if (get_walletBalance.lt(get_ticketBalance)) {
-        toast.error(`Insufficient Fund`)
+        toast.error(`You dont have enough $CRO. Reduce the number of tickets or top up your wallet`)
         setLoading(false)
         return
       }
@@ -244,6 +244,10 @@ const Play = () => {
   }
 
   useEffect(() => {
+    console.log('balance', wallet_balance);
+    if (wallet_balance <= 0) {
+      toast.error("You don’t have enough $CRO. Reduce the number of tickets or top up your wallet!");
+    }
     const init = async () => {
       if (!buyContract) {
         return
@@ -257,7 +261,8 @@ const Play = () => {
         const blockNumber = await provider.getBlockNumber()
         const timestamp = (await provider.getBlock(blockNumber)).timestamp
         console.log('current time:', { current: Date.now() / 1000, timestamp, endtime: edTime.toNumber() })
-        setRemainTime(Math.max(edTime.toNumber() - timestamp, 0))
+        // setRemainTime(Math.max(edTime.toNumber() - timestamp, 0))
+        setRemainTime(Math.max((1679120555690 - Date.now()) / 1000, 0))
       })
 
       buyContract
@@ -369,7 +374,7 @@ const Play = () => {
     if (remainTime > 0) {
       setRemainTime(remainTime - 1)
       let day = `${Math.floor(remainTime / 86400)}`
-      let hour = `${Math.floor(remainTime / 3600)}`
+      let hour = `${Math.floor((remainTime % 86400) / 3600)}`
       if (hour.length === 1) {
         hour = `0${hour}`
       }
@@ -382,9 +387,9 @@ const Play = () => {
         second = `0${second}`
       }
       if (day > 0) {
-        setTimeStr(`${day} days ${hour} hours`)
+        setTimeStr(`${day} days ${hour} hours `)
       } else if (hour > 0) {
-        setTimeStr(`${hour} hours ${minute} minutes`)
+        setTimeStr(`${hour} hours ${minute} minutes ${second} seconds`)
       } else if (minute > 0) {
         setTimeStr(`${minute} minutes ${second} seconds`)
       } else if (second > 0) {
@@ -395,6 +400,7 @@ const Play = () => {
     } else {
       setTimeStr('')
     }
+    // console.log('time', timeStr);
   }, 1000)
 
   return (
@@ -432,7 +438,15 @@ const Play = () => {
                 }} className={styles.Play_trpzCheck} />
                 <label className={styles.Play_trpzLabel}>Burn {discountTokenPrice} $TRPZ tokens per ticket purchased to receive a {discountRate / 10}% discount.</label>
               </div>
-              
+              {/* <label className={styles.Play_trpzLabel}>To learn more about the $TRPZ token and the Troopz Community Staking platform head over to the Troopz n Friendz discord.</label>
+              <a
+                className={styles.Play_playBtn}
+                target='_blank'
+                rel="noreferrer"
+                href='/'
+              >
+                Join the Discord
+              </a> */}
             </div>
             <div className={styles.Play_pricePanel}>
               {totalPrice} CRO
@@ -444,11 +458,11 @@ const Play = () => {
               PLAY NOW
             </div>
 
+            <div className={styles.Get_ticket}>Get your tickets before/ enter before</div>
             {!!timeStr && <p className={styles.Play_time}>{timeStr}</p>}
 
-///
 
-            <div className={styles.currentInfoControl}>
+            {/* <div className={styles.currentInfoControl}>
               <div className={styles.currentInfoGroup}>
                 <p className={styles.currentInfoTitle}>Total Buy Amount : </p>
                 <p className={styles.currentInfoValue}>
@@ -498,7 +512,7 @@ const Play = () => {
                   }
                 </div>
               </div>
-            </div>
+            </div> */}
 
           </div>
         </div> : <div className={styles.Play_control}>
@@ -509,7 +523,7 @@ const Play = () => {
           <div className={styles.Play_bottom}>
             <p className={styles.Play_title}>Whoops, no wallet connected</p>
             <p className={styles.Play_context}>
-              You can connect your wallet by clicking the &quot;Connect Wallet&quot; button
+              You can connect your wallet by clicking the &quot;Connect Wallet&quot;
             </p>
           </div>
         </div>}

@@ -193,9 +193,28 @@
 }
 
 .Ranking_first_tr_td {
-  color: #ed4c14;
+  color: #ed4c14 !important;
   font-size: 40px;
   font-weight: bold !important;
+}
+
+
+.Ranking_first_tr_td1 {
+  color: #ed4c14 !important;
+  font-size: 40px;
+  font-weight: bold !important;
+}
+
+.Ranking_remain_tr_td {
+  color: #0063B0;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.Ranking_remain_tr_td1 {
+  color: #0063B0;
+  font-size: 30px;
+  font-weight: 700;
 }
 
 .Ranking_table {
@@ -313,6 +332,10 @@
 }
 
 @media(max-width:768px) {
+  .Trpz_right a {
+    text-align: center !important;
+  }
+
   .Heart_title {
     display: flex;
     justify-content: center;
@@ -336,6 +359,7 @@
     justify-content: center;
     align-items: center;
     margin-top: 80px;
+    text-align: center;
   }
 
   .Heart_right {
@@ -528,6 +552,7 @@
     border-radius: 0px !important;
     border: none !important;
     padding: 24px 0px !important;
+
   }
 
   .Heart_control {
@@ -687,7 +712,7 @@
   color: #0063b0;
   font-weight: 400 !important;
   line-height: 30px;
-  text-align:center;
+  text-align: center;
 }
 
 .Method_item button {
@@ -705,9 +730,65 @@
   }
 }
 
+@media(max-width:995px) {
+  .Ranking_first_tr_td1 {
+    display: none;
+  }
+
+  .Ranking_remain_tr_td1 {
+    display: none;
+  }
+
+  .distTableHeader1 {
+    display: none;
+  }
+}
+
 @media(max-width:768px) {
   .Home_container {
     margin-bottom: 0px !important;
+  }
+
+  .Home_text {
+    text-align: center !important;
+  }
+
+  .SmartCronos {
+    text-align: center !important;
+  }
+
+  .Ranking_title {
+    text-align: center !important;
+    font-size: 40px !important;
+  }
+
+  .Heart_title {
+    font-size: 40px !important;
+  }
+
+  .Heart_right_group {
+    text-align: center;
+  }
+
+  .Trpz_title {
+    text-align: center !important;
+    font-size: 40px !important;
+  }
+
+  .Trpz_context {
+    text-align: center !important;
+  }
+
+  .learn_text {
+    text-align: center !important;
+  }
+
+  .stakeButton {
+    margin: 0 auto;
+  }
+
+  .Trpz_right a {
+    text-align: center;
   }
 
   .Method_list {
@@ -807,10 +888,48 @@
   color: white;
   cursor: pointer;
   width: 270px;
-  margin-top:20px;
+  margin-top: 20px;
 }
 
 @media screen and (max-width:576px) {
+  .Trpz_title {
+    text-align: center !important;
+  }
+
+  .learn_text {
+    text-align: center !important;
+    font-size: 20px !important;
+  }
+
+  .Trpz_context {
+    text-align: center !important;
+    font-size: 20px !important;
+  }
+
+  .Home_text {
+    text-align: center !important;
+  }
+
+  .distTableHeader1 {
+    display: none;
+  }
+
+  .Ranking_first_tr_td1 {
+    display: none;
+  }
+
+  .Ranking_remain_tr_td1 {
+    display: none;
+  }
+
+  .Ranking_title {
+    text-align: center !important;
+  }
+
+  .Ranking_context {
+    text-align: center !important;
+  }
+
   .Crow {
     display: flex;
     flex-direction: column;
@@ -1051,7 +1170,7 @@
 
 @media(max-width:1024px) {
   .Ranking_table table {
-    width: 768px;
+    width: 100%;
   }
 }
 
@@ -1065,7 +1184,7 @@
   }
 
   .Ranking_table table {
-    width: 550px !important;
+    width: 100% !important;
   }
 
   .Ranking_table thead td,
@@ -1076,7 +1195,15 @@
 
 @media(max-width:540px) {
   .Ranking_title {
-    font-size: 30px;
+    font-size: 30px !important;
+  }
+
+  .Heart_title {
+    font-size: 30px !important;
+  }
+
+  .Trpz_title {
+    font-size: 30px !important;
   }
 
   .Ranking_table table {
@@ -1107,7 +1234,11 @@
 
 @media(max-width:1444px) {
   .Heart_title {
-    font-size: 45px;
+    font-size: 55px;
+  }
+
+  .Trpz_title {
+    font-size: 55px;
   }
 
   .Heart_right_group {

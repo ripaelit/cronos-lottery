@@ -27,11 +27,12 @@ const Home = () => {
           abi,
           provider
         );
-        lotteryContract.endTime().then(endTime => setRemainTime(Math.max(endTime.toNumber() - Date.now() / 1000, 0)))
+        lotteryContract.endTime().then(endTime => { console.log('endTime', endTime.toNumber()); setRemainTime((1679120555690 - Date.now()) / 1000) })
         lotteryContract.currentTicketId().then(curId => setCurrentTicketId(curId))
       } catch (err) {
         console.log('Error getting endtime:', err)
       }
+      console.log('now', Date.now())
     }
     init()
   }, [])
@@ -55,6 +56,7 @@ const Home = () => {
     } else {
       setTimeStr('')
     }
+    // console.log('remain', timeStr);
   }, 1000)
 
   const tableRankingBodyLists = [
@@ -79,7 +81,7 @@ const Home = () => {
                     <button className={styles.playButton}>Play now!</button>
                   </Link>
                   <button className={styles.playButtonMobile}>Play now!</button>
-                  <img src="/images/banner_img.png" className={styles.mobileBannerImg} width='131px' height='150px' />
+                  <img src="/images/banner_img.png" alt='' className={styles.mobileBannerImg} width='131px' height='150px' />
                 </div>
               </div>
               <div className={`${styles.Home_container} ${styles.hideMobile}`}>
@@ -92,7 +94,7 @@ const Home = () => {
             </div>
             <div className={styles.Banner_right}>
               <div className={styles.Banner_img}>
-                <img src="/images/banner_img.png" />
+                <img src="/images/banner_img.png" alt='' />
               </div>
             </div>
           </div>
@@ -103,7 +105,7 @@ const Home = () => {
             <div className={styles.Method_list}>
               <div className={styles.Method_item}>
                 <div className={styles.Method_img}>
-                  <img src="/images/method1.png" />
+                  <img src="/images/method1.png" alt='' />
                   <div />
                 </div>
                 <p className={styles.Method_title}>How does it work?</p>
@@ -118,7 +120,7 @@ const Home = () => {
               </div>
               <div className={styles.Method_item}>
                 <div className={styles.Method_img}>
-                  <img src="/images/method2.png" />
+                  <img src="/images/method2.png" alt='' />
                   <div />
                 </div>
                 <p className={styles.Method_title}>Giving back?</p>
@@ -133,7 +135,7 @@ const Home = () => {
               </div>
               <div className={styles.Method_item}>
                 <div className={styles.Method_img}>
-                  <img src="/images/method3.png" />
+                  <img src="/images/method3.png" alt='' />
                   <div />
                 </div>
                 <p className={styles.Method_title}>Are you a winner?</p>
@@ -175,7 +177,7 @@ const Home = () => {
                 <table>
                   <thead>
                     <tr>
-                      <th className={styles.distTableHeader}></th>
+                      <th className={styles.distTableHeader1}></th>
                       <th className={styles.distTableHeader}>No of winners</th>
                       <th className={styles.distTableHeader}>Amount</th>
                     </tr>
@@ -192,8 +194,9 @@ const Home = () => {
                         <td
                           className={
                             idx === 0
-                              ? styles.Ranking_first_tr_td
-                              : styles.Ranking_remain_tr_td
+                              ? styles.Ranking_first_tr_td1
+                              : styles.Ranking_remain_tr_td1
+
                           }
                         >
                           {item.name}
@@ -238,7 +241,7 @@ const Home = () => {
           <div className={styles.Home_container}>
             <div className={styles.Heart_control}>
               <div className={styles.Heart_left}>
-                <img src="/images/hearts.png" className={styles.MobileLogo} />
+                <img src="/images/hearts.png" className={styles.MobileLogo} alt='' />
               </div>
               <div className={styles.Heart_right}>
                 <p className={styles.Heart_title}>Hearts of gold</p>
@@ -272,7 +275,7 @@ const Home = () => {
                 </Link>
               </div>
               <div className={styles.Trpz_left}>
-                <img src="/images/trpz.png" className={styles.trpzImg1} />
+                <img src="/images/trpz.png" className={styles.trpzImg1} alt='' />
               </div>
 
             </div>
@@ -342,7 +345,7 @@ const Home = () => {
           <div className={styles.Home_container}>
             <div className={styles.Trpz_control}>
               <div className={styles.Trpz_left}>
-                <img src="/images/brother.png" className={styles.trpzImg} />
+                <img src="/images/brother.png" className={styles.trpzImg} alt='' />
               </div>
               <div className={styles.Trpz_right}>
                 <p className={styles.Heart_title}>For My Brothers</p>
@@ -359,6 +362,7 @@ const Home = () => {
             </div>
           </div>
         </div>
+
 
         {/* <div className={styles.MobileSecuritySection}>
           <div className={styles.Home_container}>

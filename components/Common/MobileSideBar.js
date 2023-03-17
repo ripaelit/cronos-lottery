@@ -25,6 +25,8 @@ const MobileSideBar = (props) => {
     { id: 2, title: `Redeem`, link: '/redeem' },
   ]
 
+  const [flag, setFlag] = useState(null)
+
   const handleActiveId = (idx) => {
     if (idx === 0 || idx) {
       setActiveId(idx)
@@ -79,6 +81,7 @@ const MobileSideBar = (props) => {
         }
       }
     }
+
     if (!user.provider) {
       if (window.navigator.userAgent.includes("Crypto.com DeFiWallet")) {
         dispatch(connectAccount(false, "defi"));
@@ -87,6 +90,8 @@ const MobileSideBar = (props) => {
 
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => { setFlag(null) }, [])
 
   useEffect(() => {
     const res = menuLists.filter((item) => item.link === router.asPath)
@@ -102,14 +107,27 @@ const MobileSideBar = (props) => {
     dispatch(onLogout());
   };
 
+  const munualClose = () => {
+    if (flag === null) {
+      setFlag(false)
+    } else if (flag === flag) {
+      setFlag(null)
+    }
+  }
+
   return (
-    <Menu {...props}  >
+    <Menu {...props} isOpen={flag}>
       <div className={styles.MobileMenuContent} >
         <Link href='/home' ><img src='images/logo.png' /></Link>
         {
           menuLists.map((menu, idx) =>
             <Link href={menu.link} key={idx} >
-              <p onClick={() => handleActiveId(idx)} className={idx === activeId ? styles.menuActive : styles.menuPassive} > {menu.title} </p>
+              <p
+                onClick={() => {
+                  handleActiveId(idx)
+                  munualClose()
+                }}
+                className={idx === activeId ? styles.menuActive : styles.menuPassive} > {menu.title} </p>
             </Link>
           )
         }

@@ -81,7 +81,7 @@ const Redeem = () => {
 
               <p className={styles.Redeem_title} >Whoops, no wallet connected</p>
               <p className={styles.Redeem_context} >
-                You can connect your wallet by clicking the &quot;Connect Wallet&quot; button
+                You can connect your wallet by clicking the &quot;Connect Wallet&quot;
               </p>
             </div>
           </div>
