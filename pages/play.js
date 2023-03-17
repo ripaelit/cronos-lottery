@@ -90,7 +90,7 @@ const Play = () => {
 
       if (get_walletBalance.lt(get_ticketBalance)) {
         // "lt" mean A < B (lessthan)
-        toast.error(`Insufficient Funds`)
+        toast.error(`Insufficient Fund`)
         return
       }
 
@@ -128,7 +128,7 @@ const Play = () => {
         .then((blnc) =>
           dispatch(accountChanged({ balance: ethers.utils.formatEther(blnc) }))
         )
-      toast.success('Successfully bought tickets')
+      toast.success('Successfully buy tickets')
       setLoading(false)
     } catch (error) {
       console.log('error', { error })
@@ -151,7 +151,7 @@ const Play = () => {
     }
 
     if (remainTime <= 0) {
-      return toast.error('The lottery has ended')
+      return toast.error('Lottery has ended')
     }
 
     try {
@@ -171,13 +171,13 @@ const Play = () => {
         .mul(BN.from(10).pow(discountTokenkDecimals))
 
       if (BN.from(discountTokenBlnc).lt(request_tokenAmount)) {
-        toast.error('You dont have enough $TRPZ. Reduce the number of tickets or un-check the box.')
+        toast.error('Insufficient Token')
         setLoading(false)
         return
       }
 
       if (get_walletBalance.lt(get_ticketBalance)) {
-        toast.error(`You dont have enough $CRO. Reduce the number of tickets or top up your wallet`)
+        toast.error(`Insufficient Fund`)
         setLoading(false)
         return
       }
