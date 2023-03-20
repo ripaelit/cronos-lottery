@@ -87,7 +87,7 @@ const Home = () => {
               <div className={`${styles.Home_container} ${styles.hideMobile}`}>
                 <div className={styles.Banner_left_bottom}>
                   <p className={styles.Banner_left_bottom_context}>
-                    CroDraw is the first truly randomised lottery system built on the Cronos blockchain powered by Witnet Oracle.{' '}
+                    CroDraw is the first truly randomised, charity focused, lottery system built on the Cronos blockchain powered by Witnet Oracle.{' '}
                   </p>
                 </div>
               </div>
@@ -140,7 +140,7 @@ const Home = () => {
                 </div>
                 <p className={styles.Method_title}>Are you a winner?</p>
                 <p className={styles.Method_context}>
-                  CroDraws will take place every Sunday at 18:00 EST, distribution is managed via smart contract and paid automatically.{' '}
+                  CroDraws will take place every Wednesday at 18:00 EST, distribution is managed via smart contract.{' '}
                 </p>
                 <div className={styles.Method_item1}>
                   <Link href="/redeem">
@@ -250,7 +250,7 @@ const Home = () => {
                     CroDraw aims to support and raise awareness around mental health in Crypto and NFT space, with a particular focus on mens health.{' '}
                   </p>
                   <p className={styles.Nft}>
-                    20% of weekly ticket sales will go directly into a charity fund to support people and causes brought forward by the community via our &apos;Hearts of Gold&apos; initiative.{' '}
+                    15% of weekly ticket sales will go directly into a charity fund to support people and causes brought forward by the community via our &apos;Hearts of Gold&apos; initiative.{' '}
                   </p>
                 </div>
                 <a href='/'>Nominate a heart in need</a>
@@ -357,7 +357,7 @@ const Home = () => {
                     NFT holders get a 10% discount on CroDraw tickets and are entered into a weekly side draw for 2.5% of the CroDraw distribution.
                   </p>
                 </div>
-                <a target='_blank' rel="noreferrer" href='https://discord.gg/trooprz '>Join the Discord</a>
+                <a target='_blank' rel="noreferrer" href='https://app.ebisusbay.com/drops/for-my-brothers'>Get your For My Brothers NFT!</a>
               </div>
             </div>
           </div>
