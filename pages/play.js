@@ -60,6 +60,7 @@ const Play = () => {
   const wallet_balance = useSelector((state) => state.user.balance)
 
   const buyContract = useSelector((state) => state.user.buyContract)
+  console.log('byco', buyContract)
 
   const tokenContract = useSelector((state) => state.user.tokenContract)
 
@@ -90,7 +91,7 @@ const Play = () => {
 
       if (get_walletBalance.lt(get_ticketBalance)) {
         // "lt" mean A < B (lessthan)
-        toast.error(`Insufficient Fund`)
+        toast.error(`You don’t have enough $TRPZ. Reduce the number of tickets or un-check the box.`)
         return
       }
 
@@ -262,7 +263,7 @@ const Play = () => {
         const timestamp = (await provider.getBlock(blockNumber)).timestamp
         console.log('current time:', { current: Date.now() / 1000, timestamp, endtime: edTime.toNumber() })
         // setRemainTime(Math.max(edTime.toNumber() - timestamp, 0))
-        setRemainTime(Math.max((1679120555690 - Date.now()) / 1000, 0))
+        setRemainTime(Math.max((1680306667944 - Date.now()) / 1000, 0))
       })
 
       buyContract
@@ -395,7 +396,7 @@ const Play = () => {
       } else if (second > 0) {
         setTimeStr(`${second} seconds`)
       } else {
-        setTimeStr('Closed')
+        setTimeStr('Entries Closed')
       }
     } else {
       setTimeStr('')

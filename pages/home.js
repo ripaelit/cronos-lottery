@@ -27,7 +27,7 @@ const Home = () => {
           abi,
           provider
         );
-        lotteryContract.endTime().then(endTime => { console.log('endTime', endTime.toNumber()); setRemainTime((1679120555690 - Date.now()) / 1000) })
+        lotteryContract.endTime().then(endTime => { console.log('endTime', endTime.toNumber()); setRemainTime((endTime.toNumber() - Date.now()) / 1000) })
         lotteryContract.currentTicketId().then(curId => setCurrentTicketId(curId))
       } catch (err) {
         console.log('Error getting endtime:', err)
