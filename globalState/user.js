@@ -403,8 +403,8 @@ export const chainConnect = (type) => async (dispatch) => {
         5: 'https://goerli.infura.io/v3/33f72aa1b4f441bc8f3a244da53533b4',
         25: 'https://cronosrpc-1.xstaking.sg'
       },
-      chainId: 5
-      // chainId: 25,
+      //chainId: 5
+      chainId: 25,
     })
   }
 }
