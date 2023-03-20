@@ -12,6 +12,7 @@ import { accountChanged } from '../globalState/user'
 import useInterval from '../hooks/useInterval'
 
 import styles from '../styles/Play.module.scss'
+import { SettingsBluetoothRounded } from '@mui/icons-material'
 
 const renderer = ({ days, hours, minutes, seconds, completed }) => {
   if (completed) {
@@ -45,6 +46,7 @@ const Play = () => {
   const [totalPrice, setTotalPrice] = useState('0')
   const [timeStr, setTimeStr] = useState('')
   const [remainTime, setRemainTime] = useState(0)
+  const [isBurned, setIsBurned] = useState(false);
 
   const STATUS = {
     pending: 0,
@@ -60,7 +62,7 @@ const Play = () => {
   const wallet_balance = useSelector((state) => state.user.balance)
 
   const buyContract = useSelector((state) => state.user.buyContract)
-  console.log('byco', buyContract)
+  // console.log('byco', buyContract)
 
   const tokenContract = useSelector((state) => state.user.tokenContract)
 
@@ -139,6 +141,7 @@ const Play = () => {
   }
 
   const handleDiscountBuyTicket = async () => {
+    setIsBurned(true)
     if (!walletAddress) {
       return toast.error('Please connect your wallet')
     }
@@ -263,7 +266,8 @@ const Play = () => {
         const timestamp = (await provider.getBlock(blockNumber)).timestamp
         console.log('current time:', { current: Date.now() / 1000, timestamp, endtime: edTime.toNumber() })
         // setRemainTime(Math.max(edTime.toNumber() - timestamp, 0))
-        setRemainTime(Math.max((1680306667944 - Date.now()) / 1000, 0))
+        console.log('result', (edTime.toNumber() * 1000 - Date.now()) / 1000);
+        setRemainTime(Math.max((edTime.toNumber() - Date.now()) / 1000, 0))
       })
 
       buyContract
@@ -432,13 +436,15 @@ const Play = () => {
               }}>+</div>
             </div>
             <div className={styles.Play_trpzOption}>
-              <div className={styles.burnTrpzOption}>
-                <input type='checkbox' checked={useTrpz} onChange={e => {
-                  setUseTrpz(!useTrpz)
-                  calculatePrice(!useTrpz, ticketCount)
-                }} className={styles.Play_trpzCheck} />
-                <label className={styles.Play_trpzLabel}>Burn {discountTokenPrice} $TRPZ tokens per ticket purchased to receive a {discountRate / 10}% discount.</label>
-              </div>
+              {!isBurned && (
+                <div className={styles.burnTrpzOption}>
+                  <input type='checkbox' checked={useTrpz} onChange={e => {
+                    setUseTrpz(!useTrpz)
+                    calculatePrice(!useTrpz, ticketCount)
+                  }} className={styles.Play_trpzCheck} />
+                  <label className={styles.Play_trpzLabel}>Burn {discountTokenPrice} $TRPZ tokens per ticket purchased to receive a {discountRate / 10}% discount.</label>
+                </div>
+              )}
               {/* <label className={styles.Play_trpzLabel}>To learn more about the $TRPZ token and the Troopz Community Staking platform head over to the Troopz n Friendz discord.</label>
               <a
                 className={styles.Play_playBtn}

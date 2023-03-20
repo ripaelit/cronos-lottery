@@ -52,6 +52,7 @@ const Redeem = () => {
         buyContract.ticketPrice().then(newPrice => setTicketPrice(newPrice.toString()))
         buyContract.maxNumberTicketsPerBuy().then(newMax => setMaxTicketCount(newMax))
         buyContract.endTime().then(newEnd => setEndTime(newEnd.toNumber() * 1000))
+        // setFirstPotWinner('0xe926a25a867647D2D27C1C062237e132b1354c8f');
         buyContract.getWinnersByPot(1).then(firstPotWinners => setFirstPotWinner(firstPotWinners.length > 0 ? firstPotWinners[0] : ''))
 
         if (walletAddress) {
@@ -91,15 +92,15 @@ const Redeem = () => {
           <div className={styles.Redeem_control} >
             <img className={styles.Redeem_img} src='images/win_ticket.png' />
             <div className={styles.Redeem_bottom} >
-              <p className={styles.Redeem_title} >Woohoo!</p>
-
+              {/* <p className={styles.Redeem_title} >Woohoo!</p> */}
               {
-                firstPotWinner === walletAddress ? <p className={styles.Redeem_context} >You won the jackpot</p> : ''
+                firstPotWinner === walletAddress ? <p className={styles.Redeem_title} >You won the jackpot</p>
+                  : <p className={styles.Redeem_title} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)}CRO</p>
               }
-              {
-                (claimableAmount !== '' && claimableAmount !== '0') ? <p className={styles.Redeem_context} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)}CRO</p> : ''
-              }
-              <p className={styles.Redeem_context} >Week Claimable</p>
+              {/* {
+                (claimableAmount !== '' && claimableAmount !== '0') ? <p className={styles.Redeem_title} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)}CRO</p> : ''
+              } */}
+              <p className={styles.Redeem_context} >Forever Claimable</p>
               <div className={styles.Redeem_RedeemBtnGroup} >
                 <div className={styles.Redeem_RedeemBtn} onClick={handleClaimWinnings}  >
                   Claim your winnings
@@ -120,7 +121,7 @@ const Redeem = () => {
               {
                 (claimableAmount !== '' && claimableAmount !== '0') ? <p className={styles.Redeem_context} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)}CRO</p> : ''
               }
-              <p className={styles.Redeem_context} >Week Claimable</p>
+              <p className={styles.Redeem_context} >Forever Claimable</p>
               <div className={styles.Redeem_RedeemBtnGroup} >
                 <div className={styles.Redeem_playBtnGroup} >
                   <div className={styles.Redeem_sliderGroup} >
