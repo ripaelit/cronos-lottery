@@ -273,6 +273,7 @@ const Play = () => {
       buyContract
         .ticketPrice()
         .then((newPrice) => {
+          console.log("new", newPrice);
           setTicketPrice(newPrice.toString())
           calculatePrice(false, 1)
         })
@@ -423,6 +424,7 @@ const Play = () => {
 
           <div className={styles.Play_bottom}>
             <p className={styles.Play_title}>Buy your ticket now!</p>
+            {/* <p>{ticketPrice}</p> */}
             <p className={styles.Play_price}>{new BigNumber(ticketPrice).times(new BigNumber(1000 - (useTrpz ? discountRate : 0) - (hasDiscountNft ? nftDiscountRate : 0)).div(new BigNumber(1000))).div(new BigNumber(10).pow(18)).toFixed(3)} CRO</p>
             <div className={styles.Play_countPanel}>
               <div className={styles.Play_countChangeButton} onClick={() => {
@@ -436,6 +438,11 @@ const Play = () => {
               }}>+</div>
             </div>
             <div className={styles.Play_trpzOption}>
+              {hasDiscountNft ? (
+                <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target="_blank" rel="noopener noreferrer">10% Discount has been added for holding a For My Brothers NFT</a>
+              ) : (
+                <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target="_blank" rel="noopener noreferrer">For an extra 10% discount on tickets, grab a &apos;For My Brothers&apos; NFT</a>
+              )}
               {!isBurned && (
                 <div className={styles.burnTrpzOption}>
                   <input type='checkbox' checked={useTrpz} onChange={e => {

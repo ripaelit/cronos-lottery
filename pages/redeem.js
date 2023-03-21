@@ -73,6 +73,8 @@ const Redeem = () => {
       }
       <div className={styles.Redeempage} >
         <div className={styles.Redeem_top} />
+        {/* <div>{claimableAmount}</div>
+        <div>{isClaimable ? 'true' : 'false'}</div> */}
         {
           !walletAddress &&
           <div className={styles.Redeem_control} >
@@ -88,19 +90,19 @@ const Redeem = () => {
           </div>
         }
         {
-          walletAddress && isClaimable &&
+          walletAddress && !isClaimable &&
           <div className={styles.Redeem_control} >
             <img className={styles.Redeem_img} src='images/win_ticket.png' />
             <div className={styles.Redeem_bottom} >
               {/* <p className={styles.Redeem_title} >Woohoo!</p> */}
               {
-                firstPotWinner === walletAddress ? <p className={styles.Redeem_title} >You won the jackpot</p>
+                firstPotWinner === walletAddress ? <p className={styles.Redeem_title} >You won the jackpot. You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)}CRO</p>
                   : <p className={styles.Redeem_title} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)}CRO</p>
               }
               {/* {
                 (claimableAmount !== '' && claimableAmount !== '0') ? <p className={styles.Redeem_title} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)}CRO</p> : ''
               } */}
-              <p className={styles.Redeem_context} >Winnings claimable forever</p>
+              <p className={styles.Redeem_context} >Forever Claimable</p>
               <div className={styles.Redeem_RedeemBtnGroup} >
                 <div className={styles.Redeem_RedeemBtn} onClick={handleClaimWinnings}  >
                   Claim your winnings
@@ -110,18 +112,12 @@ const Redeem = () => {
           </div>
         }
         {
-          walletAddress && !isClaimable &&
+          walletAddress && isClaimable &&
           <div className={styles.Redeem_control} >
             <img className={styles.Redeem_img} src='images/no_win_ticket.png' />
             <div className={styles.Redeem_bottom} >
               <p className={styles.Redeem_title} >No winning tickets…</p>
-              {
-                firstPotWinner === walletAddress ? <p className={styles.Redeem_context} >You won the jackpot</p> : ''
-              }
-              {
-                (claimableAmount !== '' && claimableAmount !== '0') ? <p className={styles.Redeem_context} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)}CRO</p> : ''
-              }
-              <p className={styles.Redeem_context} >Forever Claimable</p>
+              {/* <p className={styles.Redeem_context} >Forever Claimable</p> */}
               <div className={styles.Redeem_RedeemBtnGroup} >
                 <div className={styles.Redeem_playBtnGroup} >
                   <div className={styles.Redeem_sliderGroup} >
