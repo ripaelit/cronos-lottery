@@ -131,7 +131,7 @@ const Play = () => {
         .then((blnc) =>
           dispatch(accountChanged({ balance: ethers.utils.formatEther(blnc) }))
         )
-      toast.success('Successfully buy tickets')
+      toast.success('Successfully bought tickets')
       setLoading(false)
     } catch (error) {
       console.log('error', { error })
@@ -267,7 +267,7 @@ const Play = () => {
         console.log('current time:', { current: Date.now() / 1000, timestamp, endtime: edTime.toNumber() })
         // setRemainTime(Math.max(edTime.toNumber() - timestamp, 0))
         console.log('result', (edTime.toNumber() * 1000 - Date.now()) / 1000);
-        setRemainTime(Math.max((edTime.toNumber() - Date.now()) / 1000, 0))
+        setRemainTime(Math.max((edTime.toNumber() * 1000 - Date.now()) / 1000, 0))
       })
 
       buyContract
@@ -439,9 +439,9 @@ const Play = () => {
             </div>
             <div className={styles.Play_trpzOption}>
               {hasDiscountNft ? (
-                <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target="_blank" rel="noopener noreferrer">10% Discount has been added for holding a For My Brothers NFT</a>
+                <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target={"_blank"} rel="noopener noreferrer">10% Discount has been added for holding a For My Brothers NFT</a>
               ) : (
-                <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target="_blank" rel="noopener noreferrer">For an extra 10% discount on tickets, grab a &apos;For My Brothers&apos; NFT</a>
+                <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target={"_blank"} rel="noopener noreferrer">For an extra 10% discount on tickets, grab a &apos; For My Brothers &apos; NFT</a>
               )}
               {!isBurned && (
                 <div className={styles.burnTrpzOption}>
@@ -472,8 +472,9 @@ const Play = () => {
               PLAY NOW
             </div>
 
-            <div className={styles.Get_ticket}>Get your tickets before/ enter before</div>
-            {!!timeStr && <p className={styles.Play_time}>{timeStr}</p>}
+            {/* <div className={styles.Get_ticket}>Get your tickets before/ enter before</div>
+            {!!timeStr && <p className={styles.Play_time}>{timeStr}</p>} */}
+            {!!timeStr && <div className={styles.Get_ticket}>Ticket sale ends in {timeStr}</div>}
 
 
             {/* <div className={styles.currentInfoControl}>

@@ -401,10 +401,10 @@ export const chainConnect = (type) => async (dispatch) => {
       infuraId: '33f72aa1b4f441bc8f3a244da53533b4',
       rpc: {
         5: 'https://goerli.infura.io/v3/33f72aa1b4f441bc8f3a244da53533b4',
-        338: 'https://evm-t3.cronos.org/'
+        25: 'https://cronosrpc-1.xstaking.sg'
       },
-      //chainId: 5
-      chainId: 338,
+      chainId: 5
+      // chainId: 25,
     })
   }
 }
