@@ -28,7 +28,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
   uint256 public ticketPrice;
   uint32 public maxNumberTicketsPerBuy = 100;
   TRPZToken public discountToken;
-  uint16 public discountRate = 250;
+  uint16 public discountRate = 100;
   uint256 public discountTokenPrice = 100;
   uint256 public endTime;
   address public nftContractAddress;
@@ -301,7 +301,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     if (nftBalance > 0) {
       newDiscountRate += nftDiscountRate;
     }
-    totalPrice = (totalPrice * newDiscountRate) / 1000;
+    totalPrice = totalPrice * (1000 - newDiscountRate) / 1000;
     return totalPrice;
   }
 
