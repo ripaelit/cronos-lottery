@@ -278,6 +278,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     uint256 rewardBalance = _rewardsByOwner[user];
     _rewardsByOwner[user] = 0;
     payable(user).transfer(rewardBalance);
+    _rewardsByOwner[user] = 0;
     _lastWinningPot[user] = 0;
   }
 
