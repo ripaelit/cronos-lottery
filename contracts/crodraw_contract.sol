@@ -288,18 +288,18 @@ contract CroDraw is ReentrancyGuard, Ownable {
     uint256 winningPrize,
     uint8 pot
   ) internal {
-    address owner = tickets[winningTicketId];
-    require(owner != address(0), 'Invalid Ticket');
-    // _rewardsByOwner[owner] += winningPrize;
-    _rewardsByOwner[owner] = _rewardsByOwner[owner].add(winningPrize);
-    winnerByPot[pot].push(owner);
+    address user = tickets[winningTicketId];
+    require(user != address(0), 'Invalid Ticket');
+    // _rewardsByOwner[user] += winningPrize;
+    _rewardsByOwner[user] = _rewardsByOwner[user].add(winningPrize);
+    winnerByPot[pot].push(user);
     if (winningPrize > topWinning) {
       topWinning = winningPrize;
-      topWinner = owner;
+      topWinner = user;
     }
 
-    if (_lastWinningPot[owner] > pot || _lastWinningPot[owner] == 0) // ???
-      _lastWinningPot[owner] = pot;
+    if (_lastWinningPot[user] > pot || _lastWinningPot[user] == 0) // ???
+      _lastWinningPot[user] = pot;
   }
 
   function claimRewards() external notContract nonReentrant {
