@@ -23,37 +23,41 @@ contract CroDraw is ReentrancyGuard, Ownable {
   address public founder2Address;
   address public founder3Address;
   address public operatorAddress;
-  uint32 public currentTicketId;
-  uint256 public amountCollected;
+  uint32 public currentTicketId;  // current ticket index: start from 0
+  uint256 public amountCollected; // balance collected
   uint256 public ticketPrice;
-  uint32 public maxNumberTicketsPerBuy = 100;
+  uint32 public maxNumberTicketsPerBuy = 100; // tickets limit per user
   TRPZToken public discountToken;
-  uint16 public discountRate = 100;
+  uint16 public discountRate = 100; // 10%
   uint256 public discountTokenPrice = 100;
   uint256 public endTime;
   address public nftContractAddress;
-  uint256 public nftDiscountRate = 100;
+  uint256 public nftDiscountRate = 100; // 10%
   uint256[] public winnerRate = [2, 5, 10];
   uint256[] public prizeRate = [15, 20, 25];
 
   enum Status {
+    // set in declareWinner and require in startLottery
     Pending,
+    // set in startLottery and require in buyDiscountTickets, buyTickets, addFund, closeLottery
     Open,
+    // set in closeLottery and require in declareWinner
     Close,
+    // not used yet...
     Claimable
   }
 
   Status public status;
-  mapping(uint32 => address) public tickets;
-  mapping(address => mapping(uint256 => uint32)) public _numOfTickesPerOwner;
-  mapping(address => uint256) private _rewardsByOwner;
-  mapping(address => uint8) private _lastWinningPot;
-  mapping(uint8 => address[]) private winnerByPot;
+  mapping(uint32 => address) public tickets;  // tickets[ticketIndex] = user
+  mapping(address => mapping(uint256 => uint32)) public _numOfTickesPerOwner; // _numOfTickesPerOwner[user][lotteryIndex] = ticket count
+  mapping(address => uint256) private _rewardsByOwner;  // _rewardsByOwner[user] = balance: this should be kept until user claims
+  mapping(address => uint8) private _lastWinningPot;  // _lastWinningPot[user] = pot: winning ranks(1,2,3,4)
+  mapping(uint8 => address[]) private winnerByPot;  // winnerByPot[pot] = user[]
 
   address[5] private _lastTopWinners;
   uint8 private _sp;
 
-  uint256 public lotteryId;
+  uint256 public lotteryId; // lottery index: start from 1
 
   IWitnetRandomness public immutable witnet;
   uint256 public latestRandomizingBlock;
@@ -90,6 +94,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     founder3Address = _founder3;
   }
 
+  // ??? There's no logic to transfer cro from msg.sender to here
   function buyDiscountTickets(uint32 _amount)
     external
     payable
@@ -122,6 +127,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     _numOfTickesPerOwner[msg.sender][lotteryId] += _amount;
   }
 
+  // ??? There's no logic to transfer cro from msg.sender to here
   function buyTickets(uint32 _amount)
     external
     payable
@@ -173,7 +179,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     latestRandomizingBlock = block.number;
     uint256 _usedFunds = witnet.randomize{value: msg.value}();
     if (_usedFunds < msg.value) {
-      payable(msg.sender).transfer(msg.value - _usedFunds);
+      payable(msg.sender).transfer(msg.value - _usedFunds); // ???
     }
 
     status = Status.Close;
@@ -192,7 +198,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
 
     for (i = 1; i <= 4; ++i) {
       for (j = 0; j < winnerByPot[i].length; ++j) {
-        amountCollected += _rewardsByOwner[winnerByPot[i][j]];
+        amountCollected += _rewardsByOwner[winnerByPot[i][j]];    // ???
         _rewardsByOwner[winnerByPot[i][j]] = 0;
       }
       delete winnerByPot[i];
@@ -214,12 +220,13 @@ contract CroDraw is ReentrancyGuard, Ownable {
     nonce++;
     uint256 winningPrize = amountCollected / 10;
 
-    //Top Winner
+    //Choose Top Winner
     _chooseWinner(winningTicketId, winningPrize, 1);
     _setTopWinner(winningTicketId);
 
     remainingPrize -= winningPrize;
 
+    // Choose rank2, 3, 4 winners
     uint256 winnerCnt;
     for (i = 0; i < 3; ++i) {
       winnerCnt = ((currentTicketId - 1) * winnerRate[i]) / 100;
@@ -239,6 +246,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
       }
     }
 
+    // Now 30% are remaining.
+    // Send 2.5% to each founder1, 2, 3, total 7.5%
     winningPrize = remainingPrize / 12;
     payable(founder1Address).transfer(winningPrize);
     payable(founder2Address).transfer(winningPrize);
@@ -247,10 +256,12 @@ contract CroDraw is ReentrancyGuard, Ownable {
     remainingPrize -= winningPrize * 3;
     winningPrize = remainingPrize / 3;
 
+    // Send 7.5% to project
     payable(projectAddress).transfer(winningPrize);
 
     remainingPrize -= winningPrize;
 
+    // Send remaining 15% to charity
     payable(charityAddress).transfer(remainingPrize);
   }
 
@@ -268,7 +279,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
       topWinner = owner;
     }
 
-    if (_lastWinningPot[owner] > pot || _lastWinningPot[owner] == 0)
+    if (_lastWinningPot[owner] > pot || _lastWinningPot[owner] == 0) // ???
       _lastWinningPot[owner] = pot;
   }
 
@@ -276,7 +287,6 @@ contract CroDraw is ReentrancyGuard, Ownable {
     address user = msg.sender;
     require(_rewardsByOwner[user] > 0, 'No rewards to claim');
     uint256 rewardBalance = _rewardsByOwner[user];
-    _rewardsByOwner[user] = 0;
     payable(user).transfer(rewardBalance);
     _rewardsByOwner[user] = 0;
     _lastWinningPot[user] = 0;
@@ -307,6 +317,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     return totalPrice;
   }
 
+  // Get last 5 top winners
   function getLastWinners() external view returns (address[5] memory) {
     address[5] memory lastWinners;
     for (uint8 i = 0; i < 5; i++) {
