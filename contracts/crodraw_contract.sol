@@ -194,13 +194,13 @@ contract CroDraw is ReentrancyGuard, Ownable {
     );
 
     uint8 i;
-    uint256 j;
+    // uint256 j;
 
     for (i = 1; i <= 4; ++i) {
-      for (j = 0; j < winnerByPot[i].length; ++j) {
-        amountCollected += _rewardsByOwner[winnerByPot[i][j]];    // ???
-        _rewardsByOwner[winnerByPot[i][j]] = 0;
-      }
+      // for (j = 0; j < winnerByPot[i].length; ++j) {
+      //   amountCollected += _rewardsByOwner[winnerByPot[i][j]];    // ???
+      //   _rewardsByOwner[winnerByPot[i][j]] = 0;
+      // }
       delete winnerByPot[i];
     }
 
