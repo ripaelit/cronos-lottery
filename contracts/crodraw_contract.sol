@@ -33,8 +33,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
   uint256 public endTime;
   address public nftContractAddress;
   uint256 public nftDiscountRate = 100; // 10%
-  uint256[] public winnerRate = [2, 5, 10];
-  uint256[] public prizeRate = [15, 20, 25];
+  uint8[] public winnerRate = [2, 5, 10];
+  uint8[] public prizeRate = [15, 20, 25];
 
   enum Status {
     // set in declareWinner and require in startLottery
