@@ -264,6 +264,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     _rewardsByOwner[owner] += winningPrize;
     winnerByPot[pot].push(owner);
     if (winningPrize > topWinning) {
+      topWinning = winningPrize;
       topWinner = owner;
     }
 
