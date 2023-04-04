@@ -298,7 +298,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
       topWinner = user;
     }
 
-    if (_lastWinningPot[user] > pot || _lastWinningPot[user] == 0) // ???
+    if (_lastWinningPot[user] > pot || _lastWinningPot[user] == 0)
       _lastWinningPot[user] = pot;
   }
 

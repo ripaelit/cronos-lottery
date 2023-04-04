@@ -35,6 +35,6 @@ contract TrpzToken is ERC20, AccessControl {
 
     /// @notice Overriden the decimals function to be 0
     function decimals() public view virtual override returns (uint8) {
-        return 0;   // ???
+        return 0;
     }
 }
