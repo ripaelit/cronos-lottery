@@ -4,10 +4,13 @@ require('@nomiclabs/hardhat-waffle')
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
+const mnemonic = "manual miracle sword lizard spider catalog interest foam throw lion fog clock";
+
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
+  defaultNetwork: 'cronosTest',
   solidity: {
     version: '0.8.17',
     settings: {
@@ -29,7 +32,8 @@ module.exports = {
     },
     cronosTest: {
       url: "https://evm-t3.cronos.org",
-      accounts: [process.env.METAMASK_PRIVATE_KEY || ""],
+      // accounts: [process.env.METAMASK_PRIVATE_KEY || ""],
+      accounts: {mnemonic: mnemonic},
       chainId: 338
     }
   },
@@ -40,9 +44,19 @@ module.exports = {
     artifacts: './artifacts'
   },
   mocha: {
-    timeout: 40000
+    timeout: 40000000000000
   },
   etherscan: {
-    apiKey: `${process.env.ETHERSCAN_API_KEY}`
+    apiKey: `${process.env.ETHERSCAN_API_KEY}`,
+    customChains: [
+      {
+        network: "cronosTest",
+        chainId: 338,
+        urls: {
+          apiURL: "https://api-goerli.etherscan.io/api",
+          browserURL: "https://cronos.crypto.org/explorer/testnet3/"
+        }
+      }
+    ]
   }
 }
