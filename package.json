@@ -9,7 +9,10 @@
     "lint": "next lint",
     "export": "next export",
     "compile": "npx hardhat compile",
-    "deploy": "npx hardhat run --network cronosTest ./scripts/deployContract.ts"
+    "deploy": "npx hardhat run --network cronosTest ./scripts/deployContract.js",
+    "verify_": "npx hardhat run --network cronosTest ./scripts/verify.js",
+    "testnet": "npx hardhat test ./test/testnet.js",
+    "verify": "npx hardhat verify --network cronosTest"
   },
   "dependencies": {
     "@deficonnect/web3-provider": "^1.6.14-dev.2",
