@@ -102,9 +102,16 @@ const Play = () => {
         return
       }
       setLoading(true)
-      const send_value = new BigNumber(ticketPrice).times(
-        new BigNumber(ticketCount)
-      )
+      // const send_value = new BigNumber(ticketPrice).times(
+      //   new BigNumber(ticketCount)
+      // )
+      
+      const send_value = await buyContract
+        .calculateTotalPrice(
+          new BigNumber(ticketCount),
+          false
+        )
+
       console.log("buying tickets:", ticketCount)
       const gasEstimated = await buyContract.estimateGas.buyTickets(
         ticketCount,
@@ -201,9 +208,14 @@ const Play = () => {
       )
       await tx.wait()
 
-      const send_value = new BigNumber(discountTicketPrice).times(
-        new BigNumber(ticketCount)
-      )
+      // const send_value = new BigNumber(discountTicketPrice).times(
+      //   new BigNumber(ticketCount)
+      // )
+      const send_value = await buyContract
+        .calculateTotalPrice(
+          new BigNumber(ticketCount),
+          true
+        )
       gasEstimated = await buyContract.estimateGas.buyDiscountTickets(
         ticketCount,
         {

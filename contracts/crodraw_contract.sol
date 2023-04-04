@@ -114,7 +114,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     discountToken.transferFrom(msg.sender, address(this), discountTokenAmount);
     discountToken.burn(discountTokenAmount);
 
-    uint256 totalPrice = _calculateTotalPrice(_amount, true);
+    uint256 totalPrice = calculateTotalPrice(_amount, true);
     require(msg.value >= totalPrice, 'Insufficient funds');
     // ??? There's no logic to refund overpaid balance
 
@@ -144,7 +144,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     require(status == Status.Open, 'Lottery is not open yet');
     require(block.timestamp < endTime, 'Lottery has ended');
 
-    uint256 totalPrice = _calculateTotalPrice(_amount, false);
+    uint256 totalPrice = calculateTotalPrice(_amount, false);
     require(msg.value >= totalPrice, 'Insufficient funds');
     // ??? There's no logic to refund overpaid balance
 
@@ -318,8 +318,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
     _sp = (_sp + 1) % 5;
   }
 
-  function _calculateTotalPrice(uint32 _amount, bool _useTrpz)
-    internal
+  function calculateTotalPrice(uint32 _amount, bool _useTrpz)
+    public
     view
     returns (uint256)
   {
