@@ -84,14 +84,20 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "addFund",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "payable",
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "amountCollected",
     "outputs": [
       {
@@ -112,7 +118,9 @@
       }
     ],
     "name": "buyDiscountTickets",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "payable",
     "type": "function"
   },
@@ -125,12 +133,40 @@
       }
     ],
     "name": "buyTickets",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "payable",
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_amount",
+        "type": "uint32"
+      },
+      {
+        "internalType": "bool",
+        "name": "_useTrpz",
+        "type": "bool"
+      }
+    ],
+    "name": "calculateTotalPrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      
+    ],
     "name": "charityAddress",
     "outputs": [
       {
@@ -143,21 +179,31 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "claimRewards",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "closeLottery",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "payable",
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "currentTicketId",
     "outputs": [
       {
@@ -170,14 +216,20 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "declareWinner",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "discountRate",
     "outputs": [
       {
@@ -190,7 +242,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "discountToken",
     "outputs": [
       {
@@ -203,7 +257,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "discountTokenPrice",
     "outputs": [
       {
@@ -216,7 +272,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "endTime",
     "outputs": [
       {
@@ -229,7 +287,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "founder1Address",
     "outputs": [
       {
@@ -242,7 +302,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "founder2Address",
     "outputs": [
       {
@@ -255,7 +317,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "founder3Address",
     "outputs": [
       {
@@ -292,7 +356,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "getLastWinners",
     "outputs": [
       {
@@ -305,7 +371,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "getLotteryInfo",
     "outputs": [
       {
@@ -366,7 +434,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "latestRandomizingBlock",
     "outputs": [
       {
@@ -379,7 +449,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "lotteryId",
     "outputs": [
       {
@@ -392,7 +464,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "maxNumberTicketsPerBuy",
     "outputs": [
       {
@@ -405,7 +479,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "nftContractAddress",
     "outputs": [
       {
@@ -418,7 +494,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "nftDiscountRate",
     "outputs": [
       {
@@ -431,7 +509,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "operatorAddress",
     "outputs": [
       {
@@ -444,7 +524,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "owner",
     "outputs": [
       {
@@ -467,16 +549,18 @@
     "name": "prizeRate",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint8",
         "name": "",
-        "type": "uint256"
+        "type": "uint8"
       }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "projectAddress",
     "outputs": [
       {
@@ -502,14 +586,20 @@
       }
     ],
     "name": "recoverWrongTokens",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "renounceOwnership",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -522,7 +612,9 @@
       }
     ],
     "name": "setDiscountNFTContractAddress",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -535,7 +627,9 @@
       }
     ],
     "name": "setDiscountNFTRate",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -548,7 +642,9 @@
       }
     ],
     "name": "setDiscountRate",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -561,7 +657,9 @@
       }
     ],
     "name": "setDiscountToken",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -574,7 +672,9 @@
       }
     ],
     "name": "setDiscountTokenPrice",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -587,7 +687,9 @@
       }
     ],
     "name": "setMaxNumberTicketsPerBuy",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -620,7 +722,9 @@
       }
     ],
     "name": "setOperatorAndTreasuryAndCharityAddresses",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -633,7 +737,9 @@
       }
     ],
     "name": "setTicketPrice",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -646,12 +752,16 @@
       }
     ],
     "name": "startLottery",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "status",
     "outputs": [
       {
@@ -664,7 +774,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "ticketPrice",
     "outputs": [
       {
@@ -696,7 +808,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "topWinner",
     "outputs": [
       {
@@ -709,7 +823,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "topWinning",
     "outputs": [
       {
@@ -730,7 +846,9 @@
       }
     ],
     "name": "transferOwnership",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -745,16 +863,18 @@
     "name": "winnerRate",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint8",
         "name": "",
-        "type": "uint256"
+        "type": "uint8"
       }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "witnet",
     "outputs": [
       {
