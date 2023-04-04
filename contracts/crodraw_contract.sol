@@ -107,7 +107,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     require(_amount <= maxNumberTicketsPerBuy, 'Too many tickets');
 
     require(status == Status.Open, 'Lottery is not open yet');
-    require(block.timestamp < endTime, 'Lottery has ended');
+    // require(block.timestamp < endTime, 'Lottery has ended'); // tempo
     uint8 decimals = discountToken.decimals();
     // uint256 discountTokenAmount = discountTokenPrice * (10**decimals) * _amount;
     uint256 discountTokenAmount = discountTokenPrice.mul(10**decimals).mul(_amount);
@@ -142,7 +142,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     require(_amount <= maxNumberTicketsPerBuy, 'Too many tickets');
 
     require(status == Status.Open, 'Lottery is not open yet');
-    require(block.timestamp < endTime, 'Lottery has ended');
+    // require(block.timestamp < endTime, 'Lottery has ended'); // tempo
 
     uint256 totalPrice = _calculateTotalPrice(_amount, false);
     require(msg.value >= totalPrice, 'Insufficient funds');
@@ -184,6 +184,10 @@ contract CroDraw is ReentrancyGuard, Ownable {
     require(block.timestamp > endTime, 'Lottery is ongoing');
 
     latestRandomizingBlock = block.number;
+    uint256 fee = witnet.estimateRandomizeFee(tx.gasprice);
+    if (msg.value < fee) {
+      revert("not enough value");
+    }
     uint256 _usedFunds = witnet.randomize{value: msg.value}();
     if (_usedFunds < msg.value) {
       payable(msg.sender).transfer(msg.value - _usedFunds); // ???
