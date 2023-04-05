@@ -123,7 +123,7 @@ const Redeem = () => {
                   <div className={styles.Redeem_sliderGroup} >
                     <Link href="/play">
                       <button className={styles.Redeem_playBtn}  >
-                        PLAY NOW
+                        REDEEM
                       </button>
                     </Link>
                   </div>
