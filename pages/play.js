@@ -97,10 +97,11 @@ const Play = () => {
         return
       }
 
-      if (remainTime <= 0) {
-        toast.error('Lottery has ended')
-        return
-      }
+      // Temporarily...
+      // if (remainTime <= 0) {
+      //   toast.error('Lottery has ended')
+      //   return
+      // }
       setLoading(true)
       // const send_value = new BigNumber(ticketPrice).times(
       //   new BigNumber(ticketCount)
@@ -108,7 +109,7 @@ const Play = () => {
       
       const send_value = await buyContract
         .calculateTotalPrice(
-          new BigNumber(ticketCount),
+          ticketCount,
           false
         )
 
@@ -162,9 +163,9 @@ const Play = () => {
       return toast.error(`You can buy Max ${MaxTicketCount} tickets`)
     }
 
-    if (remainTime <= 0) {
-      return toast.error('Lottery has ended')
-    }
+    // if (remainTime <= 0) {
+    //   return toast.error('Lottery has ended')
+    // }
 
     try {
       setLoading(true)
