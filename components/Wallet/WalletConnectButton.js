@@ -21,6 +21,7 @@ const WalletConnectButton = () => {
   const dispatch = useDispatch()
   const isMobile = useMedia('(max-width: 1200px)')
   const [bought, setBought] = useState(-1)
+  const [hrgls, setHrgls] = useState(false);
 
   const walletAddress = useSelector((state) => {
     return state.user.address
@@ -80,6 +81,13 @@ const WalletConnectButton = () => {
   }, [])
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      setHrgls(oldVal => !oldVal);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
     if (!walletAddress) {
       return
     }
@@ -97,7 +105,7 @@ const WalletConnectButton = () => {
       }
     }
     init()
-  }, [walletAddress])
+  }, [walletAddress, hrgls])
 
   const onWrongChainModalChangeChain = () => {
     dispatch(setShowWrongChainModal(false))
