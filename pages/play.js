@@ -88,7 +88,7 @@ const Play = () => {
         new BigNumber(ticketCount)
       )
       if (hasDiscountNft) {
-        get_ticketBalance = get_ticketBalance.mul(new BigNumber(1000 - nftDiscountRate)).div(new BigNumber(1000))
+        get_ticketBalance = get_ticketBalance.times(new BigNumber(1000 - nftDiscountRate)).div(new BigNumber(1000))
       }
 
       if (get_walletBalance.lt(get_ticketBalance)) {
@@ -180,8 +180,8 @@ const Play = () => {
       )
 
       const request_tokenAmount = BN.from(ticketCount)
-        .mul(BN.from(discountTokenPrice))
-        .mul(BN.from(10).pow(discountTokenkDecimals))
+        .times(BN.from(discountTokenPrice))
+        .times(BN.from(10).pow(discountTokenkDecimals))
 
       if (BN.from(discountTokenBlnc).lt(request_tokenAmount)) {
         toast.error('Insufficient Token')
