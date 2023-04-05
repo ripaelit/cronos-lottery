@@ -42,8 +42,7 @@ const Redeem = () => {
     }
   }
 
-  useEffect(() => {
-    (
+  useEffect(
       async () => {
         if (!buyContract) {
           return
@@ -58,11 +57,10 @@ const Redeem = () => {
         if (walletAddress) {
           buyContract.getClaimableReward(walletAddress).then(claimableRes => setClaimableAmount(claimableRes[0].toString()))
           buyContract.getUserTickets(walletAddress).then(newTicketCount => SetTicketCountByUser(newTicketCount.toString()))
-          buyContract.getClaimableReward(walletAddress).then(newClaimCnt => setClaimable(newClaimCnt.toString() !== '0'))
+          buyContract.getClaimableReward(walletAddress).then(claimableRes => setClaimable(claimableRes[1].toString() !== '0'))
         }
       }
-    )()
-  }, [walletAddress, buyContract])
+  , [walletAddress, buyContract])
 
   return (
     <>
@@ -90,14 +88,14 @@ const Redeem = () => {
           </div>
         }
         {
-          walletAddress && !isClaimable &&
+          walletAddress && isClaimable &&
           <div className={styles.Redeem_control} >
             <img className={styles.Redeem_img} src='images/win_ticket.png' />
             <div className={styles.Redeem_bottom} >
               {/* <p className={styles.Redeem_title} >Woohoo!</p> */}
               {
-                firstPotWinner === walletAddress ? <p className={styles.Redeem_title} >You won the jackpot. You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)}CRO</p>
-                  : <p className={styles.Redeem_title} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)}CRO</p>
+                firstPotWinner === walletAddress ? <p className={styles.Redeem_title} >You won the jackpot. You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(18)}CRO</p>
+                  : <p className={styles.Redeem_title} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(18)}CRO</p>
               }
               {/* {
                 (claimableAmount !== '' && claimableAmount !== '0') ? <p className={styles.Redeem_title} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)}CRO</p> : ''
@@ -112,7 +110,7 @@ const Redeem = () => {
           </div>
         }
         {
-          walletAddress && isClaimable &&
+          walletAddress && !isClaimable &&
           <div className={styles.Redeem_control} >
             <img className={styles.Redeem_img} src='images/no_win_ticket.png' />
             <div className={styles.Redeem_bottom} >
