@@ -94,8 +94,8 @@ const Redeem = () => {
             <div className={styles.Redeem_bottom} >
               {/* <p className={styles.Redeem_title} >Woohoo!</p> */}
               {
-                firstPotWinner === walletAddress ? <p className={styles.Redeem_title} >You won the jackpot. You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(18)}CRO</p>
-                  : <p className={styles.Redeem_title} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(18)}CRO</p>
+                firstPotWinner === walletAddress ? <p className={styles.Redeem_title} >You won the jackpot. You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(3)}CRO</p>
+                  : <p className={styles.Redeem_title} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(3)}CRO</p>
               }
               {/* {
                 (claimableAmount !== '' && claimableAmount !== '0') ? <p className={styles.Redeem_title} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)}CRO</p> : ''
