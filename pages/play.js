@@ -97,11 +97,11 @@ const Play = () => {
         return
       }
 
-      // Temporarily...
-      // if (remainTime <= 0) {
-      //   toast.error('Lottery has ended')
-      //   return
-      // }
+       //temporarily
+      if (remainTime <= 0) {
+        toast.error('Lottery has ended')
+        return
+      }
       setLoading(true)
       // const send_value = new BigNumber(ticketPrice).times(
       //   new BigNumber(ticketCount)
