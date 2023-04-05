@@ -37,8 +37,11 @@ const userSlice = createSlice({
   reducers: {
     accountChanged(state, action) {
       state.balance = action.payload.balance
-      state.buyContract = action.payload.buyContract
-      state.tokenContract = action.payload.tokenContract
+      // TODO: QUICKFIX. Need to make as independent reducers later.
+      if (action.payload.buyContract)
+        state.buyContract = action.payload.buyContract
+      if (action.payload.tokenContract)
+        state.tokenContract = action.payload.tokenContract
     },
 
     setIsMetamask(state, action) {
@@ -338,6 +341,7 @@ export const initProvider = () => async (dispatch) => {
     //dispatch(onProvider(obj))
 
     provider.on('accountsChanged', (accounts) => {
+      console.log("dispatching accountsChanged with undefined contractAddress")
       dispatch(
         accountChanged({
           address: accounts[0]
