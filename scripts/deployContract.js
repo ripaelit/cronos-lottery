@@ -5,8 +5,8 @@
 
 const hre = require('hardhat')
 
-const discountTokenAddress = '0xeDdA73a0462630B84a4fD85E79F81327892b272c'
-const witnetAddress = '0x0017A464A86f48B342Cae3b8Fe29cFCDaA7b0643'
+const discountTokenAddress = '0x1Cc0B25BD5105CD8905f7e9cD174435D4C890E02'
+const witnetAddress = '0x3737be6FcFf5B3B0f9DCc9a9ae1Da56561D0d0d3'
 
 async function main() {
   // Deploy the contract
