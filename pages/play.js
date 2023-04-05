@@ -62,19 +62,19 @@ const Play = () => {
   const wallet_balance = useSelector((state) => state.user.balance)
 
   const buyContract = useSelector((state) => state.user.buyContract)
-  // console.log('byco', buyContract)
 
   const tokenContract = useSelector((state) => state.user.tokenContract)
 
   const dispatch = useDispatch()
 
   const handleBuyTicket = async () => {
+    console.log("ticketStatus = ", ticketStatus);
     try {
       if (!walletAddress) {
         return toast.error('Please connect your wallet')
       }
       if (ticketStatus !== STATUS.open) {
-        return toast.error('Lottery is not open yet')
+        return toast.error('handleBuyTicket: Lottery is not open yet')
       }
 
       if (ticketCountByUser > MaxTicketCount) {
@@ -148,13 +148,14 @@ const Play = () => {
   }
 
   const handleDiscountBuyTicket = async () => {
+    console.log("ticketStatus = ", ticketStatus);
     setIsBurned(true)
     if (!walletAddress) {
       return toast.error('Please connect your wallet')
     }
 
     if (ticketStatus !== STATUS.open) {
-      return toast.error('Lottery is not open yet')
+      return toast.error('handleDiscountBuyTicket: Lottery is not open yet')
     }
 
     if (ticketCountByUser > MaxTicketCount) {
@@ -481,7 +482,7 @@ const Play = () => {
               className={styles.Play_playBtn}
               onClick={() => { useTrpz ? handleDiscountBuyTicket() : handleBuyTicket() }}
             >
-              PLAY NOW
+              BUY
             </div>
 
             {/* <div className={styles.Get_ticket}>Get your tickets before/ enter before</div>
