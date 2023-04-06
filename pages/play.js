@@ -4,7 +4,6 @@ import Countdown from 'react-countdown'
 import { ethers, providers, Contract } from 'ethers'
 import { toast } from 'react-toastify'
 import BigNumber from 'bignumber.js'
-import { BigNumber as BN } from 'ethers'
 
 import { chainConfig, ContractAddress } from '../constants/index'
 import ERC721ABI from '../constants/erc721Abi.json'
@@ -12,7 +11,7 @@ import { accountChanged } from '../globalState/user'
 import useInterval from '../hooks/useInterval'
 
 import styles from '../styles/Play.module.scss'
-import { SettingsBluetoothRounded } from '@mui/icons-material'
+import { BakeryDiningRounded, SettingsBluetoothRounded } from '@mui/icons-material'
 
 const renderer = ({ days, hours, minutes, seconds, completed }) => {
   if (completed) {
@@ -88,7 +87,7 @@ const Play = () => {
         new BigNumber(ticketCount)
       )
       if (hasDiscountNft) {
-        get_ticketBalance = get_ticketBalance.mul(new BigNumber(1000 - nftDiscountRate)).div(new BigNumber(1000))
+        get_ticketBalance = get_ticketBalance.times(1000 - nftDiscountRate).div(1000)
       }
 
       if (get_walletBalance.lt(get_ticketBalance)) {
@@ -121,10 +120,9 @@ const Play = () => {
         }
       )
       const gas = Math.ceil(gasEstimated.toNumber() * 1.5)
-      const gasNumber = BN.from(gas)
       const tx = await buyContract.buyTickets(ticketCount, {
         value: send_value.toString(),
-        gasLimit: gasNumber
+        gasLimit: gas
       })
       await tx.wait()
 
@@ -170,20 +168,13 @@ const Play = () => {
     try {
       setLoading(true)
 
-      const discountTicketPrice = new BigNumber(ticketPrice).times(1000 - discountRate - (hasDiscountNft ? nftDiscountRate : 0)).div(1000)
+      const discountedTicketPrice = new BigNumber(ticketPrice).times(1000 - discountRate - (hasDiscountNft ? nftDiscountRate : 0)).div(1000)
+      const get_walletBalance = new BigNumber(wallet_balance).times(new BigNumber(10).pow(18))
+      const get_ticketBalance = new BigNumber(discountedTicketPrice).times(ticketCount)
+      const request_tokenAmount = new BigNumber(ticketCount).times(new BigNumber(discountTokenPrice)).times(new BigNumber(10).pow(discountTokenkDecimals))
 
-      const get_walletBalance = new BigNumber(wallet_balance).times(
-        new BigNumber(10).pow(18)
-      )
-      const get_ticketBalance = new BigNumber(discountTicketPrice).times(
-        new BigNumber(ticketCount)
-      )
-
-      const request_tokenAmount = BN.from(ticketCount)
-        .mul(BN.from(discountTokenPrice))
-        .mul(BN.from(10).pow(discountTokenkDecimals))
-
-      if (BN.from(discountTokenBlnc).lt(request_tokenAmount)) {
+      if ((new BigNumber(discountTokenBlnc)).lt(request_tokenAmount)) {
+        console.log("discountTokenBlnc", discountTokenBlnc.toString(), "request_tokenAmount", request_tokenAmount.toString())
         toast.error('Insufficient Token')
         setLoading(false)
         return
@@ -200,12 +191,11 @@ const Play = () => {
         request_tokenAmount.toString()
       )
       let gas = Math.ceil(gasEstimated.toNumber() * 1.5)
-      let gasNumber = BN.from(gas)
       let tx = await tokenContract.approve(
         ContractAddress,
         request_tokenAmount.toString(),
         {
-          gasLimit: gasNumber
+          gasLimit: gas
         }
       )
       await tx.wait()
@@ -215,7 +205,7 @@ const Play = () => {
       // )
       const send_value = await buyContract
         .calculateTotalPrice(
-          new BigNumber(ticketCount),
+          ticketCount,
           true
         )
       gasEstimated = await buyContract.estimateGas.buyDiscountTickets(
@@ -225,10 +215,9 @@ const Play = () => {
         }
       )
       gas = Math.ceil(gasEstimated.toNumber() * 1.5)
-      gasNumber = BN.from(gas)
       tx = await buyContract.buyDiscountTickets(ticketCount, {
         value: send_value.toString(),
-        gasLimit: gasNumber
+        gasLimit: gas
       })
       await tx.wait()
 
@@ -258,7 +247,7 @@ const Play = () => {
 
   const calculatePrice = (useDiscount, mintCnt) => {
     const rate = 1000 - (useDiscount ? discountRate : 0) - (hasDiscountNft ? nftDiscountRate : 0)
-    setTotalPrice(new BigNumber(ticketPrice).multipliedBy(new BigNumber(mintCnt)).multipliedBy(new BigNumber(rate)).dividedBy(new BigNumber(1000)).dividedBy(new BigNumber(10).pow(18)).toFixed(3))
+    setTotalPrice(new BigNumber(ticketPrice).times(new BigNumber(mintCnt)).times(new BigNumber(rate)).div(1000).div(new BigNumber(10).pow(18)).toFixed(3))
   }
 
   useEffect(() => {
@@ -439,7 +428,7 @@ const Play = () => {
           <div className={styles.Play_bottom}>
             <p className={styles.Play_title}>Buy your ticket now!</p>
             {/* <p>{ticketPrice}</p> */}
-            <p className={styles.Play_price}>{new BigNumber(ticketPrice).times(new BigNumber(1000 - (useTrpz ? discountRate : 0) - (hasDiscountNft ? nftDiscountRate : 0)).div(new BigNumber(1000))).div(new BigNumber(10).pow(18)).toFixed(3)} CRO</p>
+            <p className={styles.Play_price}>{new BigNumber(ticketPrice).times(new BigNumber(1000 - (useTrpz ? discountRate : 0) - (hasDiscountNft ? nftDiscountRate : 0))).div(1000).div(new BigNumber(10).pow(18)).toFixed(3)} CRO</p>
             <div className={styles.Play_countPanel}>
               <div className={styles.Play_countChangeButton} onClick={() => {
                 setTicketCount(ticketCount > 1 ? ticketCount - 1 : ticketCount)
