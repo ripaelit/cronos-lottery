@@ -166,7 +166,6 @@ contract CroDraw is ReentrancyGuard, Ownable {
     status = Status.Open;
     amountCollected = 0;
     currentTicketId = 0;
-    lotteryId++;
     // endTime = block.timestamp + _period;
     endTime = _period.add(block.timestamp);
   }
@@ -208,10 +207,6 @@ contract CroDraw is ReentrancyGuard, Ownable {
     // uint256 j;
 
     for (i = 1; i <= 4; ++i) {
-      // for (j = 0; j < winnerByPot[i].length; ++j) {
-      //   amountCollected += _rewardsByOwner[winnerByPot[i][j]];    // ???
-      //   _rewardsByOwner[winnerByPot[i][j]] = 0;
-      // }
       delete winnerByPot[i];
     }
 
@@ -285,6 +280,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 
     // Send remaining 15% to charity
     payable(charityAddress).transfer(remainingPrize);
+
+    lotteryId++;
   }
 
   function _chooseWinner(
