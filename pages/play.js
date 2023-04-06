@@ -270,7 +270,6 @@ const Play = () => {
       buyContract
         .ticketPrice()
         .then((newPrice) => {
-          console.log("new", newPrice);
           setTicketPrice(newPrice.toString())
           calculatePrice(false, 1)
         })
