@@ -80,7 +80,9 @@ const Home = () => {
                   <Link href="/play">
                     <button className={styles.playButton}>Play now!</button>
                   </Link>
-                  <button className={styles.playButtonMobile}>Play now!</button>
+                  <Link href="/play">
+                    <button className={styles.playButtonMobile}>Play now!</button>
+                  </Link>
                   <img src="/images/banner_img.png" alt='' className={styles.mobileBannerImg} width='131px' height='150px' />
                 </div>
               </div>
