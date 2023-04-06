@@ -96,7 +96,6 @@ const Play = () => {
         return
       }
 
-       //temporarily
       if (remainTime <= 0) {
         toast.error('Lottery has ended')
         return
@@ -161,10 +160,9 @@ const Play = () => {
       return toast.error(`You can buy Max ${MaxTicketCount} tickets`)
     }
 
-    // tempo
-    // if (remainTime <= 0) {
-    //   return toast.error('Lottery has ended')
-    // }
+    if (remainTime <= 0) {
+      return toast.error('Lottery has ended')
+    }
 
     try {
       setLoading(true)
