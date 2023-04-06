@@ -69,6 +69,8 @@ const Play = () => {
   const handleBuyTicket = async () => {
     console.log("ticketStatus = ", ticketStatus);
     try {
+      setLoading(true)
+
       if (!walletAddress) {
         return toast.error('Please connect your wallet')
       }
