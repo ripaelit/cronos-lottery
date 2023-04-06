@@ -182,19 +182,23 @@ const Play = () => {
         return
       }
 
-      let gasEstimated = await tokenContract.estimateGas.approve(
-        ContractAddress,
-        request_tokenAmount.toString()
-      )
-      let gas = Math.ceil(gasEstimated.toNumber() * 1.5)
-      let tx = await tokenContract.approve(
-        ContractAddress,
-        request_tokenAmount.toString(),
-        {
-          gasLimit: gas
-        }
-      )
-      await tx.wait()
+      // approve only when allowance is insufficient
+      const allowanceAmount = new BigNumber((await tokenContract.allowance(walletAddress, ContractAddress)).toString())
+      if (allowanceAmount.lt(request_tokenAmount)) {
+        gasEstimated = await tokenContract.estimateGas.approve(
+          ContractAddress,
+          request_tokenAmount.toString()
+        )
+        gas = Math.ceil(gasEstimated.toNumber() * 1.5)
+        tx = await tokenContract.approve(
+          ContractAddress,
+          request_tokenAmount.toString(),
+          {
+            gasLimit: gas
+          }
+        )
+        await tx.wait()
+      }
 
       const send_value = await buyContract
         .calculateTotalPrice(
