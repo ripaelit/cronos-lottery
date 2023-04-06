@@ -73,7 +73,7 @@ const Play = () => {
         return toast.error('Please connect your wallet')
       }
       if (ticketStatus !== STATUS.open) {
-        return toast.error('handleBuyTicket: Lottery is not open yet')
+        return toast.error('Lottery is not open yet')
       }
 
       if (ticketCountByUser > MaxTicketCount) {
@@ -154,7 +154,7 @@ const Play = () => {
     }
 
     if (ticketStatus !== STATUS.open) {
-      return toast.error('handleDiscountBuyTicket: Lottery is not open yet')
+      return toast.error('Lottery is not open yet')
     }
 
     if (ticketCountByUser > MaxTicketCount) {
