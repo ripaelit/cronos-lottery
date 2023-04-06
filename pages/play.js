@@ -109,7 +109,6 @@ const Play = () => {
           false
         )
 
-      console.log("buying tickets:", ticketCount)
       const gasEstimated = await buyContract.estimateGas.buyTickets(
         ticketCount,
         {
