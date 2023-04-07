@@ -189,8 +189,8 @@ const Play = () => {
           ContractAddress,
           request_tokenAmount.toString()
         )
-        gas = Math.ceil(gasEstimated.toNumber() * 1.5)
-        tx = await tokenContract.approve(
+        let gas = Math.ceil(gasEstimated.toNumber() * 1.5)
+        let tx = await tokenContract.approve(
           ContractAddress,
           request_tokenAmount.toString(),
           {
