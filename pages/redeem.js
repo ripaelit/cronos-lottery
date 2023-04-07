@@ -114,7 +114,7 @@ const Redeem = () => {
           <div className={styles.Redeem_control} >
             <img className={styles.Redeem_img} src='images/no_win_ticket.png' />
             <div className={styles.Redeem_bottom} >
-              <p className={styles.Redeem_title} >No winning tickets…</p>
+              <p className={styles.Redeem_title} >You have {ticketCountByUser} tickets</p>
               {/* <p className={styles.Redeem_context} >Forever Claimable</p> */}
               <div className={styles.Redeem_RedeemBtnGroup} >
                 <div className={styles.Redeem_playBtnGroup} >
