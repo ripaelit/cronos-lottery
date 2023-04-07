@@ -244,7 +244,7 @@ const Play = () => {
 
   const calculatePrice = (useDiscount, mintCnt) => {
     const rate = 1000 - (useDiscount ? discountRate : 0) - (hasDiscountNft ? nftDiscountRate : 0)
-    setTotalPrice((new BigNumber(ticketPrice)).times(new BigNumber(mintCnt)).times(new BigNumber(rate)).div(1000).div((new BigNumber(10)).pow(18)).toFixed(3))
+    setTotalPrice((new BigNumber(ticketPrice)).times(new BigNumber(mintCnt)).times(new BigNumber(rate)).div(1000).div((new BigNumber(10)).pow(18)).toFixed(2))
   }
 
   useEffect(() => {
@@ -423,7 +423,7 @@ const Play = () => {
           <div className={styles.Play_bottom}>
             <p className={styles.Play_title}>Buy your ticket now!</p>
             {/* <p>{ticketPrice}</p> */}
-            <p className={styles.Play_price}>{new BigNumber(ticketPrice).times(new BigNumber(1000 - (useTrpz ? discountRate : 0) - (hasDiscountNft ? nftDiscountRate : 0))).div(1000).div(new BigNumber(10).pow(18)).toFixed(3)} CRO</p>
+            <p className={styles.Play_price}>{new BigNumber(ticketPrice).times(new BigNumber(1000 - (useTrpz ? discountRate : 0) - (hasDiscountNft ? nftDiscountRate : 0))).div(1000).div(new BigNumber(10).pow(18)).toFixed(2)} CRO</p>
             <div className={styles.Play_countPanel}>
               <div className={styles.Play_countChangeButton} onClick={() => {
                 setTicketCount(ticketCount > 1 ? ticketCount - 1 : ticketCount)
