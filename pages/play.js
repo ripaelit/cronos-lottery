@@ -185,7 +185,7 @@ const Play = () => {
       // approve only when allowance is insufficient
       const allowanceAmount = new BigNumber((await tokenContract.allowance(walletAddress, ContractAddress)).toString())
       if (allowanceAmount.lt(request_tokenAmount)) {
-        gasEstimated = await tokenContract.estimateGas.approve(
+        let gasEstimated = await tokenContract.estimateGas.approve(
           ContractAddress,
           request_tokenAmount.toString()
         )
@@ -205,14 +205,14 @@ const Play = () => {
           ticketCount,
           true
         )
-      gasEstimated = await buyContract.estimateGas.buyDiscountTickets(
+      let gasEstimated = await buyContract.estimateGas.buyDiscountTickets(
         ticketCount,
         {
           value: send_value.toString()
         }
       )
-      gas = Math.ceil(gasEstimated.toNumber() * 1.5)
-      tx = await buyContract.buyDiscountTickets(ticketCount, {
+      let gas = Math.ceil(gasEstimated.toNumber() * 1.5)
+      let tx = await buyContract.buyDiscountTickets(ticketCount, {
         value: send_value.toString(),
         gasLimit: gas
       })
