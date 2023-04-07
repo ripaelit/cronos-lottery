@@ -244,7 +244,7 @@ const Play = () => {
 
   const calculatePrice = (useDiscount, mintCnt) => {
     const rate = 1000 - (useDiscount ? discountRate : 0) - (hasDiscountNft ? nftDiscountRate : 0)
-    setTotalPrice(new BigNumber(ticketPrice).times(new BigNumber(mintCnt)).times(new BigNumber(rate)).div(1000).div(new BigNumber(10).pow(18)).toFixed(3))
+    setTotalPrice((new BigNumber(ticketPrice)).times(new BigNumber(mintCnt)).times(new BigNumber(rate)).div(1000).div((new BigNumber(10)).pow(18)).toFixed(3))
   }
 
   useEffect(() => {
@@ -274,7 +274,6 @@ const Play = () => {
         .ticketPrice()
         .then((newPrice) => {
           setTicketPrice(newPrice.toString())
-          calculatePrice(false, 1)
         })
 
       buyContract
