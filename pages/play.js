@@ -242,6 +242,10 @@ const Play = () => {
     }
   }
 
+  const handleCheckWinnings = async () => {
+
+  }
+
   const calculatePrice = (useDiscount, mintCnt) => {
     const rate = 1000 - (useDiscount ? discountRate : 0) - (hasDiscountNft ? nftDiscountRate : 0)
     setTotalPrice((new BigNumber(ticketPrice)).times(new BigNumber(mintCnt)).times(new BigNumber(rate)).div(1000).div((new BigNumber(10)).pow(18)).toFixed(2))
@@ -375,6 +379,7 @@ const Play = () => {
   }, [ticketPrice, hasDiscountNft])
 
   useInterval(() => {
+    buyContract.status().then((newStatus) => setTicketStatus(newStatus))
     if (remainTime > 0) {
       setRemainTime(remainTime - 1)
       let day = `${Math.floor(remainTime / 86400)}`
@@ -404,7 +409,6 @@ const Play = () => {
     } else {
       setTimeStr('')
     }
-    // console.log('time', timeStr);
   }, 1000)
 
   return (
@@ -415,119 +419,130 @@ const Play = () => {
       <div className={styles.Playpage}>
         <div className={styles.Play_top} />
         {walletAddress ? <div className={styles.Play_control}>
-          <img
-            className={styles.Play_img}
-            src="images/play_connectedwallet.png"
-          />
-
-          <div className={styles.Play_bottom}>
-            <p className={styles.Play_title}>Buy your ticket now!</p>
-            {/* <p>{ticketPrice}</p> */}
-            <p className={styles.Play_price}>{new BigNumber(ticketPrice).times(new BigNumber(1000 - (useTrpz ? discountRate : 0) - (hasDiscountNft ? nftDiscountRate : 0))).div(1000).div(new BigNumber(10).pow(18)).toFixed(2)} CRO</p>
-            <div className={styles.Play_countPanel}>
-              <div className={styles.Play_countChangeButton} onClick={() => {
-                setTicketCount(ticketCount > 1 ? ticketCount - 1 : ticketCount)
-                calculatePrice(useTrpz, ticketCount > 1 ? ticketCount - 1 : ticketCount)
-              }}>-</div>
-              <div className={styles.Play_countLabel}>{ticketCount}</div>
-              <div className={styles.Play_countChangeButton} onClick={() => {
-                setTicketCount(ticketCount < MaxTicketCount ? ticketCount + 1 : ticketCount)
-                calculatePrice(useTrpz, ticketCount < MaxTicketCount ? ticketCount + 1 : ticketCount)
-              }}>+</div>
-            </div>
-            <div className={styles.Play_trpzOption}>
-              {hasDiscountNft ? (
-                <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target={"_blank"} rel="noopener noreferrer">10% Discount has been added for holding a For My Brothers NFT</a>
-              ) : (
-                <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target={"_blank"} rel="noopener noreferrer">For an extra 10% discount on tickets, grab a &apos; For My Brothers &apos; NFT</a>
-              )}
-              {!isBurned && (
-                <div className={styles.burnTrpzOption}>
-                  <input type='checkbox' checked={useTrpz} onChange={e => {
-                    setUseTrpz(!useTrpz)
-                    calculatePrice(!useTrpz, ticketCount)
-                  }} className={styles.Play_trpzCheck} />
-                  <label className={styles.Play_trpzLabel}>Burn {discountTokenPrice} $TRPZ tokens per ticket purchased to receive a {discountRate / 10}% discount.</label>
+          {ticketStatus == STATUS.open ? 
+            <div>
+              <img
+                className={styles.Play_img}
+                src="images/play_connectedwallet.png"
+              />
+              <div className={styles.Play_bottom}>
+                <p className={styles.Play_title}>Buy your ticket now!</p>
+                <p className={styles.Play_price}>{new BigNumber(ticketPrice).times(new BigNumber(1000 - (useTrpz ? discountRate : 0) - (hasDiscountNft ? nftDiscountRate : 0))).div(1000).div(new BigNumber(10).pow(18)).toFixed(2)} CRO</p>
+                <div className={styles.Play_countPanel}>
+                  <div className={styles.Play_countChangeButton} onClick={() => {
+                    setTicketCount(ticketCount > 1 ? ticketCount - 1 : ticketCount)
+                    calculatePrice(useTrpz, ticketCount > 1 ? ticketCount - 1 : ticketCount)
+                  }}>-</div>
+                  <div className={styles.Play_countLabel}>{ticketCount}</div>
+                  <div className={styles.Play_countChangeButton} onClick={() => {
+                    setTicketCount(ticketCount < MaxTicketCount ? ticketCount + 1 : ticketCount)
+                    calculatePrice(useTrpz, ticketCount < MaxTicketCount ? ticketCount + 1 : ticketCount)
+                  }}>+</div>
                 </div>
-              )}
-              {/* <label className={styles.Play_trpzLabel}>To learn more about the $TRPZ token and the Troopz Community Staking platform head over to the Troopz n Friendz discord.</label>
-              <a
-                className={styles.Play_playBtn}
-                target='_blank'
-                rel="noreferrer"
-                href='/'
-              >
-                Join the Discord
-              </a> */}
-            </div>
-            <div className={styles.Play_pricePanel}>
-              {totalPrice} CRO
-            </div>
-            <div
-              className={styles.Play_playBtn}
-              onClick={() => { useTrpz ? handleDiscountBuyTicket() : handleBuyTicket() }}
-            >
-              BUY
-            </div>
-
-            {/* <div className={styles.Get_ticket}>Get your tickets before/ enter before</div>
-            {!!timeStr && <p className={styles.Play_time}>{timeStr}</p>} */}
-            {!!timeStr && <div className={styles.Get_ticket}>Ticket sale ends in {timeStr}</div>}
-
-
-            {/* <div className={styles.currentInfoControl}>
-              <div className={styles.currentInfoGroup}>
-                <p className={styles.currentInfoTitle}>Total Buy Amount : </p>
-                <p className={styles.currentInfoValue}>
-                  {currentTotalAmount}
-                </p>
-              </div>
-
-              <div className={styles.currentInfoGroup}>
-                <p className={styles.currentInfoTitle}>
-                  Ticket Amount By User :{' '}
-                </p>
-                <p className={styles.currentInfoValue}>{ticketCountByUser}</p>
-              </div>
-
-              <div className={styles.currentInfoGroup}>
-                <p className={styles.currentInfoTitle}>Last Winners : </p>
-                <div className={styles.flexColumn}>
-                  {lastWinners.length > 0 ? (
-                    lastWinners.map((item, index) => (
-                      <p className={styles.currentInfoValue} key={index}>
-                        {item}
-                      </p>
-                    ))
+                <div className={styles.Play_trpzOption}>
+                  {hasDiscountNft ? (
+                    <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target={"_blank"} rel="noopener noreferrer">10% Discount has been added for holding a For My Brothers NFT</a>
                   ) : (
-                    <p className={styles.currentInfoValue}>No winners</p>
+                    <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target={"_blank"} rel="noopener noreferrer">For an extra 10% discount on tickets, grab a &apos; For My Brothers &apos; NFT</a>
                   )}
+                  {!isBurned && (
+                    <div className={styles.burnTrpzOption}>
+                      <input type='checkbox' checked={useTrpz} onChange={e => {
+                        setUseTrpz(!useTrpz)
+                        calculatePrice(!useTrpz, ticketCount)
+                      }} className={styles.Play_trpzCheck} />
+                      <label className={styles.Play_trpzLabel}>Burn {discountTokenPrice} $TRPZ tokens per ticket purchased to receive a {discountRate / 10}% discount.</label>
+                    </div>
+                  )}
+                  {/* <label className={styles.Play_trpzLabel}>To learn more about the $TRPZ token and the Troopz Community Staking platform head over to the Troopz n Friendz discord.</label>
+                  <a
+                    className={styles.Play_playBtn}
+                    target='_blank'
+                    rel="noreferrer"
+                    href='/'
+                  >
+                    Join the Discord
+                  </a> */}
                 </div>
-              </div>
+                <div className={styles.Play_pricePanel}>
+                  {totalPrice} CRO
+                </div>
+                <div
+                  className={styles.Play_playBtn}
+                  onClick={() => { useTrpz ? handleDiscountBuyTicket() : handleBuyTicket() }}
+                >
+                  BUY
+                </div>
+                {!!timeStr && <div className={styles.Get_ticket}>Ticket sale ends in {timeStr}</div>}
+                {/* <div className={styles.currentInfoControl}>
+                  <div className={styles.currentInfoGroup}>
+                    <p className={styles.currentInfoTitle}>Total Buy Amount : </p>
+                    <p className={styles.currentInfoValue}>
+                      {currentTotalAmount}
+                    </p>
+                  </div>
 
-              <div className={styles.currentInfoGroup}>
-                <p className={styles.currentInfoTitle}>Last Top Winner : </p>
-                <p className={styles.currentInfoValue}>{lastTopWinner}</p>
-              </div>
+                  <div className={styles.currentInfoGroup}>
+                    <p className={styles.currentInfoTitle}>
+                      Ticket Amount By User :{' '}
+                    </p>
+                    <p className={styles.currentInfoValue}>{ticketCountByUser}</p>
+                  </div>
 
-              <div className={styles.currentInfoGroup}>
-                <p className={styles.currentInfoTitle}>
-                  Winners by pot :{' '}
-                </p>
-                <div className={`${styles.flexColumn} ${styles.currentInfoValue}`}>
-                  {
-                    winnersByPot.map((winners, index) => winners.length > 0 && <>
-                      <div className={styles.potName}>Pot {index + 1}</div>
+                  <div className={styles.currentInfoGroup}>
+                    <p className={styles.currentInfoTitle}>Last Winners : </p>
+                    <div className={styles.flexColumn}>
+                      {lastWinners.length > 0 ? (
+                        lastWinners.map((item, index) => (
+                          <p className={styles.currentInfoValue} key={index}>
+                            {item}
+                          </p>
+                        ))
+                      ) : (
+                        <p className={styles.currentInfoValue}>No winners</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className={styles.currentInfoGroup}>
+                    <p className={styles.currentInfoTitle}>Last Top Winner : </p>
+                    <p className={styles.currentInfoValue}>{lastTopWinner}</p>
+                  </div>
+
+                  <div className={styles.currentInfoGroup}>
+                    <p className={styles.currentInfoTitle}>
+                      Winners by pot :{' '}
+                    </p>
+                    <div className={`${styles.flexColumn} ${styles.currentInfoValue}`}>
                       {
-                        winners.map((winner, index) => <p key={index}>{winner}</p>)
+                        winnersByPot.map((winners, index) => winners.length > 0 && <>
+                          <div className={styles.potName}>Pot {index + 1}</div>
+                          {
+                            winners.map((winner, index) => <p key={index}>{winner}</p>)
+                          }
+                        </>)
                       }
-                    </>)
-                  }
+                    </div>
+                  </div>
+                </div> */}
+
+              </div>
+            </div>
+          : <div>
+              <img
+                className={styles.Play_img}
+                src="images/security.png"
+              />
+              <div className={styles.Play_bottom}>
+                <p className={styles.Play_title}>Lottery is closed<br />Next lottery will start soon...</p>
+                <div
+                  className={styles.Play_playBtn}
+                  onClick={() => { handleCheckWinnings() }}
+                >
+                  Check your winnings!
                 </div>
               </div>
-            </div> */}
-
-          </div>
+            </div>}
         </div> : <div className={styles.Play_control}>
           <img
             className={styles.Play_img}
