@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js'
 import { toast } from 'react-toastify';
 
 import styles from '../styles/Redeem.module.scss'
+import useInterval from '../hooks/useInterval'
 
 const Redeem = () => {
   const [isLoading, setLoading] = useState(false)
@@ -17,9 +18,10 @@ const Redeem = () => {
     discount: 1
   })
   const [claimableAmount, setClaimableAmount] = useState('')
-  const [endTime, setEndTime] = useState(0)
   const [ticketStatus, setTicketStatus] = useState(0)
   const [firstPotWinner, setFirstPotWinner] = useState('')
+  const [timeStr, setTimeStr] = useState('')
+  const [remainTime, setRemainTime] = useState(0)
 
   const walletAddress = useSelector(state => state.user.address);
 
@@ -50,9 +52,10 @@ const Redeem = () => {
         buyContract.status().then(newStatus => setTicketStatus(newStatus))
         buyContract.ticketPrice().then(newPrice => setTicketPrice(newPrice.toString()))
         buyContract.maxNumberTicketsPerBuy().then(newMax => setMaxTicketCount(newMax))
-        buyContract.endTime().then(newEnd => setEndTime(newEnd.toNumber() * 1000))
-        // setFirstPotWinner('0xe926a25a867647D2D27C1C062237e132b1354c8f');
         buyContract.getWinnersByPot(1).then(firstPotWinners => setFirstPotWinner(firstPotWinners.length > 0 ? firstPotWinners[0] : ''))
+        buyContract.endTime().then(async (edTime) => {
+          setRemainTime(Math.max((edTime.toNumber() * 1000 - Date.now()) / 1000, 0))
+        })
 
         if (walletAddress) {
           buyContract.getClaimableReward(walletAddress).then(claimableRes => setClaimableAmount(claimableRes[0].toString()))
@@ -61,6 +64,38 @@ const Redeem = () => {
         }
       }
   , [walletAddress, buyContract])
+
+  useInterval(() => {
+    if (remainTime > 0) {
+      setRemainTime(remainTime - 1)
+      let day = `${Math.floor(remainTime / 86400)}`
+      let hour = `${Math.floor((remainTime % 86400) / 3600)}`
+      if (hour.length === 1) {
+        hour = `0${hour}`
+      }
+      let minute = `${Math.floor(remainTime % 3600 / 60)}`
+      if (minute.length === 1) {
+        minute = `0${minute}`
+      }
+      let second = `${Math.floor(remainTime % 60)}`
+      if (second.length === 1) {
+        second = `0${second}`
+      }
+      if (day > 0) {
+        setTimeStr(`${day} days ${hour} hours `)
+      } else if (hour > 0) {
+        setTimeStr(`${hour} hours ${minute} minutes ${second} seconds`)
+      } else if (minute > 0) {
+        setTimeStr(`${minute} minutes ${second} seconds`)
+      } else if (second > 0) {
+        setTimeStr(`${second} seconds`)
+      } else {
+        setTimeStr('Entries Closed')
+      }
+    } else {
+      setTimeStr('')
+    }
+  }, 1000)
 
   return (
     <>
@@ -106,6 +141,7 @@ const Redeem = () => {
                   Claim your winnings
                 </div>
               </div>
+              {!!timeStr && <div className={styles.Redeem_remainingTime}>Ticket sale ends in {timeStr}</div>}
             </div>
           </div>
         }
