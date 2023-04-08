@@ -140,7 +140,10 @@ const Redeem = () => {
                 firstPotWinner.toLowerCase() === walletAddress.toLowerCase() ? <p className={styles.Redeem_title} >You won the jackpot.<br />You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)} CRO.</p>
                   : <p className={styles.Redeem_title} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)} CRO.</p>
               }
-              <p className={styles.Redeem_context} >Forever Claimable</p>
+              {/* {
+                (claimableAmount !== '' && claimableAmount !== '0') ? <p className={styles.Redeem_title} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)}CRO</p> : ''
+              } */}
+              {/*<p className={styles.Redeem_context} >Forever Claimable</p> */}
               <div className={styles.Redeem_RedeemBtnGroup} >
                 <div className={styles.Redeem_RedeemBtn} onClick={handleClaimWinnings}  >
                   Claim your winnings
