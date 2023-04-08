@@ -255,7 +255,7 @@ const Home = () => {
                     15% of weekly ticket sales will go directly into a charity fund to support people and causes brought forward by the community via our &apos;Hearts of Gold&apos; initiative.{' '}
                   </p>
                 </div>
-                <a href='/'>Nominate a heart in need</a>
+                <a target='_blank' rel="noreferrer" href='https://docs.google.com/forms/d/e/1FAIpQLScArHfhbIhBxjDTWOLtbwygUotp7OIMolnvTF8n1secD_8GFA/viewform'>Nominate a heart in need</a>
               </div>
             </div>
           </div>
@@ -353,7 +353,7 @@ const Home = () => {
                 <p className={styles.Heart_title}>For My Brothers</p>
                 <div className={styles.Heart_right_group}>
                   <p>
-                    A unique NFT collection designed by Elkay to raise awareness surrounding mens mental health in the Crypto and NFT space.
+                    A unique NFT collection designed to raise awareness surrounding mens mental health in the Crypto and NFT space.
                   </p>
                   <p className={styles.Nft}>
                     NFT holders get a 10% discount on CroDraw tickets and are entered into a weekly side draw for 2.5% of the CroDraw distribution.
