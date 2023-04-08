@@ -379,7 +379,11 @@ const Play = () => {
   }, [ticketPrice, hasDiscountNft])
 
   useInterval(() => {
+    if (!buyContract)
+      return;
+
     buyContract.status().then((newStatus) => setTicketStatus(newStatus))
+    
     if (remainTime > 0) {
       setRemainTime(remainTime - 1)
       let day = `${Math.floor(remainTime / 86400)}`
