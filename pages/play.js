@@ -449,15 +449,13 @@ const Play = () => {
                   ) : (
                     <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target={"_blank"} rel="noopener noreferrer">For an extra 10% discount on tickets, grab a &apos; For My Brothers &apos; NFT</a>
                   )}
-                  {!isBurned && (
-                    <div className={styles.burnTrpzOption}>
-                      <input type='checkbox' checked={useTrpz} onChange={e => {
-                        setUseTrpz(!useTrpz)
-                        calculatePrice(!useTrpz, ticketCount)
-                      }} className={styles.Play_trpzCheck} />
-                      <label className={styles.Play_trpzLabel}>Burn {discountTokenPrice} $TRPZ tokens per ticket purchased to receive a {discountRate / 10}% discount.</label>
-                    </div>
-                  )}
+                  <div className={styles.burnTrpzOption}>
+                    <input type='checkbox' checked={useTrpz} onChange={e => {
+                      setUseTrpz(!useTrpz)
+                      calculatePrice(!useTrpz, ticketCount)
+                    }} className={styles.Play_trpzCheck} />
+                    <label className={styles.Play_trpzLabel}>Burn {discountTokenPrice} $TRPZ tokens per ticket purchased to receive a {discountRate / 10}% discount.</label>
+                  </div>
                   {/* <label className={styles.Play_trpzLabel}>To learn more about the $TRPZ token and the Troopz Community Staking platform head over to the Troopz n Friendz discord.</label>
                   <a
                     className={styles.Play_playBtn}
