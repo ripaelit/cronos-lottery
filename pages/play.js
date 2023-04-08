@@ -234,7 +234,7 @@ const Play = () => {
         .then((blnc) =>
           dispatch(accountChanged({ balance: ethers.utils.formatEther(blnc) }))
         )
-      toast.success('Successfully buy tickets')
+      toast.success('Successfully bought tickets')
     } catch (error) {
       console.log('error', error)
       toast.error(`Error`)
