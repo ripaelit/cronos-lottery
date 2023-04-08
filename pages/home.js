@@ -359,7 +359,7 @@ const Home = () => {
                     NFT holders get a 10% discount on CroDraw tickets and are entered into a weekly side draw for 2.5% of the CroDraw distribution.
                   </p>
                 </div>
-                <a target='_blank' rel="noreferrer" href='https://app.ebisusbay.com/drops/for-my-brothers'>Get your For My Brothers NFT!</a>
+                <a target='_blank' rel="noreferrer" href='https://app.ebisusbay.com/collection/for-my-brothers'>Get your For My Brothers NFT!</a>
               </div>
             </div>
           </div>
