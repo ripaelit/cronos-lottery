@@ -23,13 +23,6 @@ const Redeem = () => {
   const [timeStr, setTimeStr] = useState('')
   const [remainTime, setRemainTime] = useState(0)
 
-  const STATUS = {
-    pending: 0,
-    open: 1,
-    close: 2,
-    Claimable: 3
-  }
-
   const walletAddress = useSelector(state => state.user.address);
 
   const buyContract = useSelector(state => state.user.buyContract);
@@ -73,7 +66,6 @@ const Redeem = () => {
   , [walletAddress, buyContract])
 
   useInterval(() => {
-    buyContract.status().then((newStatus) => setTicketStatus(newStatus))
     if (remainTime > 0) {
       setRemainTime(remainTime - 1)
       let day = `${Math.floor(remainTime / 86400)}`
@@ -131,7 +123,7 @@ const Redeem = () => {
           </div>
         }
         {
-          walletAddress && ticketStatus == STATUS.pending && isClaimable &&
+          walletAddress && isClaimable &&
           <div className={styles.Redeem_control} >
             <img className={styles.Redeem_img} src='images/win_ticket.png' />
             <div className={styles.Redeem_bottom} >
@@ -149,29 +141,17 @@ const Redeem = () => {
                   Claim your winnings
                 </div>
               </div>
+              {!!timeStr && <div className={styles.Redeem_remainingTime}>Ticket sale ends in {timeStr}</div>}
             </div>
           </div>
         }
         {
-          walletAddress && ticketStatus == STATUS.pending && !isClaimable &&
-          <div className={styles.Redeem_control} >
-            <img className={styles.Redeem_img} src='images/no_win_ticket.png' />
-            <div className={styles.Redeem_bottom} >
-              <p className={styles.Redeem_title} >No winning tickets...</p>
-              {/* <div className={styles.Redeem_RedeemBtnGroup} >
-                <div className={styles.Redeem_RedeemBtn} onClick={handleClaimWinnings}  >
-                  Claim your winnings
-                </div>
-              </div> */}
-            </div>
-          </div>
-        }
-        {
-          walletAddress && ticketStatus == STATUS.open &&
+          walletAddress && !isClaimable &&
           <div className={styles.Redeem_control} >
             <img className={styles.Redeem_img} src='images/no_win_ticket.png' />
             <div className={styles.Redeem_bottom} >
               <p className={styles.Redeem_title} >You have {ticketCountByUser} tickets</p>
+              {/* <p className={styles.Redeem_context} >Forever Claimable</p> */}
               <div className={styles.Redeem_RedeemBtnGroup} >
                 <div className={styles.Redeem_playBtnGroup} >
                   <div className={styles.Redeem_sliderGroup} >
@@ -183,7 +163,6 @@ const Redeem = () => {
                   </div>
                 </div>
               </div>
-              {!!timeStr && <div className={styles.Redeem_remainingTime}>Ticket sale ends in {timeStr}</div>}
             </div>
           </div>
         }
