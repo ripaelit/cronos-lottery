@@ -437,9 +437,9 @@ const Play = () => {
             </div>
             <div className={styles.Play_trpzOption}>
               {hasDiscountNft ? (
-                <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/collection/for-my-brothers" target={"_blank"} rel="noopener noreferrer">10% Discount has been added for holding a For My Brothers NFT</a>
+                <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target={"_blank"} rel="noopener noreferrer">10% Discount has been added for holding a For My Brothers NFT</a>
               ) : (
-                <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/collection/for-my-brothers" target={"_blank"} rel="noopener noreferrer">For an extra 10% discount on tickets, grab a &apos; For My Brothers &apos; NFT</a>
+                <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target={"_blank"} rel="noopener noreferrer">For an extra 10% discount on tickets, grab a &apos; For My Brothers &apos; NFT</a>
               )}
               {!isBurned && (
                 <div className={styles.burnTrpzOption}>
