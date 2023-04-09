@@ -3,12 +3,12 @@
 // export const TokenContractAddress = "0x4C17b4368Bf94BabEe6D6FaCE5b1f14568CC9055"
 
 // Cronos Test net
-export const ContractAddress = "0xe52057321d702517B917c7eB7980BF29e6a6d425";
-export const TokenContractAddress = '0xeDdA73a0462630B84a4fD85E79F81327892b272c'
+// export const ContractAddress = "0xe52057321d702517B917c7eB7980BF29e6a6d425";
+// export const TokenContractAddress = '0xeDdA73a0462630B84a4fD85E79F81327892b272c'
 
 // Cronos Main net
-// export const ContractAddress = '0xeDdA73a0462630B84a4fD85E79F81327892b272c'
-// export const TokenContractAddress = '0x1Cc0B25BD5105CD8905f7e9cD174435D4C890E02'
+export const ContractAddress = '0xeDdA73a0462630B84a4fD85E79F81327892b272c'
+export const TokenContractAddress = '0x1Cc0B25BD5105CD8905f7e9cD174435D4C890E02'
 
 //goerli CPT  token 0x2ebfba490C670473bA7D91a82F4097daC27D94B5
 // transfer token contract address 0x5a87Fcc8767E2dAb9EB08FA873Bd2343De08bc9B
@@ -29,32 +29,32 @@ export const TokenContractAddress = '0xeDdA73a0462630B84a4fD85E79F81327892b272c'
 // };
 
 //Mainnet
-// export const chainConfig = {
-//    chainId: "0x19",
-//    chainName: "Cronos Mainnet Beta",
-//    rpcUrls: ["https://evm.cronos.org/"],
-//    iconUrls: ["https://cronoscan.com/images/brandassets/logo.jpg?v=22.12.2.0"],
-//    blockExplorerUrls: ["https://cronoscan.com/"],
-//    nativeCurrency: {
-//      name: "Cronos",
-//      symbol: "CRO",
-//      decimals: 18,
-//    }
-//  };
+export const chainConfig = {
+   chainId: "0x19",
+   chainName: "Cronos Mainnet Beta",
+   rpcUrls: ["https://evm.cronos.org/"],
+   iconUrls: ["https://cronoscan.com/images/brandassets/logo.jpg?v=22.12.2.0"],
+   blockExplorerUrls: ["https://cronoscan.com/"],
+   nativeCurrency: {
+     name: "Cronos",
+     symbol: "CRO",
+     decimals: 18,
+   }
+ };
 
 // Testnet
-export const chainConfig = {
-  chainId: '0x152',
-  chainName: 'Cronos Testnet Beta',
-  rpcUrls: ['https://evm-t3.cronos.org'],
-  iconUrls: ['https://cronoscan.com/images/brandassets/logo.jpg?v=22.12.2.0'],
-  blockExplorerUrls: ['https://cronos.crypto.org/explorer/testnet3/'],
-  nativeCurrency: {
-   name: 'Cronos',
-   symbol: 'CRO',
-   decimals: 18
-  }
-}
+// export const chainConfig = {
+//   chainId: '0x152',
+//   chainName: 'Cronos Testnet Beta',
+//   rpcUrls: ['https://evm-t3.cronos.org'],
+//   iconUrls: ['https://cronoscan.com/images/brandassets/logo.jpg?v=22.12.2.0'],
+//   blockExplorerUrls: ['https://cronos.crypto.org/explorer/testnet3/'],
+//   nativeCurrency: {
+//    name: 'Cronos',
+//    symbol: 'CRO',
+//    decimals: 18
+//   }
+// }
 
 // Goerli Testnet
 
