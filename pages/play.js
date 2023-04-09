@@ -46,6 +46,9 @@ const Play = () => {
   const [timeStr, setTimeStr] = useState('')
   const [remainTime, setRemainTime] = useState(0)
   const [isBurned, setIsBurned] = useState(false);
+  const [showLivePotSizes, setShowLivePotSizes] = useState(true);
+  const [winnersPot, setWinnersPot] = useState(0);
+  const [charityPot, setCharityPot] = useState(0);
 
   const STATUS = {
     pending: 0,
@@ -261,10 +264,8 @@ const Play = () => {
         return
       }
       buyContract.status().then((newStatus) => setTicketStatus(newStatus))
-
       buyContract.nftContractAddress().then(newNftAddress => setDiscountNftAddress(newNftAddress))
       buyContract.nftDiscountRate().then(newRate => setNftDiscountRate(newRate.toNumber()))
-
       buyContract.endTime().then(async (edTime) => {
         const blockNumber = await provider.getBlockNumber()
         const timestamp = (await provider.getBlock(blockNumber)).timestamp
@@ -383,6 +384,14 @@ const Play = () => {
       return;
 
     buyContract.status().then((newStatus) => setTicketStatus(newStatus))
+    buyContract.amountCollected().then(
+      (newAmountCollected) => {
+        console.log("newAmountCollected", newAmountCollected, typeof(newAmountCollected))
+        const totalPot = newAmountCollected / (10 ** 18)
+        setWinnersPot((totalPot * 70 / 100).toFixed(2))
+        setCharityPot((totalPot * 15 / 100).toFixed(2))
+      }
+    )
     
     if (remainTime > 0) {
       setRemainTime(remainTime - 1)
@@ -476,6 +485,11 @@ const Play = () => {
                   BUY
                 </div>
                 {!!timeStr && <div className={styles.Get_ticket}>Ticket sale ends in {timeStr}</div>}
+                {showLivePotSizes && <>
+                  <div className={styles.Get_ticket}>LIVE POT SIZES:</div>
+                  <label className={styles.Play_trpzLabel}>WINNERS POT: {winnersPot} CRO | CHARITY POT: {charityPot} CRO</label>
+                </>}
+                
                 {/* <div className={styles.currentInfoControl}>
                   <div className={styles.currentInfoGroup}>
                     <p className={styles.currentInfoTitle}>Total Buy Amount : </p>
