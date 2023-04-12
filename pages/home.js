@@ -60,10 +60,10 @@ const Home = () => {
   }, 1000)
 
   const tableRankingBodyLists = [
-    { name: `RANK 1`, winner: `1`, amount: `10%` },
-    { name: `RANK 2`, winner: isMobile ? `2%` : `2% of entrants`, amount: isMobile ? `15% of pot` : `Split 15% of pot` },
-    { name: `RANK 3`, winner: isMobile ? `5%` : `5% of entrants`, amount: isMobile ? `20% of pot` : `Split 20% of pot` },
-    { name: `RANK 4`, winner: isMobile ? `10%` : `10% of entrants`, amount: isMobile ? `25% of pot` : `Split 25% of pot` },
+    { name: `POT 1`, winner: `1`, amount: `10%` },
+    { name: `POT 2`, winner: isMobile ? `2%` : `2% of entrants`, amount: isMobile ? `15% of pot` : `Split 15% of pot` },
+    { name: `POT 3`, winner: isMobile ? `5%` : `5% of entrants`, amount: isMobile ? `20% of pot` : `Split 20% of pot` },
+    { name: `POT 4`, winner: isMobile ? `10%` : `10% of entrants`, amount: isMobile ? `25% of pot` : `Split 25% of pot` },
     { name: `Hearts of gold`, winner: ``, amount: `15% of pot` },
     { name: `CroDraw `, winner: ``, amount: `15% of pot` }
   ]
@@ -356,10 +356,10 @@ const Home = () => {
                     A unique NFT collection designed to raise awareness surrounding mens mental health in the Crypto and NFT space.
                   </p>
                   <p className={styles.Nft}>
-                    NFT holders get a 10% discount on CroDraw tickets and are entered into a weekly side draw for 2.5% of the CroDraw distribution.
+                    NFT holders get a 10% discount on CroDraw tickets and are entered into a monthly side draw for 2.5% of the CroDraw distribution.
                   </p>
                 </div>
-                <a target='_blank' rel="noreferrer" href='https://app.ebisusbay.com/drops/for-my-brothers'>Get your For My Brothers NFT!</a>
+                <a target='_blank' rel="noreferrer" href='https://app.ebisusbay.com/collection/for-my-brothers'>Get your For My Brothers NFT!</a>
               </div>
             </div>
           </div>
