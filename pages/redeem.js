@@ -37,33 +37,32 @@ const Redeem = () => {
       setLoading(false)
       toast.success('Successfully claim ')
 
-    } catch (error) {
-      console.log('error', error)
+    } catch (err) {
+      // console.log('error:', err)
       toast.error('Error')
       setLoading(false)
     }
   }
 
   useEffect(
-      async () => {
-        if (!buyContract) {
-          return
-        }
-        buyContract.status().then(newStatus => setTicketStatus(newStatus))
-        buyContract.ticketPrice().then(newPrice => setTicketPrice(newPrice.toString()))
-        buyContract.maxNumberTicketsPerBuy().then(newMax => setMaxTicketCount(newMax))
-        buyContract.getWinnersByPot(1).then(firstPotWinners => setFirstPotWinner(firstPotWinners.length > 0 ? firstPotWinners[0] : ''))
-        buyContract.endTime().then(async (edTime) => {
-          setRemainTime(Math.max((edTime.toNumber() * 1000 - Date.now()) / 1000, 0))
-        })
-
-        if (walletAddress) {
-          buyContract.getClaimableReward(walletAddress).then(claimableRes => setClaimableAmount(claimableRes[0].toString()))
-          buyContract.getUserTickets(walletAddress).then(newTicketCount => SetTicketCountByUser(newTicketCount.toString()))
-          buyContract.getClaimableReward(walletAddress).then(claimableRes => setClaimable(claimableRes[1].toString() !== '0'))
-        }
+    async () => {
+      if (!buyContract) {
+        return
       }
-  , [walletAddress, buyContract])
+      buyContract.status().then(newStatus => setTicketStatus(newStatus))
+      buyContract.ticketPrice().then(newPrice => setTicketPrice(newPrice.toString()))
+      buyContract.maxNumberTicketsPerBuy().then(newMax => setMaxTicketCount(newMax))
+      buyContract.getWinnersByPot(1).then(firstPotWinners => setFirstPotWinner(firstPotWinners.length > 0 ? firstPotWinners[0] : ''))
+      buyContract.endTime().then(async (edTime) => {
+        setRemainTime(Math.max((edTime.toNumber() * 1000 - Date.now()) / 1000, 0))
+      })
+
+      if (walletAddress) {
+        buyContract.getClaimableReward(walletAddress).then(claimableRes => setClaimableAmount(claimableRes[0].toString()))
+        buyContract.getUserTickets(walletAddress).then(newTicketCount => SetTicketCountByUser(newTicketCount.toString()))
+        buyContract.getClaimableReward(walletAddress).then(claimableRes => setClaimable(claimableRes[1].toString() !== '0'))
+      }
+    }, [walletAddress, buyContract])
 
   useInterval(() => {
     if (remainTime > 0) {

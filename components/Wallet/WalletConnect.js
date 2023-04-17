@@ -46,7 +46,7 @@ export default function KeepMountedModal(props) {
   let wallet = null
 
   const onConnect = async (connector) => {
-    console.log('start connecting wallet')
+    // console.log('start connecting wallet')
     props.setOpen(false)
     switch (connector) {
       case 'metamask':
@@ -62,7 +62,7 @@ export default function KeepMountedModal(props) {
         wallet = await walletMetamask.connect()
     }
     if (wallet !== null) props.setWallet(wallet)
-    console.log('end connecting wallet')
+    // console.log('end connecting wallet')
   }
 
   return (

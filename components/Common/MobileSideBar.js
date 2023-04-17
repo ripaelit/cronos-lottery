@@ -56,7 +56,9 @@ const MobileSideBar = (props) => {
     }
   };
 
+  // show modal for wallet connect
   useEffect(() => {
+    // console.log("connect wallet")
     let defiLink = localStorage.getItem("DeFiLink_session_storage_extension");
     if (defiLink) {
       try {

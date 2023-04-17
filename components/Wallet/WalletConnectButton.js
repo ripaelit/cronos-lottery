@@ -5,14 +5,12 @@ import MetaMaskOnboarding from '@metamask/onboarding'
 import { ContractAddress, chainConfig } from '../../constants'
 import abi from '../../constants/abi.json'
 import useMedia from '../../hooks/useMedia'
-
 import {
   connectAccount,
   onLogout,
   setShowWrongChainModal,
   chainConnect
 } from '../../globalState/user'
-
 import styles from '../../styles/Component.module.scss'
 
 let lotteryContract, provider
@@ -46,6 +44,7 @@ const WalletConnectButton = () => {
     }
   }
 
+  // show modal for wallet connect
   useEffect(() => {
     let defiLink = localStorage.getItem('DeFiLink_session_storage_extension')
     if (defiLink) {
@@ -93,6 +92,7 @@ const WalletConnectButton = () => {
     }
     const init = async () => {
       try {
+        // console.log("test")
         provider = new providers.JsonRpcProvider(chainConfig.rpcUrls[0])
         lotteryContract = new Contract(
           ContractAddress,
@@ -101,7 +101,7 @@ const WalletConnectButton = () => {
         );
         lotteryContract.getUserTickets(walletAddress).then(userTickets => setBought(userTickets.toNumber()))
       } catch (err) {
-        console.log('Error getting endtime:', err)
+        // console.log('Error getting endtime:', err)
       }
     }
     init()
@@ -110,6 +110,7 @@ const WalletConnectButton = () => {
   const onWrongChainModalChangeChain = () => {
     dispatch(setShowWrongChainModal(false))
     dispatch(chainConnect())
+    console.log("onWrongChainModalChangeChain:::")
   }
 
   const logout = async () => {
@@ -121,15 +122,22 @@ const WalletConnectButton = () => {
       {!walletAddress && (
         <button
           className={styles.WalletClickButton}
-          onClick={() => connectWalletPressed()}
+          onClick={() => {
+            connectWalletPressed()
+          }}
         >
-          Connect Wallet
+          Connect Wallet???
         </button>
       )}
       {walletAddress && !correctChain && !user.showWrongChainModal && (
         <button
           className={styles.WalletClickButton}
-          onClick={() => onWrongChainModalChangeChain()}
+          onClick={() => {
+            onWrongChainModalChangeChain()
+            console.log("walletAddress>>>>>", walletAddress)
+            console.log("correctChain>>>>>", correctChain)
+            console.log("user.showWrongChainModal>>>>>", user.showWrongChainModal)
+          }}
         >
           Switch Network
         </button>
@@ -151,7 +159,6 @@ const WalletConnectButton = () => {
                 walletAddress.substr(walletAddress.length - 4, 4)}
             </button>
           }
-
         </div>
       )}
     </div>

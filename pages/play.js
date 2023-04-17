@@ -262,12 +262,17 @@ const Play = () => {
       buyContract.nftDiscountRate().then(newRate => setNftDiscountRate(newRate.toNumber()))
 
       buyContract.endTime().then(async (edTime) => {
-        const blockNumber = await provider.getBlockNumber()
-        const timestamp = (await provider.getBlock(blockNumber)).timestamp
-        console.log('current time:', { current: Date.now() / 1000, timestamp, endtime: edTime.toNumber() })
-        // setRemainTime(Math.max(edTime.toNumber() - timestamp, 0))
-        console.log('result', (edTime.toNumber() * 1000 - Date.now()) / 1000);
-        setRemainTime(Math.max((edTime.toNumber() * 1000 - Date.now()) / 1000, 0))
+        try {
+          const blockNumber = await provider.getBlockNumber()
+          const timestamp = (await provider.getBlock(blockNumber)).timestamp
+          console.log('current time:', { current: Date.now() / 1000, timestamp, endtime: edTime.toNumber() })
+          // setRemainTime(Math.max(edTime.toNumber() - timestamp, 0))
+          console.log('result', (edTime.toNumber() * 1000 - Date.now()) / 1000);
+          setRemainTime(Math.max((edTime.toNumber() * 1000 - Date.now()) / 1000, 0))
+        }
+        catch(err) {
+          console.log("error:", err)
+        }
       })
 
       buyContract

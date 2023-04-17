@@ -110,7 +110,7 @@ export const user = userSlice.reducer
 export const connectAccount =
   (firstRun = false, type = '') =>
   async (dispatch) => {
-    console.log('currentlyPath:::', window.location.pathname)
+    // console.log('currentlyPath:::', window.location.pathname)
     // const currentlyPath = window.location.pathname;
 
     chainInfo = chainConfig
@@ -174,7 +174,7 @@ export const connectAccount =
     )
 
     if (process.env.NODE_ENV !== 'production') {
-      console.log('web3ModalWillShowUp: ', web3ModalWillShowUp)
+      // console.log('web3ModalWillShowUp: ', web3ModalWillShowUp)
     }
 
     const web3Modal = new Web3Modal({
@@ -187,11 +187,11 @@ export const connectAccount =
       .then((web3provider) => web3provider)
       .catch((error) => {
         captureException(error, { extra: { firstRun } })
-        console.log('Could not get a wallet connection', error)
+        // console.log('Could not get a wallet connection', error)
         return null
       })
 
-    console.log('web3provider:', web3provider)
+    console.log('web3provider:::', web3provider)
 
     if (!web3provider) {
       dispatch(onLogout())
@@ -207,7 +207,7 @@ export const connectAccount =
       const cid = await web3provider.request({
         method: 'net_version'
       })
-      console.log('cid: ', { cid, chainId: chainInfo.chainId })
+      // console.log('cid: ', { cid, chainId: chainInfo.chainId })
       const correctChain =
         Number(cid) === chainInfo.chainId ||
         Number(cid) === Number(chainInfo.chainId)
@@ -215,6 +215,7 @@ export const connectAccount =
         method: 'eth_accounts',
         params: [{ chainId: cid }]
       })
+      console.log("account:::", accounts[0])
       const address = accounts[0]
       const signer = provider.getSigner()
 
@@ -273,7 +274,7 @@ export const connectAccount =
         try {
           balance = ethers.utils.formatEther(await provider.getBalance(address))
         } catch (error) {
-          console.log('Error checking CRO balance', error)
+          // console.log('Error checking CRO balance', error)
         }
       }
 
@@ -304,8 +305,8 @@ export const connectAccount =
       if (firstRun) {
         dispatch(appAuthInitFinished())
       }
-      console.log(error)
-      console.log('Error connecting wallet!')
+      // console.log(error)
+      // console.log('Error connecting wallet!')
       await web3Modal.clearCachedProvider()
       dispatch(onLogout())
     }
@@ -316,7 +317,7 @@ export const initProvider = () => async (dispatch) => {
   const ethereum = await detectEthereumProvider()
 
   if (ethereum == null || ethereum !== window.ethereum) {
-    console.log('not metamask detected')
+    // console.log('not metamask detected')
   } else {
     const provider = new ethers.providers.Web3Provider(ethereum)
     // const signer = provider.getSigner();
@@ -341,7 +342,7 @@ export const initProvider = () => async (dispatch) => {
     //dispatch(onProvider(obj))
 
     provider.on('accountsChanged', (accounts) => {
-      console.log("dispatching accountsChanged with undefined contractAddress")
+      // console.log("dispatching accountsChanged with undefined contractAddress")
       dispatch(
         accountChanged({
           address: accounts[0]
@@ -397,7 +398,7 @@ export const chainConnect = (type) => async (dispatch) => {
           window.location.reload()
         }
       }
-      console.log(error)
+      // console.log(error)
     }
   } else {
     // eslint-disable-next-line

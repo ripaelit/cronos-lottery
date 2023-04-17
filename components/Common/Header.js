@@ -11,7 +11,7 @@ import Link from 'next/link'
 import MobileSideBar from './MobileSideBar'
 
 const errorAlert = (title, err) => {
-  console.log(title, JSON.stringify(err))
+  // console.log(title, JSON.stringify(err))
   toast.error(`${title} ${JSON.stringify(err)}`)
 }
 

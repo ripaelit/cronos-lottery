@@ -15,7 +15,7 @@ export const switchNetwork = async () => {
       params: [{ chainId: chainConfig.chainId }],
     });
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     await window.ethereum.request({
       method: "wallet_addEthereumChain",
       params: [
@@ -59,7 +59,7 @@ export const connect = async () => {
       ),
     };
   } catch (e) {
-    console.log("error:", e);
+    // console.log("error:", e);
     return null;
   }
 };
