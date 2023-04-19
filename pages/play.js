@@ -102,8 +102,7 @@ const Play = () => {
       }
 
       if (remainTime <= 0) {
-        toast.error('Lottery has ended')
-        return
+        return toast.error('Lottery has ended')
       }
       
       const send_value = await buyContract
