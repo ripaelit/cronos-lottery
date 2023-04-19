@@ -251,14 +251,14 @@ const Play = () => {
   }
 
   useEffect(() => {
+    if (!buyContract || !provider) {
+      return
+    }
     console.log('balance', wallet_balance);
     if (wallet_balance <= 0) {
       toast.error("You don’t have enough $CRO. Reduce the number of tickets or top up your wallet!");
     }
     const init = async () => {
-      if (!buyContract) {
-        return
-      }
       buyContract.status().then((newStatus) => setTicketStatus(newStatus))
       buyContract.nftContractAddress().then(newNftAddress => setDiscountNftAddress(newNftAddress))
       buyContract.nftDiscountRate().then(newRate => setNftDiscountRate(newRate.toNumber()))

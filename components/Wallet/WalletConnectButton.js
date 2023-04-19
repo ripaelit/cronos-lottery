@@ -46,6 +46,15 @@ const WalletConnectButton = () => {
     }
   }
 
+  const onWrongChainModalChangeChain = () => {
+    dispatch(setShowWrongChainModal(false))
+    dispatch(chainConnect())
+  }
+
+  const logout = async () => {
+    dispatch(onLogout())
+  }
+
   useEffect(() => {
     let defiLink = localStorage.getItem('DeFiLink_session_storage_extension')
     if (defiLink) {
@@ -106,15 +115,6 @@ const WalletConnectButton = () => {
     }
     init()
   }, [walletAddress, hrgls])
-
-  const onWrongChainModalChangeChain = () => {
-    dispatch(setShowWrongChainModal(false))
-    dispatch(chainConnect())
-  }
-
-  const logout = async () => {
-    dispatch(onLogout())
-  }
 
   return (
     <div>
