@@ -135,8 +135,10 @@ export const connectAccount =
         package: DefiWalletConnectProvider,
         connector: async (ProviderPackage, options) => {
           const connector = new DeFiWeb3Connector({
-            supportedChainIds: [25, 338],
-            rpc: { 25: 'https://gateway.nebkas.ro', 338: 'https://cronos-testnet-3.crypto.org:8545/' },
+            // supportedChainIds: [25, 338],
+            // rpc: { 25: 'https://gateway.nebkas.ro', 338: 'https://cronos-testnet-3.crypto.org:8545/' },
+            supportedChainIds: [25],
+            rpc: { 25: chainInfo.rpcUrls[0] },
             pollingInterval: 15000,
             metadata: {
               icons: ['https://ebisusbay.com/vector%20-%20face.svg'],
