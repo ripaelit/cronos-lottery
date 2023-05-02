@@ -336,9 +336,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     discountTokenPrice = _discountTokenPRice;
   }
 
-  function setMaxNumberTicketsPerBuy(uint32 _maxNumberTicketsPerBuy)
-    external
-    onlyOwner {
+  function setMaxNumberTicketsPerBuy(uint32 _maxNumberTicketsPerBuy) external onlyOwner {
     require(_maxNumberTicketsPerBuy != 0, 'Must be > 0');
     maxNumberTicketsPerBuy = _maxNumberTicketsPerBuy;
   }
@@ -363,9 +361,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     founder2Address = _founder2Address;
   }
 
-  function recoverWrongTokens(address _tokenAddress, uint256 _tokenAmount)
-    external
-    onlyOwner {
+  function recoverWrongTokens(address _tokenAddress, uint256 _tokenAmount) external onlyOwner {
     IERC20(_tokenAddress).transfer(address(msg.sender), _tokenAmount);
   }
 
