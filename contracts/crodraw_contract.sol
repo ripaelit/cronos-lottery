@@ -96,12 +96,9 @@ contract CroDraw is ReentrancyGuard, Ownable {
     founder3Address = _founder3;
   }
 
-  function buyDiscountTickets(uint32 _amount)
-    external
-    payable
-    notContract
-    nonReentrant
-  {
+  receive() external payable {}
+
+  function buyDiscountTickets(uint32 _amount) external payable notContract nonReentrant {
     require(ticketPrice != 0, 'Price not set');
     require(_amount != 0, 'Enter chosen amount to buy');
     require(_amount <= maxNumberTicketsPerBuy, 'Too many tickets');
@@ -131,12 +128,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     _numOfTickesPerOwner[msg.sender][lotteryId] += _amount;
   }
 
-  function buyTickets(uint32 _amount)
-    external
-    payable
-    notContract
-    nonReentrant
-  {
+  function buyTickets(uint32 _amount) external payable notContract nonReentrant {
     require(ticketPrice != 0, 'Price not set');
     require(_amount != 0, 'Enter chosen amount to buy');
     require(_amount <= maxNumberTicketsPerBuy, 'Too many tickets');
@@ -175,8 +167,6 @@ contract CroDraw is ReentrancyGuard, Ownable {
     // amountCollected += msg.value;
     amountCollected = amountCollected.add(msg.value);
   }
-
-  receive() external payable {}
 
   function closeLottery() external payable onlyOperator {
     require(status == Status.Open, 'Lottery is not open');
@@ -284,25 +274,6 @@ contract CroDraw is ReentrancyGuard, Ownable {
     lotteryId++;
   }
 
-  function _chooseWinner(
-    uint32 winningTicketId,
-    uint256 winningPrize,
-    uint8 pot
-  ) internal {
-    address user = tickets[winningTicketId];
-    require(user != address(0), 'Invalid Ticket');
-    // _rewardsByOwner[user] += winningPrize;
-    _rewardsByOwner[user] = _rewardsByOwner[user].add(winningPrize);
-    winnerByPot[pot].push(user);
-    if (winningPrize > topWinning) {
-      topWinning = winningPrize;
-      topWinner = user;
-    }
-
-    if (_lastWinningPot[user] > pot || _lastWinningPot[user] == 0)
-      _lastWinningPot[user] = pot;
-  }
-
   function claimRewards() external notContract nonReentrant {
     address user = msg.sender;
     require(_rewardsByOwner[user] > 0, 'No rewards to claim');
@@ -310,35 +281,6 @@ contract CroDraw is ReentrancyGuard, Ownable {
     payable(user).transfer(rewardBalance);
     _rewardsByOwner[user] = 0;
     _lastWinningPot[user] = 0;
-  }
-
-  function _setTopWinner(uint32 winningTicketId) internal {
-    address winner = tickets[winningTicketId];
-    require(winner != address(0), 'Invalid Ticket');
-    _lastTopWinners[_sp] = winner;
-    _sp = (_sp + 1) % 5;
-  }
-
-  function calculateTotalPrice(uint32 _amount, bool _useTrpz)
-    public
-    view
-    returns (uint256)
-  {
-    // uint256 totalPrice = _amount * ticketPrice;
-    uint256 totalPrice = ticketPrice.mul(_amount);
-    uint256 nftBalance = IERC721(nftContractAddress).balanceOf(msg.sender);
-    uint256 newDiscountRate = 0;
-    if (_useTrpz) {
-      // newDiscountRate += discountRate;
-      newDiscountRate = newDiscountRate.add(discountRate);
-    }
-    if (nftBalance > 0) {
-      // newDiscountRate += nftDiscountRate;
-      newDiscountRate = newDiscountRate.add(nftDiscountRate);
-    }
-    // totalPrice = totalPrice * (1000 - newDiscountRate) / 1000;
-    totalPrice = totalPrice.mul(1000 - newDiscountRate).div(1000);
-    return totalPrice;
   }
 
   // Get last 5 top winners
@@ -354,20 +296,15 @@ contract CroDraw is ReentrancyGuard, Ownable {
   function getClaimableReward(address user)
     external
     view
-    returns (uint256, uint8)
-  {
+    returns (uint256, uint8) {
     return (_rewardsByOwner[user], _lastWinningPot[user]);
   }
 
-  function getLotteryInfo()
-    external
-    view
-    returns (
+  function getLotteryInfo() external view returns (
       uint256,
       uint256,
       uint256
-    )
-  {
+    ) {
     return (amountCollected, currentTicketId, ticketPrice);
   }
 
@@ -387,10 +324,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     ticketPrice = _ticketPrice;
   }
 
-  function setDiscountNFTContractAddress(address _newAddress)
-    external
-    onlyOwner
-  {
+  function setDiscountNFTContractAddress(address _newAddress) external onlyOwner {
     nftContractAddress = _newAddress;
   }
 
@@ -398,17 +332,13 @@ contract CroDraw is ReentrancyGuard, Ownable {
     nftDiscountRate = _newRate;
   }
 
-  function setDiscountTokenPrice(uint256 _discountTokenPRice)
-    external
-    onlyOwner
-  {
+  function setDiscountTokenPrice(uint256 _discountTokenPRice) external onlyOwner {
     discountTokenPrice = _discountTokenPRice;
   }
 
   function setMaxNumberTicketsPerBuy(uint32 _maxNumberTicketsPerBuy)
     external
-    onlyOwner
-  {
+    onlyOwner {
     require(_maxNumberTicketsPerBuy != 0, 'Must be > 0');
     maxNumberTicketsPerBuy = _maxNumberTicketsPerBuy;
   }
@@ -435,9 +365,62 @@ contract CroDraw is ReentrancyGuard, Ownable {
 
   function recoverWrongTokens(address _tokenAddress, uint256 _tokenAmount)
     external
-    onlyOwner
-  {
+    onlyOwner {
     IERC20(_tokenAddress).transfer(address(msg.sender), _tokenAmount);
+  }
+
+  function getWinnersByPot(uint8 potNumber) external view returns (address[] memory) {
+    return winnerByPot[potNumber];
+  }
+
+  /***********************************************************
+  ********************* PUBLIC FUNCTIONS *********************
+  ***********************************************************/
+  function calculateTotalPrice(uint32 _amount, bool _useTrpz) public view returns (uint256) {
+    // uint256 totalPrice = _amount * ticketPrice;
+    uint256 totalPrice = ticketPrice.mul(_amount);
+    uint256 nftBalance = IERC721(nftContractAddress).balanceOf(msg.sender);
+    uint256 newDiscountRate = 0;
+    if (_useTrpz) {
+      // newDiscountRate += discountRate;
+      newDiscountRate = newDiscountRate.add(discountRate);
+    }
+    if (nftBalance > 0) {
+      // newDiscountRate += nftDiscountRate;
+      newDiscountRate = newDiscountRate.add(nftDiscountRate);
+    }
+    // totalPrice = totalPrice * (1000 - newDiscountRate) / 1000;
+    totalPrice = totalPrice.mul(1000 - newDiscountRate).div(1000);
+    return totalPrice;
+  }
+
+  /***********************************************************
+  ******************** INTERNAL FUNCTIONS ********************
+  ***********************************************************/
+  function _setTopWinner(uint32 winningTicketId) internal {
+    address winner = tickets[winningTicketId];
+    require(winner != address(0), 'Invalid Ticket');
+    _lastTopWinners[_sp] = winner;
+    _sp = (_sp + 1) % 5;
+  }
+
+  function _chooseWinner(
+    uint32 winningTicketId,
+    uint256 winningPrize,
+    uint8 pot
+  ) internal {
+    address user = tickets[winningTicketId];
+    require(user != address(0), 'Invalid Ticket');
+    // _rewardsByOwner[user] += winningPrize;
+    _rewardsByOwner[user] = _rewardsByOwner[user].add(winningPrize);
+    winnerByPot[pot].push(user);
+    if (winningPrize > topWinning) {
+      topWinning = winningPrize;
+      topWinner = user;
+    }
+
+    if (_lastWinningPot[user] > pot || _lastWinningPot[user] == 0)
+      _lastWinningPot[user] = pot;
   }
 
   /**
@@ -449,13 +432,5 @@ contract CroDraw is ReentrancyGuard, Ownable {
       size := extcodesize(_addr)
     }
     return size > 0;
-  }
-
-  function getWinnersByPot(uint8 potNumber)
-    external
-    view
-    returns (address[] memory)
-  {
-    return winnerByPot[potNumber];
   }
 }
