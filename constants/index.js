@@ -7,7 +7,7 @@
 // export const ContractAddress = '0x3b930555ffCb54a312406D61ad74FE2732b7d28e'
 // export const TokenContractAddress = '0xe5D487dF63f2D613e64E4D1D908A70D02c82992b'
 
-export const ContractAddress = '0xeDdA73a0462630B84a4fD85E79F81327892b272c'
+export const ContractAddress = '0x17344A21432C507538079337db0327218e6E8Db6'
 export const TokenContractAddress = '0x1Cc0B25BD5105CD8905f7e9cD174435D4C890E02'
 
 //goerli CPT  token 0x2ebfba490C670473bA7D91a82F4097daC27D94B5

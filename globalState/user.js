@@ -2,9 +2,9 @@ import { createSlice } from '@reduxjs/toolkit'
 import { Contract, ethers, BigNumber } from 'ethers'
 import Web3Modal from 'web3modal'
 import detectEthereumProvider from '@metamask/detect-provider'
-// import { DeFiWeb3Connector } from 'deficonnect';
+import { DeFiWeb3Connector } from 'deficonnect';
 import WalletConnectProvider from '@walletconnect/web3-provider'
-// import * as DefiWalletConnectProvider from '@deficonnect/web3-provider';
+import * as DefiWalletConnectProvider from '@deficonnect/web3-provider';
 import { appAuthInitFinished } from './initSlice'
 import { captureException } from '@sentry/react'
 // import abi from '../artifacts/contracts/CrosmoBaby.sol/AlienCrosmobaby.json'
@@ -27,6 +27,7 @@ const userSlice = createSlice({
     connectingWallet: false,
     gettingContractData: true,
     needsOnboard: false,
+    balance: null,
     // Contracts
     buyContract: null,
     tokenContract: null,
@@ -123,42 +124,42 @@ export const connectAccount =
           description: 'Connect with MetaMask in your browser'
         },
         package: null
-      }
-      // 'custom-defiwallet': {
-      //   display: {
-      //     logo: '/assets/cdc_logo.svg',
-      //     name: 'Crypto.com DeFi Wallet',
-      //     description: 'Connect with the CDC DeFi Wallet',
-      //   },
-      //   options: {},
-      //   package: DefiWalletConnectProvider,
-      //   connector: async (ProviderPackage, options) => {
-      //     const connector = new DeFiWeb3Connector({
-      //       supportedChainIds: [25, 338],
-      //       rpc: { 25: 'https://gateway.nebkas.ro', 338: 'https://cronos-testnet-3.crypto.org:8545/' },
-      //       pollingInterval: 15000,
-      //       metadata: {
-      //         icons: ['https://ebisusbay.com/vector%20-%20face.svg'],
-      //         description: 'Cronos NFT Marketplace',
-      //       },
-      //     });
+      },
+      'custom-defiwallet': {
+        display: {
+          logo: '/assets/cdc_logo.svg',
+          name: 'Crypto.com DeFi Wallet',
+          description: 'Connect with the CDC DeFi Wallet',
+        },
+        options: {},
+        package: DefiWalletConnectProvider,
+        connector: async (ProviderPackage, options) => {
+          const connector = new DeFiWeb3Connector({
+            // supportedChainIds: [25, 338],
+            // rpc: { 25: 'https://gateway.nebkas.ro', 338: 'https://cronos-testnet-3.crypto.org:8545/' },
+            supportedChainIds: [25],
+            rpc: { 25: chainInfo.rpcUrls[0] },
+            pollingInterval: 15000,
+            metadata: {
+              icons: ['https://ebisusbay.com/vector%20-%20face.svg'],
+              description: 'Cronos NFT Marketplace',
+            },
+          });
 
-      //     await connector.activate();
-      //     let provider = await connector.getProvider();
-      //     return provider;
-      //   },
-      // },
+          await connector.activate();
+          let provider = await connector.getProvider();
+          return provider;
+        },
+      },
     }
 
     if (type !== 'defi') {
       providerOptions.walletconnect = {
         package: WalletConnectProvider, // required
         options: {
-          chainId: 5,
-          // chainId: 25,
+          chainId: chainConfig.chainId,
           rpc: {
-            5: 'https://goerli.infura.io/v3/33f72aa1b4f441bc8f3a244da53533b4',
-            25: 'https://cronosrpc-1.xstaking.sg'
+            25: chainConfig.rpcUrls[0]
           },
           network: 'cronos',
           metadata: {
@@ -377,14 +378,14 @@ export const chainConnect = (type) => async (dispatch) => {
             method: 'wallet_addEthereumChain',
             params: [
               {
-                chainName: chainInfo.name,
                 chainId: cid,
+                chainName: chainInfo.chainName,
                 rpcUrls: [chainInfo.rpcUrls[0]],
-                blockExplorerUrls: null,
+                blockExplorerUrls: [chainInfo.blockExplorerUrls[0]],
                 nativeCurrency: {
-                  name: chainInfo.name,
+                  name: chainInfo.nativeCurrency.name,
                   symbol: chainInfo.nativeCurrency.symbol,
-                  decimals: 18
+                  decimals: chainInfo.nativeCurrency.decimals
                 }
               }
             ]
@@ -402,15 +403,15 @@ export const chainConnect = (type) => async (dispatch) => {
     }
   } else {
     // eslint-disable-next-line
-    const web3Provider = new WalletConnectProvider({
-      infuraId: '33f72aa1b4f441bc8f3a244da53533b4',
-      rpc: {
-        5: 'https://goerli.infura.io/v3/33f72aa1b4f441bc8f3a244da53533b4',
-        25: 'https://cronosrpc-1.xstaking.sg'
-      },
-      chainId: 5
-      // chainId: 25,
-    })
+    // const web3Provider = new WalletConnectProvider({
+    //   infuraId: '33f72aa1b4f441bc8f3a244da53533b4',
+    //   rpc: {
+    //     5: 'https://goerli.infura.io/v3/33f72aa1b4f441bc8f3a244da53533b4',
+    //     25: 'https://cronosrpc-1.xstaking.sg'
+    //   },
+    //   chainId: 5
+    //   // chainId: 25,
+    // })
   }
 }
 
