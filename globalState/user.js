@@ -127,7 +127,7 @@ export const connectAccount =
       },
       'custom-defiwallet': {
         display: {
-          logo: '/assets/cdc_logo.svg',
+          logo: '/images/defiwallet.png',
           name: 'Crypto.com DeFi Wallet',
           description: 'Connect with the CDC DeFi Wallet',
         },
