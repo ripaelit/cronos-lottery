@@ -97,6 +97,9 @@ contract CroDraw is ReentrancyGuard, Ownable {
 
 	receive() external payable {}
 
+	/***********************************************************
+	******************** EXTERNAL FUNCTIONS ********************
+	***********************************************************/
 	function buyTickets(uint32 _amount) external payable notContract nonReentrant {
 		require(ticketPrice != 0, 'Price not set');
 		require(_amount != 0, 'Enter chosen amount to buy');
@@ -157,11 +160,6 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		status = Status.Open;
 		amountCollected = 0;
 		currentTicketId = 0;
-		endTime = _period.add(block.timestamp);
-	}
-
-	function extendPeriod(uint256 _period) external onlyOperator {
-		// require(status != Status.Pending, '');
 		endTime = _period.add(block.timestamp);
 	}
 
@@ -389,6 +387,11 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		return totalPrice;
 	}
 
+	function extendPeriod(uint256 _period) public onlyOperator {
+		// require(status != Status.Pending, '');
+		endTime = _period.add(block.timestamp);
+	}
+
 	/***********************************************************
 	******************** INTERNAL FUNCTIONS ********************
 	***********************************************************/
@@ -399,11 +402,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		_sp = (_sp + 1) % 5;
 	}
 
-	function _chooseWinner(
-		uint32 winningTicketId,
-		uint256 winningPrize,
-		uint8 pot
-	) internal {
+	function _chooseWinner(uint32 winningTicketId, uint256 winningPrize, uint8 pot) internal {
 		address user = tickets[winningTicketId];
 		require(user != address(0), 'Invalid Ticket');
 		// _rewardsByOwner[user] += winningPrize;
