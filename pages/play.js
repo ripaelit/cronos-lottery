@@ -58,68 +58,56 @@ const Play = () => {
   }
 
   const walletAddress = useSelector((state) => state.user.address)
-
   const provider = useSelector((state) => state.user.provider)
-
-  const wallet_balance = useSelector((state) => state.user.balance)
-
+  const walletBalance = useSelector((state) => state.user.balance)
   const buyContract = useSelector((state) => state.user.buyContract)
-
   const tokenContract = useSelector((state) => state.user.tokenContract)
-
   const dispatch = useDispatch()
 
   const handleBuyTicket = async () => {
     console.log("ticketStatus = ", ticketStatus);
     try {
       setLoading(true)
-
       if (!walletAddress) {
         return toast.error('Please connect your wallet')
       }
       if (ticketStatus !== STATUS.open) {
         return toast.error('Lottery is not open yet')
       }
-
       if (ticketCountByUser > MaxTicketCount) {
         return toast.error(`You can buy Max ${MaxTicketCount} tickets`)
       }
-
-      const get_walletBalance = new BigNumber(wallet_balance).times(
+      const getWalletBalance = new BigNumber(walletBalance).times(
         new BigNumber(10).pow(18)
       )
-      const get_ticketBalance = new BigNumber(ticketPrice).times(
+      const getTicketBalance = new BigNumber(ticketPrice).times(
         new BigNumber(ticketCount)
       )
       if (hasDiscountNft) {
-        get_ticketBalance = get_ticketBalance.times(1000 - nftDiscountRate).div(1000)
+        getTicketBalance = getTicketBalance.times(1000 - nftDiscountRate).div(1000)
       }
-
-      if (get_walletBalance.lt(get_ticketBalance)) {
+      if (getWalletBalance.lt(getTicketBalance)) {
         // "lt" mean A < B (lessthan)
         toast.error(`You don’t have enough $TRPZ. Reduce the number of tickets or un-check the box.`)
         return
       }
-
       if (remainTime <= 0) {
         return toast.error('Lottery has ended')
       }
-      
-      const send_value = await buyContract
+      const sendValue = await buyContract
         .calculateTotalPrice(
           ticketCount,
           false
         )
-
       const gasEstimated = await buyContract.estimateGas.buyTickets(
         ticketCount,
         {
-          value: send_value.toString()
+          value: sendValue.toString()
         }
       )
       const gas = Math.ceil(gasEstimated.toNumber() * 1.5)
       const tx = await buyContract.buyTickets(ticketCount, {
-        value: send_value.toString(),
+        value: sendValue.toString(),
         gasLimit: gas
       })
       await tx.wait()
@@ -150,51 +138,45 @@ const Play = () => {
     if (!walletAddress) {
       return toast.error('Please connect your wallet')
     }
-
     if (ticketStatus !== STATUS.open) {
       return toast.error('Lottery is not open yet')
     }
-
     if (ticketCountByUser > MaxTicketCount) {
       return toast.error(`You can buy Max ${MaxTicketCount} tickets`)
     }
-
     if (remainTime <= 0) {
-      return toast.error('Lottery has ended')
+      return toast.error('Lottery has been ended')
     }
-
     try {
       setLoading(true)
 
       const discountedTicketPrice = new BigNumber(ticketPrice).times(1000 - discountRate - (hasDiscountNft ? nftDiscountRate : 0)).div(1000)
-      const get_walletBalance = new BigNumber(wallet_balance).times(new BigNumber(10).pow(18))
-      const get_ticketBalance = new BigNumber(discountedTicketPrice).times(ticketCount)
-      const request_tokenAmount = new BigNumber(ticketCount).times(new BigNumber(discountTokenPrice)).times(new BigNumber(10).pow(discountTokenkDecimals))
+      const getWalletBalance = new BigNumber(walletBalance).times(new BigNumber(10).pow(18))
+      const getTicketBalance = new BigNumber(discountedTicketPrice).times(ticketCount)
+      const requestTokenAmount = new BigNumber(ticketCount).times(new BigNumber(discountTokenPrice)).times(new BigNumber(10).pow(discountTokenkDecimals))
 
-      if ((new BigNumber(discountTokenBlnc)).lt(request_tokenAmount)) {
-        console.log("discountTokenBlnc", discountTokenBlnc.toString(), "request_tokenAmount", request_tokenAmount.toString())
+      if ((new BigNumber(discountTokenBlnc)).lt(requestTokenAmount)) {
+        console.log("discountTokenBlnc", discountTokenBlnc.toString(), "requestTokenAmount", requestTokenAmount.toString())
         toast.error('Insufficient Token')
         setLoading(false)
         return
       }
-
-      if (get_walletBalance.lt(get_ticketBalance)) {
+      if (getWalletBalance.lt(getTicketBalance)) {
         toast.error(`Insufficient Fund`)
         setLoading(false)
         return
       }
-
       // approve only when allowance is insufficient
       const allowanceAmount = new BigNumber((await tokenContract.allowance(walletAddress, ContractAddress)).toString())
-      if (allowanceAmount.lt(request_tokenAmount)) {
+      if (allowanceAmount.lt(requestTokenAmount)) {
         let gasEstimated = await tokenContract.estimateGas.approve(
           ContractAddress,
-          request_tokenAmount.toString()
+          requestTokenAmount.toString()
         )
         let gas = Math.ceil(gasEstimated.toNumber() * 1.5)
         let tx = await tokenContract.approve(
           ContractAddress,
-          request_tokenAmount.toString(),
+          requestTokenAmount.toString(),
           {
             gasLimit: gas
           }
@@ -202,7 +184,7 @@ const Play = () => {
         await tx.wait()
       }
 
-      const send_value = await buyContract
+      const sendValue = await buyContract
         .calculateTotalPrice(
           ticketCount,
           true
@@ -210,12 +192,12 @@ const Play = () => {
       let gasEstimated = await buyContract.estimateGas.buyDiscountTickets(
         ticketCount,
         {
-          value: send_value.toString()
+          value: sendValue.toString()
         }
       )
       let gas = Math.ceil(gasEstimated.toNumber() * 1.5)
       let tx = await buyContract.buyDiscountTickets(ticketCount, {
-        value: send_value.toString(),
+        value: sendValue.toString(),
         gasLimit: gas
       })
       await tx.wait()
@@ -253,8 +235,8 @@ const Play = () => {
     if (!buyContract || !provider) {
       return
     }
-    console.log('balance', wallet_balance);
-    if (wallet_balance <= 0) {
+    console.log('balance', walletBalance);
+    if (walletBalance <= 0) {
       toast.error("You don’t have enough $CRO. Reduce the number of tickets or top up your wallet!");
     }
     const init = async () => {
@@ -280,29 +262,23 @@ const Play = () => {
         .then((newPrice) => {
           setTicketPrice(newPrice.toString())
         })
-
       buyContract
         .maxNumberTicketsPerBuy()
         .then((maxCount) => setMaxTicketCount(maxCount))
-
       buyContract
         .endTime()
         .then((newEndTime) => setEndTime(newEndTime.toString() * 1000))
-
       buyContract
         .currentTicketId()
         .then((newTotalAmount) =>
           setCurrentTotalAmount(newTotalAmount.toString())
         )
-
       buyContract
         .discountTokenPrice()
         .then((newDisPrice) => setDiscountTokenPrice(newDisPrice.toNumber()))
-
       buyContract
         .discountRate()
         .then((newDiscountRate) => setDiscountRate(newDiscountRate))
-
       buyContract.topWinner().then((newTopWinner) => {
         if (newTopWinner === '0x0000000000000000000000000000000000000000') {
           setLastTopWinner('No winners')
@@ -392,7 +368,7 @@ const Play = () => {
         setCharityPot((totalPot * 15 / 100).toFixed(2))
       }
     )
-    
+
     if (remainTime > 0) {
       setRemainTime(remainTime - 1)
       let day = `${Math.floor(remainTime / 86400)}`
@@ -490,7 +466,6 @@ const Play = () => {
                     <div className={styles.Get_ticket}>LIVE POT SIZES:</div>
                     <label className={styles.Play_trpzLabel}>WINNERS POT: {winnersPot} CRO | CHARITY POT: {charityPot} CRO</label>
                   </>}
-                  
                   {/* <div className={styles.currentInfoControl}>
                     <div className={styles.currentInfoGroup}>
                       <p className={styles.currentInfoTitle}>Total Buy Amount : </p>
@@ -552,7 +527,6 @@ const Play = () => {
                 />
                 <div className={styles.Play_bottom}>
                   <p className={styles.Play_title}>Lottery is closed<br /></p> <p className={styles.Play_text}> Next lottery will start soon...</p>
-                  
                   <div className={styles.Play_playBtn}>
                     <Link href="/redeem">
                       <button className={styles.findoutButton1}>Check your winnings!</button>
