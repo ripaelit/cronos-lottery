@@ -13,13 +13,14 @@ contract TrpzToken is ERC20, AccessControl {
     uint256 public constant MAX_SUPPLY = 1000000000;
 
     constructor(uint256 _initialSupply, address _wallet)
-        ERC20("TrpzToken", "TRPZ")
-    {
+        ERC20("TrpzToken", "TRPZ") {
         _setupRole(ADMIN_ROLE, msg.sender);
         _mint(_wallet, _initialSupply);
     }
 
-    // ================= PUBLIC FUNCTIONS ============== //
+    /***********************************************************
+    ******************** EXTERNAL FUNCTIONS ********************
+    ***********************************************************/
     function mint(address _addr, uint256 _amount) external {
         require(
             hasRole(ADMIN_ROLE, msg.sender),
@@ -33,6 +34,9 @@ contract TrpzToken is ERC20, AccessControl {
         _burn(msg.sender, _amount);
     }
 
+    /***********************************************************
+    ********************* PUBLIC FUNCTIONS *********************
+    ***********************************************************/
     /// @notice Overriden the decimals function to be 0
     function decimals() public view virtual override returns (uint8) {
         return 0;
