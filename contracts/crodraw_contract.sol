@@ -160,6 +160,11 @@ contract CroDraw is ReentrancyGuard, Ownable {
     endTime = _period.add(block.timestamp);
   }
 
+  function extendPeriod(uint256 _period) external onlyOperator {
+    // require(status != Status.Pending, '');
+    endTime = _period.add(block.timestamp);
+  }
+
   function addFund() external payable onlyOperator {
     require(status == Status.Open, 'Lottery is not open');
     // amountCollected += msg.value;
