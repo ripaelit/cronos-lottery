@@ -106,7 +106,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		require(_amount <= maxNumberTicketsPerBuy, 'Too many tickets');
 
 		require(lotteryStatus == LotteryStatus.Open, 'Lottery is not open yet');
-		// require(block.timestamp < endTime, 'Lottery has ended'); // tempo
+		require(block.timestamp < endTime, 'Lottery has ended');
 
 		uint256 totalPrice = calculateTotalPrice(_amount, false);
 		require(msg.value >= totalPrice, 'Insufficient funds');
@@ -130,7 +130,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		require(_amount <= maxNumberTicketsPerBuy, 'Too many tickets');
 
 		require(lotteryStatus == LotteryStatus.Open, 'Lottery is not open yet');
-		// require(block.timestamp < endTime, 'Lottery has ended'); // tempo
+		require(block.timestamp < endTime, 'Lottery has ended');
 		uint8 decimals = discountToken.decimals();
 		// uint256 discountTokenAmount = discountTokenPrice * (10**decimals) * _amount;
 		uint256 discountTokenAmount = discountTokenPrice.mul(10**decimals).mul(_amount);
@@ -169,7 +169,6 @@ contract CroDraw is ReentrancyGuard, Ownable {
 	}
 
 	function extendPeriod(uint256 _period) external onlyOperator {
-		// require(lotteryStatus != LotteryStatus.Pending, '');
 		endTime = _period.add(block.timestamp);
 	}
 
