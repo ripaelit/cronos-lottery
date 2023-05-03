@@ -24,7 +24,7 @@ const userSlice = createSlice({
     provider: null,
     address: null,
     web3modal: null,
-    connectingWallet: false,
+    onConnectingWallet: false,
     gettingContractData: true,
     needsOnboard: false,
     balance: null,
@@ -36,7 +36,7 @@ const userSlice = createSlice({
     isMetamask: false
   },
   reducers: {
-    accountChanged(state, action) {
+    onChangeAccount(state, action) {
       state.balance = action.payload.balance
       // TODO: QUICKFIX. Need to make as independent reducers later.
       if (action.payload.buyContract)
@@ -44,21 +44,17 @@ const userSlice = createSlice({
       if (action.payload.tokenContract)
         state.tokenContract = action.payload.tokenContract
     },
-
     setIsMetamask(state, action) {
       state.isMetamask = action.payload.isMetamask
     },
-
     onCorrectChain(state, action) {
       state.correctChain = action.payload.correctChain
     },
-
     onProvider(state, action) {
       state.provider = action.payload.provider
       state.needsOnboard = action.payload.needsOnboard
       state.correctChain = action.payload.correctChain
     },
-
     onBasicAccountData(state, action) {
       state.address = action.payload.address
       state.provider = action.payload.provider
@@ -66,16 +62,14 @@ const userSlice = createSlice({
       state.correctChain = action.payload.correctChain
       state.needsOnboard = action.payload.needsOnboard
     },
-
-    connectingWallet(state, action) {
-      state.connectingWallet = action.payload.connecting
+    onConnectingWallet(state, action) {
+      state.onConnectingWallet = action.payload.connecting
     },
-
     setShowWrongChainModal(state, action) {
       state.showWrongChainModal = action.payload
     },
     onLogout(state) {
-      state.connectingWallet = false
+      state.onConnectingWallet = false
       const web3Modal = new Web3Modal({
         cacheProvider: false, // optional
         providerOptions: [] // required
@@ -90,16 +84,16 @@ const userSlice = createSlice({
       state.address = ''
       state.balance = null
     },
-    balanceUpdated(state, action) {
+    onUpdateBalance(state, action) {
       state.balance = action.payload
     }
   }
 })
 
 export const {
-  accountChanged,
+  onChangeAccount,
   onProvider,
-  connectingWallet,
+  onConnectingWallet,
   onCorrectChain,
   setShowWrongChainModal,
   onBasicAccountData,
@@ -202,7 +196,7 @@ export const connectAccount =
     dispatch(setIsMetamask({ isMetamask: web3provider.isMetaMask }))
 
     try {
-      dispatch(connectingWallet({ connecting: true }))
+      dispatch(onConnectingWallet({ connecting: true }))
       const provider = new ethers.providers.Web3Provider(web3provider)
 
       const cid = await web3provider.request({
@@ -280,7 +274,7 @@ export const connectAccount =
       }
 
       await dispatch(
-        accountChanged({
+        onChangeAccount({
           address: address,
           provider: provider,
           web3modal: web3Modal,
@@ -311,7 +305,7 @@ export const connectAccount =
       await web3Modal.clearCachedProvider()
       dispatch(onLogout())
     }
-    dispatch(connectingWallet({ connecting: false }))
+    dispatch(onConnectingWallet({ connecting: false }))
   }
 
 export const initProvider = () => async (dispatch) => {
@@ -345,7 +339,7 @@ export const initProvider = () => async (dispatch) => {
     provider.on('accountsChanged', (accounts) => {
       // console.log("dispatching accountsChanged with undefined contractAddress")
       dispatch(
-        accountChanged({
+        onChangeAccount({
           address: accounts[0]
         })
       )
@@ -419,5 +413,5 @@ export const updateBalance = () => async (dispatch, getState) => {
   const { user } = getState()
   const { address, provider } = user
   const balance = ethers.utils.formatEther(await provider.getBalance(address))
-  dispatch(userSlice.actions.balanceUpdated(balance))
+  dispatch(userSlice.actions.onUpdateBalance(balance))
 }

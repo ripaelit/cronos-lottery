@@ -7,7 +7,7 @@ import BigNumber from 'bignumber.js'
 import Link from 'next/link'
 import { chainConfig, ContractAddress } from '../constants/index'
 import ERC721ABI from '../constants/erc721Abi.json'
-import { accountChanged } from '../globalState/user'
+import { onChangeAccount } from '../globalState/user'
 import useInterval from '../hooks/useInterval'
 
 import styles from '../styles/Play.module.scss'
@@ -121,7 +121,7 @@ const Play = () => {
       provider
         .getBalance(walletAddress)
         .then((blnc) =>
-          dispatch(accountChanged({ balance: ethers.utils.formatEther(blnc) }))
+          dispatch(onChangeAccount({ balance: ethers.utils.formatEther(blnc) }))
         )
       toast.success('Successfully bought tickets')
       setLoading(false)
@@ -216,7 +216,7 @@ const Play = () => {
       provider
         .getBalance(walletAddress)
         .then((blnc) =>
-          dispatch(accountChanged({ balance: ethers.utils.formatEther(blnc) }))
+          dispatch(onChangeAccount({ balance: ethers.utils.formatEther(blnc) }))
         )
       toast.success('Successfully bought tickets')
     } catch (error) {
