@@ -121,13 +121,11 @@ const Redeem = () => {
         <div>{isClaimable ? 'true' : 'false'}</div> */}
         {
           !walletAddress &&
-          <div className={styles.Redeem_control} >
+          <div className={styles.Redeem_control}>
             <img className={styles.Redeem_img} src='images/disconnectWallet.png' />
-
-            <div className={styles.Redeem_bottom} >
-
-              <p className={styles.Redeem_title} >Whoops, no wallet connected</p>
-              <p className={styles.Redeem_context} >
+            <div className={styles.Redeem_bottom}>
+              <p className={styles.Redeem_title}>Whoops, no wallet connected</p>
+              <p className={styles.Redeem_context}>
                 You can connect your wallet by clicking the &quot;Connect Wallet&quot;
               </p>
             </div>
@@ -135,9 +133,9 @@ const Redeem = () => {
         }
         {
           walletAddress && ticketStatus == STATUS.pending && isClaimable &&
-          <div className={styles.Redeem_control} >
+          <div className={styles.Redeem_control}>
             <img className={styles.Redeem_img} src='images/win_ticket.png' />
-            <div className={styles.Redeem_bottom} >
+            <div className={styles.Redeem_bottom}>
               {/* <p className={styles.Redeem_title} >Woohoo!</p> */}
               {
                 firstPotWinner.toLowerCase() === walletAddress.toLowerCase() ? <><p className={styles.Redeem_title}>You hit the JACKPOT!<br /> </p><p className={styles.Redeem_text}>You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)} CRO</p></>
@@ -147,8 +145,8 @@ const Redeem = () => {
                 (claimableAmount !== '' && claimableAmount !== '0') ? <p className={styles.Redeem_title} >You won {(new BigNumber(claimableAmount)).div((new BigNumber(10)).pow(18)).toFixed(2)}CRO</p> : ''
               } */}
               {/*<p className={styles.Redeem_context} >Forever Claimable</p> */}
-              <div className={styles.Redeem_RedeemBtnGroup} >
-                <div className={styles.Redeem_RedeemBtn} onClick={handleClaimWinnings}  >
+              <div className={styles.Redeem_RedeemBtnGroup}>
+                <div className={styles.Redeem_RedeemBtn} onClick={handleClaimWinnings}>
                   Claim your winnings
                 </div>
               </div>
@@ -157,12 +155,12 @@ const Redeem = () => {
         }
         {
           walletAddress && ticketStatus == STATUS.pending && !isClaimable &&
-          <div className={styles.Redeem_control} >
+          <div className={styles.Redeem_control}>
             <img className={styles.Redeem_img} src='images/no_win_ticket.png' />
-            <div className={styles.Redeem_bottom} >
-              <p className={styles.Redeem_title} >You have no winnings to claim.</p>
+            <div className={styles.Redeem_bottom}>
+              <p className={styles.Redeem_title}>You have no winnings to claim.</p>
               {/* <div className={styles.Redeem_RedeemBtnGroup} >
-                <div className={styles.Redeem_RedeemBtn} onClick={handleClaimWinnings}  >
+                <div className={styles.Redeem_RedeemBtn} onClick={handleClaimWinnings}>
                   Claim your winnings
                 </div>
               </div> */}
@@ -171,15 +169,15 @@ const Redeem = () => {
         }
         {
           walletAddress && ticketStatus == STATUS.open &&
-          <div className={styles.Redeem_control} >
+          <div className={styles.Redeem_control}>
             <img className={styles.Redeem_img} src='images/no_win_ticket.png' />
-            <div className={styles.Redeem_bottom} >
+            <div className={styles.Redeem_bottom}>
               <p className={styles.Redeem_title} >You have {ticketCountByUser} tickets</p>
-              <div className={styles.Redeem_RedeemBtnGroup} >
-                <div className={styles.Redeem_playBtnGroup} >
-                  <div className={styles.Redeem_sliderGroup} >
+              <div className={styles.Redeem_RedeemBtnGroup}>
+                <div className={styles.Redeem_playBtnGroup}>
+                  <div className={styles.Redeem_sliderGroup}>
                     <Link href="/play">
-                      <button className={styles.Redeem_playBtn}  >
+                      <button className={styles.Redeem_playBtn}>
                         Buy More Tickets
                       </button>
                     </Link>
@@ -188,6 +186,13 @@ const Redeem = () => {
               </div>
               {!!timeStr && <div className={styles.Redeem_remainingTime}>Ticket sale ends in {timeStr}</div>}
             </div>
+          </div>
+        }
+        {
+          walletAddress && ticketStatus == STATUS.close &&
+          <div className={styles.Redeem_bottom}>
+            <p className={styles.Redeem_title} style={{lineHeight: "120%", marginTop: "24px"}}>No ongoing lottery</p>
+            <p className={styles.Redeem_context} style={{margin: 0}}>Winners are being drawn shortly</p>
           </div>
         }
       </div>
