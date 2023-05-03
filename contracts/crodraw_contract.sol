@@ -6,12 +6,11 @@ import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
-import 'witnet-solidity-bridge/contracts/interfaces/IWitnetRandomness.sol';
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import 'witnet-solidity-bridge/contracts/interfaces/IWitnetRandomness.sol';
 
 interface TRPZToken is IERC20 {
   function decimals() external view returns (uint8);
-
   function burn(uint256 _amount) external;
 }
 
@@ -54,7 +53,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
   mapping(address => mapping(uint256 => uint32)) public _numOfTickesPerOwner; // _numOfTickesPerOwner[user][lotteryIndex] = ticket count
   mapping(address => uint256) private _rewardsByOwner;  // _rewardsByOwner[user] = balance: this should be kept until user claims
   mapping(address => uint8) private _lastWinningPot;  // _lastWinningPot[user] = pot: winning ranks(1,2,3,4)
-  mapping(uint8 => address[]) private winnerByPot;  // winnerByPot[pot] = user[]
+  mapping(uint8 => address[]) private _winnerByPot;  // _winnerByPot[pot] = user[]
 
   address[5] private _lastTopWinners;
   uint8 private _sp;
@@ -98,6 +97,31 @@ contract CroDraw is ReentrancyGuard, Ownable {
 
   receive() external payable {}
 
+  function buyTickets(uint32 _amount) external payable notContract nonReentrant {
+    require(ticketPrice != 0, 'Price not set');
+    require(_amount != 0, 'Enter chosen amount to buy');
+    require(_amount <= maxNumberTicketsPerBuy, 'Too many tickets');
+
+    require(status == Status.Open, 'Lottery is not open yet');
+    // require(block.timestamp < endTime, 'Lottery has ended'); // tempo
+
+    uint256 totalPrice = calculateTotalPrice(_amount, false);
+    require(msg.value >= totalPrice, 'Insufficient funds');
+    // ??? There's no logic to refund overpaid balance
+
+    // amountCollected += totalPrice;
+    amountCollected = amountCollected.add(totalPrice);
+
+    for (uint256 i = 0; i < _amount; i++) {
+      tickets[currentTicketId] = msg.sender;
+
+      // Increase lottery ticket number
+      currentTicketId++;
+    }
+
+    _numOfTickesPerOwner[msg.sender][lotteryId] += _amount;
+  }
+
   function buyDiscountTickets(uint32 _amount) external payable notContract nonReentrant {
     require(ticketPrice != 0, 'Price not set');
     require(_amount != 0, 'Enter chosen amount to buy');
@@ -128,37 +152,11 @@ contract CroDraw is ReentrancyGuard, Ownable {
     _numOfTickesPerOwner[msg.sender][lotteryId] += _amount;
   }
 
-  function buyTickets(uint32 _amount) external payable notContract nonReentrant {
-    require(ticketPrice != 0, 'Price not set');
-    require(_amount != 0, 'Enter chosen amount to buy');
-    require(_amount <= maxNumberTicketsPerBuy, 'Too many tickets');
-
-    require(status == Status.Open, 'Lottery is not open yet');
-    // require(block.timestamp < endTime, 'Lottery has ended'); // tempo
-
-    uint256 totalPrice = calculateTotalPrice(_amount, false);
-    require(msg.value >= totalPrice, 'Insufficient funds');
-    // ??? There's no logic to refund overpaid balance
-
-    // amountCollected += totalPrice;
-    amountCollected = amountCollected.add(totalPrice);
-
-    for (uint256 i = 0; i < _amount; i++) {
-      tickets[currentTicketId] = msg.sender;
-
-      // Increase lottery ticket number
-      currentTicketId++;
-    }
-
-    _numOfTickesPerOwner[msg.sender][lotteryId] += _amount;
-  }
-
   function startLottery(uint256 _period) external onlyOperator {
     require(status == Status.Pending, 'Last Lottery has not finished yet');
     status = Status.Open;
     amountCollected = 0;
     currentTicketId = 0;
-    // endTime = block.timestamp + _period;
     endTime = _period.add(block.timestamp);
   }
 
@@ -197,7 +195,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     // uint256 j;
 
     for (i = 1; i <= 4; ++i) {
-      delete winnerByPot[i];
+      delete _winnerByPot[i];
     }
 
     status = Status.Pending;
@@ -366,7 +364,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
   }
 
   function getWinnersByPot(uint8 potNumber) external view returns (address[] memory) {
-    return winnerByPot[potNumber];
+    return _winnerByPot[potNumber];
   }
 
   /***********************************************************
@@ -409,7 +407,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
     require(user != address(0), 'Invalid Ticket');
     // _rewardsByOwner[user] += winningPrize;
     _rewardsByOwner[user] = _rewardsByOwner[user].add(winningPrize);
-    winnerByPot[pot].push(user);
+    _winnerByPot[pot].push(user);
     if (winningPrize > topWinning) {
       topWinning = winningPrize;
       topWinner = user;
