@@ -124,6 +124,8 @@
 
 .Play_trpzCheck {
   border: 1px solid #6DCEF4 !important;
+  width: 16px;
+  height: 16px;
 }
 
 .Play_pricePanel {
@@ -233,6 +235,7 @@
   display: flex;
   flex-direction: row;
   gap: 10px;
+  align-items: center;
 }
 
 @media(max-width:1444px) {
