@@ -37,7 +37,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
 	uint8[] public winnerRate = [2, 5, 10];
 	uint8[] public prizeRate = [15, 20, 25];
 
-	enum Status {
+	enum LotteryStatus {
 		// set in declareWinner and require in startLottery
 		Pending,
 		// set in startLottery and require in buyDiscountTickets, buyTickets, addFund, closeLottery
@@ -48,22 +48,22 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		Claimable
 	}
 
-	Status public status;
+	LotteryStatus public lotteryStatus;
 	mapping(uint32 => address) public tickets;  // tickets[ticketIndex] = user
-	mapping(address => mapping(uint256 => uint32)) public _numOfTickesPerOwner; // _numOfTickesPerOwner[user][lotteryIndex] = ticket count
+	mapping(address => mapping(uint256 => uint32)) public numOfTickesPerOwner; // numOfTickesPerOwner[user][lotteryIndex] = ticket count
 	mapping(address => uint256) private _rewardsByOwner;  // _rewardsByOwner[user] = balance: this should be kept until user claims
 	mapping(address => uint8) private _lastWinningPot;  // _lastWinningPot[user] = pot: winning ranks(1,2,3,4)
 	mapping(uint8 => address[]) private _winnerByPot;  // _winnerByPot[pot] = user[]
-
-	address[5] private _lastTopWinners;
-	uint8 private _sp;
 
 	uint256 public lotteryId; // lottery index: start from 1
 
 	IWitnetRandomness public immutable witnet;
 	uint256 public latestRandomizingBlock;
-	address public topWinner;
 	uint256 public topWinning;
+	address public topWinner;
+
+	address[5] private _lastTopWinners;
+	uint8 private _sp;
 
 	modifier notContract() {
 		require(!_isContract(msg.sender), 'Contract is not allowed');
@@ -105,7 +105,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		require(_amount != 0, 'Enter chosen amount to buy');
 		require(_amount <= maxNumberTicketsPerBuy, 'Too many tickets');
 
-		require(status == Status.Open, 'Lottery is not open yet');
+		require(lotteryStatus == LotteryStatus.Open, 'Lottery is not open yet');
 		// require(block.timestamp < endTime, 'Lottery has ended'); // tempo
 
 		uint256 totalPrice = calculateTotalPrice(_amount, false);
@@ -117,12 +117,11 @@ contract CroDraw is ReentrancyGuard, Ownable {
 
 		for (uint256 i = 0; i < _amount; i++) {
 			tickets[currentTicketId] = msg.sender;
-
 			// Increase lottery ticket number
 			currentTicketId++;
 		}
 
-		_numOfTickesPerOwner[msg.sender][lotteryId] += _amount;
+		numOfTickesPerOwner[msg.sender][lotteryId] += _amount;
 	}
 
 	function buyDiscountTickets(uint32 _amount) external payable notContract nonReentrant {
@@ -130,7 +129,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		require(_amount != 0, 'Enter chosen amount to buy');
 		require(_amount <= maxNumberTicketsPerBuy, 'Too many tickets');
 
-		require(status == Status.Open, 'Lottery is not open yet');
+		require(lotteryStatus == LotteryStatus.Open, 'Lottery is not open yet');
 		// require(block.timestamp < endTime, 'Lottery has ended'); // tempo
 		uint8 decimals = discountToken.decimals();
 		// uint256 discountTokenAmount = discountTokenPrice * (10**decimals) * _amount;
@@ -152,25 +151,30 @@ contract CroDraw is ReentrancyGuard, Ownable {
 			currentTicketId++;
 		}
 
-		_numOfTickesPerOwner[msg.sender][lotteryId] += _amount;
+		numOfTickesPerOwner[msg.sender][lotteryId] += _amount;
 	}
 
 	function startLottery(uint256 _period) external onlyOperator {
-		require(status == Status.Pending, 'Last Lottery has not finished yet');
-		status = Status.Open;
+		require(lotteryStatus == LotteryStatus.Pending, 'Last Lottery has not finished yet');
+		lotteryStatus = LotteryStatus.Open;
 		amountCollected = 0;
 		currentTicketId = 0;
 		endTime = _period.add(block.timestamp);
 	}
 
 	function addFund() external payable onlyOperator {
-		require(status == Status.Open, 'Lottery is not open');
+		require(lotteryStatus == LotteryStatus.Open, 'Lottery is not open');
 		// amountCollected += msg.value;
 		amountCollected = amountCollected.add(msg.value);
 	}
 
+	function extendPeriod(uint256 _period) external onlyOperator {
+		// require(lotteryStatus != LotteryStatus.Pending, '');
+		endTime = _period.add(block.timestamp);
+	}
+
 	function closeLottery() external payable onlyOperator {
-		require(status == Status.Open, 'Lottery is not open');
+		require(lotteryStatus == LotteryStatus.Open, 'Lottery is not open');
 		require(block.timestamp > endTime, 'Lottery is ongoing');
 
 		latestRandomizingBlock = block.number;
@@ -183,11 +187,11 @@ contract CroDraw is ReentrancyGuard, Ownable {
 			payable(msg.sender).transfer(msg.value - _usedFunds); // ???
 		}
 
-		status = Status.Close;
+		lotteryStatus = LotteryStatus.Close;
 	}
 
 	function declareWinner() external nonReentrant onlyOperator {
-		require(status == Status.Close, 'Lottery has not finished');
+		require(lotteryStatus == LotteryStatus.Close, 'Lottery has not finished');
 
 		require(
 			witnet.isRandomized(latestRandomizingBlock) == true,
@@ -201,7 +205,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
 			delete _winnerByPot[i];
 		}
 
-		status = Status.Pending;
+		lotteryStatus = LotteryStatus.Pending;
 		if (currentTicketId == 0) {
 			return;
 		}
@@ -306,7 +310,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
 	}
 
 	function getUserTickets(address user) external view returns (uint256) {
-		return _numOfTickesPerOwner[user][lotteryId];
+		return numOfTickesPerOwner[user][lotteryId];
 	}
 
 	function setDiscountToken(address _token) external onlyOwner {
@@ -385,11 +389,6 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		// totalPrice = totalPrice * (1000 - newDiscountRate) / 1000;
 		totalPrice = totalPrice.mul(1000 - newDiscountRate).div(1000);
 		return totalPrice;
-	}
-
-	function extendPeriod(uint256 _period) public onlyOperator {
-		// require(status != Status.Pending, '');
-		endTime = _period.add(block.timestamp);
 	}
 
 	/***********************************************************
