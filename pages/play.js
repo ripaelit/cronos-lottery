@@ -240,7 +240,7 @@ const Play = () => {
       toast.error("You don’t have enough $CRO. Reduce the number of tickets or top up your wallet!");
     }
     const init = async () => {
-      buyContract.status().then((newStatus) => setTicketStatus(newStatus))
+      buyContract.lotteryStatus().then((newStatus) => setTicketStatus(newStatus))
       buyContract.nftContractAddress().then(newNftAddress => setDiscountNftAddress(newNftAddress))
       buyContract.nftDiscountRate().then(newRate => setNftDiscountRate(newRate.toNumber()))
       buyContract.endTime().then(async (edTime) => {
@@ -359,7 +359,7 @@ const Play = () => {
     if (!buyContract)
       return;
 
-    buyContract.status().then((newStatus) => setTicketStatus(newStatus))
+    buyContract.lotteryStatus().then((newStatus) => setTicketStatus(newStatus))
     buyContract.amountCollected().then(
       (newAmountCollected) => {
         console.log("newAmountCollected", newAmountCollected, typeof(newAmountCollected))
@@ -409,7 +409,7 @@ const Play = () => {
         <div className={styles.Play_top} />
         {walletAddress ? <div className={styles.Play_control}>
           {
-            ticketStatus == STATUS.open ? 
+            ticketStatus == STATUS.open ?
               <div>
                 <img
                   className={styles.Play_img}
@@ -531,7 +531,8 @@ const Play = () => {
                   src="images/security.png"
                 />
                 <div className={styles.Play_bottom}>
-                  <p className={styles.Play_title}>Lottery is closed<br /></p> <p className={styles.Play_text}> Next lottery will start soon...</p>
+                  <p className={styles.Play_title}>Lottery is closed<br /></p>
+                  <p className={styles.Play_text}> Next lottery will start soon...</p>
                   <div className={styles.Play_playBtn}>
                     <Link href="/redeem">
                       <button className={styles.findoutButton1}>Check your winnings!</button>

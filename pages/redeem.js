@@ -56,7 +56,7 @@ const Redeem = () => {
       if (!buyContract) {
         return
       }
-      buyContract.status().then(newStatus => setTicketStatus(newStatus))
+      buyContract.lotteryStatus().then(newStatus => setTicketStatus(newStatus))
       buyContract.ticketPrice().then(newPrice => setTicketPrice(newPrice.toString()))
       buyContract.maxNumberTicketsPerBuy().then(newMax => setMaxTicketCount(newMax))
       buyContract.getWinnersByPot(1).then(firstPotWinners => setFirstPotWinner(firstPotWinners.length > 0 ? firstPotWinners[0] : ''))
@@ -75,8 +75,8 @@ const Redeem = () => {
     if (!buyContract)
       return;
 
-    buyContract.status().then((newStatus) => setTicketStatus(newStatus))
-    
+    buyContract.lotteryStatus().then((newStatus) => setTicketStatus(newStatus))
+
     if (remainTime > 0) {
       setRemainTime(remainTime - 1)
       let day = `${Math.floor(remainTime / 86400)}`
