@@ -32,8 +32,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 	uint256 public endTime;
 	address public nftContractAddress;
 	uint256 public nftDiscountRate = 100; // 10%
-	uint8[] public winnerRate = [2, 5, 10];
-	uint8[] public prizeRate = [15, 20, 25];
+    uint8[] public winnerRatio = [2, 5, 10];   // 2, 5, 10%
+	uint8[] public prizeRatio = [10, 15, 20, 25];    // 10, 15, 20, 25%
 
 	enum LotteryStatus {
 		// set in declareWinner and require in startLottery
@@ -166,6 +166,16 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		endTime = endTime + _extraPeriod;
 	}
 
+    function updateWinnerRatio(uint8[] memory _winnerRatio) external onlyOperator {
+        require(_winnerRatio.length == 3, "Invalid winner ratio");
+        winnerRatio = _winnerRatio;
+    }
+
+    function updatePrizeRatio(uint8[] memory _prizeRatio) external onlyOperator {
+        require(_prizeRatio.length == 4, "Invalid prize ratio");
+        prizeRatio = _prizeRatio;
+    }
+
 	function closeLottery() external payable onlyOperator {
 		require(lotteryStatus == LotteryStatus.Open, 'Lottery is not open');
 		require(block.timestamp > endTime, 'Lottery is ongoing');
@@ -212,20 +222,19 @@ contract CroDraw is ReentrancyGuard, Ownable {
 			latestRandomizingBlock
 		);
 		++nonce;
-		uint256 winningPrize = amountCollected / 10;
 
-		//Choose Top Winner
+		//Choose top winner
+		uint256 winningPrize = amountCollected * prizeRatio[0] / 100;
 		_chooseWinner(winningTicketId, winningPrize, 1);
 		_setTopWinner(winningTicketId);
 
-		remainingPrize = remainingPrize - winningPrize;
-
 		// Choose rank2, 3, 4 winners
+		remainingPrize = remainingPrize - winningPrize;
 		uint256 winnerCnt;
 		for (i = 0; i < 3; ++i) {
-			winnerCnt = ((currentTicketId - 1) * winnerRate[i]) / 100;
+			winnerCnt = ((currentTicketId - 1) * winnerRatio[i]) / 100;
 			if (winnerCnt > 0) {
-				winningPrize = (amountCollected * prizeRate[i]) / 100 / winnerCnt;
+				winningPrize = (amountCollected * prizeRatio[i + 1]) / 100 / winnerCnt;
 				remainingPrize = remainingPrize - (winningPrize * winnerCnt);
 				while (winnerCnt > 0) {
 					winningTicketId = witnet.random(
