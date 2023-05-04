@@ -132,8 +132,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		require(lotteryStatus == LotteryStatus.Open, 'Lottery is not open yet');
 		require(block.timestamp < endTime, 'Lottery has ended');
 		uint8 decimals = discountToken.decimals();
-		// uint256 discountTokenAmount = discountTokenPrice * (10**decimals) * _amount;
-		uint256 discountTokenAmount = discountTokenPrice.mul(10**decimals).mul(_amount);
+		// uint256 discountTokenAmount = discountTokenPrice.mul(10**decimals).mul(_amount);
+		uint256 discountTokenAmount = discountTokenPrice * (10 ** decimals) * _amount;
 		discountToken.transferFrom(msg.sender, address(this), discountTokenAmount);
 		discountToken.burn(discountTokenAmount);
 
@@ -235,8 +235,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		for (i = 0; i < 3; ++i) {
 			winnerCnt = ((currentTicketId - 1) * winnerRate[i]) / 100;
 			if (winnerCnt > 0) {
-				// winningPrize = (amountCollected * prizeRate[i]) / 100 / winnerCnt;
-				winningPrize = amountCollected.mul(prizeRate[i]).div(100).div(winnerCnt);
+				// winningPrize = amountCollected.mul(prizeRate[i]).div(100).div(winnerCnt);
+				winningPrize = (amountCollected * prizeRate[i]) / 100 / winnerCnt;
 				// remainingPrize = remainingPrize.sub(winningPrize.mul(winnerCnt));
 				remainingPrize = remainingPrize - (winningPrize * winnerCnt);
 				while (winnerCnt > 0) {
@@ -375,8 +375,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 	********************* PUBLIC FUNCTIONS *********************
 	***********************************************************/
 	function calculateTotalPrice(uint32 _amount, bool _useTrpz) public view returns (uint256) {
-		// uint256 totalPrice = _amount * ticketPrice;
-		uint256 totalPrice = ticketPrice.mul(_amount);
+		// uint256 totalPrice = ticketPrice.mul(_amount);
+		uint256 totalPrice = ticketPrice * _amount;
 		uint256 nftBalance = IERC721(nftContractAddress).balanceOf(msg.sender);
 		uint256 newDiscountRate = 0;
 		if (_useTrpz) {
@@ -387,8 +387,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 			// newDiscountRate = newDiscountRate.add(nftDiscountRate);
 			newDiscountRate = newDiscountRate + nftDiscountRate;
 		}
-		// totalPrice = totalPrice * (1000 - newDiscountRate) / 1000;
-		totalPrice = totalPrice.mul(1000 - newDiscountRate).div(1000);
+		// totalPrice = totalPrice.mul(1000 - newDiscountRate).div(1000);
+		totalPrice = totalPrice * (1000 - newDiscountRate) / 1000;
 		return totalPrice;
 	}
 
