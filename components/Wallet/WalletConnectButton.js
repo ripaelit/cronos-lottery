@@ -151,7 +151,6 @@ const WalletConnectButton = () => {
                 walletAddress.substr(walletAddress.length - 4, 4)}
             </button>
           }
-
         </div>
       )}
     </div>

@@ -30,17 +30,17 @@ export const TokenContractAddress = '0x1Cc0B25BD5105CD8905f7e9cD174435D4C890E02'
 // };
 //Mainnet
 export const chainConfig = {
-   chainId: "0x19",
-   chainName: "Cronos Mainnet Beta",
-   rpcUrls: ["https://evm.cronos.org/"],
-   iconUrls: ["https://cronoscan.com/images/brandassets/logo.jpg?v=22.12.2.0"],
-   blockExplorerUrls: ["https://cronoscan.com/"],
-   nativeCurrency: {
-     name: "Cronos",
-     symbol: "CRO",
-     decimals: 18,
-   }
- };
+  chainId: "0x19",
+  chainName: "Cronos Mainnet Beta",
+  rpcUrls: ["https://evm.cronos.org/"],
+  iconUrls: ["https://cronoscan.com/images/brandassets/logo.jpg?v=22.12.2.0"],
+  blockExplorerUrls: ["https://cronoscan.com/"],
+  nativeCurrency: {
+    name: "Cronos",
+    symbol: "CRO",
+    decimals: 18,
+  }
+};
 
 // Testnet
 //export const chainConfig = {

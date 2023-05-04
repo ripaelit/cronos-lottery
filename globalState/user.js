@@ -102,14 +102,9 @@ export const {
 } = userSlice.actions
 export const user = userSlice.reducer
 
-export const connectAccount =
-  (firstRun = false, type = '') =>
-  async (dispatch) => {
+export const connectAccount = (firstRun = false, type = '') => async (dispatch) => {
     // console.log('currentlyPath:::', window.location.pathname)
-    // const currentlyPath = window.location.pathname;
-
     chainInfo = chainConfig
-    console.log('chainInfo:::', chainInfo)
     const providerOptions = {
       injected: {
         display: {
