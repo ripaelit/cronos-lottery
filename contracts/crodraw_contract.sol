@@ -16,7 +16,7 @@ interface TRPZToken is IERC20 {
 
 contract CroDraw is ReentrancyGuard, Ownable {
 	using SafeERC20 for TRPZToken;
-	using SafeMath for uint256;
+	// using SafeMath for uint256;
 
 	address public projectAddress;
 	address public charityAddress;
@@ -227,8 +227,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		_chooseWinner(winningTicketId, winningPrize, 1);
 		_setTopWinner(winningTicketId);
 
-		// remainingPrize -= winningPrize;
-		remainingPrize = remainingPrize.sub(winningPrize);
+		// remainingPrize = remainingPrize.sub(winningPrize);
+		remainingPrize = remainingPrize - winningPrize;
 
 		// Choose rank2, 3, 4 winners
 		uint256 winnerCnt;
@@ -237,8 +237,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 			if (winnerCnt > 0) {
 				// winningPrize = (amountCollected * prizeRate[i]) / 100 / winnerCnt;
 				winningPrize = amountCollected.mul(prizeRate[i]).div(100).div(winnerCnt);
-				// remainingPrize -= (winningPrize * winnerCnt);
-				remainingPrize = remainingPrize.sub(winningPrize.mul(winnerCnt));
+				// remainingPrize = remainingPrize.sub(winningPrize.mul(winnerCnt));
+				remainingPrize = remainingPrize - (winningPrize * winnerCnt);
 				while (winnerCnt > 0) {
 					winningTicketId = witnet.random(
 						currentTicketId,
@@ -248,8 +248,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 					// nonce = nonce.add(1);
 					nonce = nonce + 1;
 					_chooseWinner(winningTicketId, winningPrize, i + 2);
-					// --winnerCnt;
-					winnerCnt = winnerCnt.sub(1);
+					// winnerCnt = winnerCnt.sub(1);
+					winnerCnt = winnerCnt - 1;
 				}
 			}
 		}
@@ -262,15 +262,16 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		payable(founder3Address).transfer(winningPrize);
 
 		// remainingPrize -= winningPrize * 3;
-		remainingPrize = remainingPrize.sub(winningPrize.mul(3));
+		// remainingPrize = remainingPrize.sub(winningPrize.mul(3));
+		remainingPrize = remainingPrize - (winningPrize * 3);
 		// winningPrize = remainingPrize / 3;
 		winningPrize = remainingPrize.div(3);
 
 		// Send 7.5% to project
 		payable(projectAddress).transfer(winningPrize);
 
-		// remainingPrize -= winningPrize;
-		remainingPrize = remainingPrize.sub(winningPrize);
+		// remainingPrize = remainingPrize.sub(winningPrize);
+		remainingPrize = remainingPrize - winningPrize;
 
 		// Send remaining 15% to charity
 		payable(charityAddress).transfer(remainingPrize);
