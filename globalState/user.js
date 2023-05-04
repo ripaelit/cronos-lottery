@@ -24,7 +24,7 @@ const userSlice = createSlice({
     provider: null,
     address: null,
     web3modal: null,
-    onConnectingWallet: false,
+    connectingWallet: false,
     gettingContractData: true,
     needsOnboard: false,
     balance: null,
@@ -36,7 +36,7 @@ const userSlice = createSlice({
     isMetamask: false
   },
   reducers: {
-    onChangeAccount(state, action) {
+    accountChanged(state, action) {
       state.balance = action.payload.balance
       // TODO: QUICKFIX. Need to make as independent reducers later.
       if (action.payload.buyContract)
@@ -44,17 +44,21 @@ const userSlice = createSlice({
       if (action.payload.tokenContract)
         state.tokenContract = action.payload.tokenContract
     },
+
     setIsMetamask(state, action) {
       state.isMetamask = action.payload.isMetamask
     },
+
     onCorrectChain(state, action) {
       state.correctChain = action.payload.correctChain
     },
+
     onProvider(state, action) {
       state.provider = action.payload.provider
       state.needsOnboard = action.payload.needsOnboard
       state.correctChain = action.payload.correctChain
     },
+
     onBasicAccountData(state, action) {
       state.address = action.payload.address
       state.provider = action.payload.provider
@@ -62,14 +66,16 @@ const userSlice = createSlice({
       state.correctChain = action.payload.correctChain
       state.needsOnboard = action.payload.needsOnboard
     },
-    onConnectingWallet(state, action) {
-      state.onConnectingWallet = action.payload.connecting
+
+    connectingWallet(state, action) {
+      state.connectingWallet = action.payload.connecting
     },
+
     setShowWrongChainModal(state, action) {
       state.showWrongChainModal = action.payload
     },
     onLogout(state) {
-      state.onConnectingWallet = false
+      state.connectingWallet = false
       const web3Modal = new Web3Modal({
         cacheProvider: false, // optional
         providerOptions: [] // required
@@ -84,16 +90,16 @@ const userSlice = createSlice({
       state.address = ''
       state.balance = null
     },
-    onUpdateBalance(state, action) {
+    balanceUpdated(state, action) {
       state.balance = action.payload
     }
   }
 })
 
 export const {
-  onChangeAccount,
+  accountChanged,
   onProvider,
-  onConnectingWallet,
+  connectingWallet,
   onCorrectChain,
   setShowWrongChainModal,
   onBasicAccountData,
@@ -191,7 +197,7 @@ export const connectAccount = (firstRun = false, type = '') => async (dispatch) 
     dispatch(setIsMetamask({ isMetamask: web3provider.isMetaMask }))
 
     try {
-      dispatch(onConnectingWallet({ connecting: true }))
+      dispatch(connectingWallet({ connecting: true }))
       const provider = new ethers.providers.Web3Provider(web3provider)
 
       const cid = await web3provider.request({
@@ -269,7 +275,7 @@ export const connectAccount = (firstRun = false, type = '') => async (dispatch) 
       }
 
       await dispatch(
-        onChangeAccount({
+        accountChanged({
           address: address,
           provider: provider,
           web3modal: web3Modal,
@@ -300,7 +306,7 @@ export const connectAccount = (firstRun = false, type = '') => async (dispatch) 
       await web3Modal.clearCachedProvider()
       dispatch(onLogout())
     }
-    dispatch(onConnectingWallet({ connecting: false }))
+    dispatch(connectingWallet({ connecting: false }))
   }
 
 export const initProvider = () => async (dispatch) => {
@@ -334,7 +340,7 @@ export const initProvider = () => async (dispatch) => {
     provider.on('accountsChanged', (accounts) => {
       // console.log("dispatching accountsChanged with undefined contractAddress")
       dispatch(
-        onChangeAccount({
+        accountChanged({
           address: accounts[0]
         })
       )
@@ -408,5 +414,5 @@ export const updateBalance = () => async (dispatch, getState) => {
   const { user } = getState()
   const { address, provider } = user
   const balance = ethers.utils.formatEther(await provider.getBalance(address))
-  dispatch(userSlice.actions.onUpdateBalance(balance))
+  dispatch(userSlice.actions.balanceUpdated(balance))
 }
