@@ -69,12 +69,20 @@ const Play = () => {
     try {
       setLoading(true)
       if (!walletAddress) {
+        setLoading(false)
         return toast.error('Please connect your wallet')
       }
+      if (remainTime <= 0) {
+        setLoading(false)
+        console.log("if remainTime <= 0")
+        return toast.error('Lottery has been ended')
+      }
       if (ticketStatus !== STATUS.open) {
+        setLoading(false)
         return toast.error('Lottery is not open yet')
       }
       if (ticketCountByUser > MaxTicketCount) {
+        setLoading(false)
         return toast.error(`You can buy Max ${MaxTicketCount} tickets`)
       }
       const getWalletBalance = new BigNumber(walletBalance).times(
@@ -88,12 +96,10 @@ const Play = () => {
       }
       if (getWalletBalance.lt(getTicketBalance)) {
         // "lt" mean A < B (lessthan)
-        toast.error(`You don’t have enough $TRPZ. Reduce the number of tickets or un-check the box.`)
-        return
+        setLoading(false)
+        return toast.error(`You don’t have enough $TRPZ. Reduce the number of tickets or un-check the box.`)
       }
-      if (remainTime <= 0) {
-        return toast.error('Lottery has ended')
-      }
+
       const sendValue = await buyContract
         .calculateTotalPrice(
           ticketCount,
@@ -124,28 +130,28 @@ const Play = () => {
           dispatch(accountChanged({ balance: ethers.utils.formatEther(blnc) }))
         )
       toast.success('Successfully bought tickets')
-      setLoading(false)
     } catch (error) {
       console.log('error', { error })
       toast.error(`Error`)
-      setLoading(false)
     }
+    setLoading(false)
   }
 
   const handleDiscountBuyTicket = async () => {
-    console.log("ticketStatus = ", ticketStatus);
+    console.log("handleDiscountBuyTicket.ticketStatus = ", ticketStatus);
     setIsBurned(true)
     if (!walletAddress) {
       return toast.error('Please connect your wallet')
+    }
+    console.log({remainTime});
+    if (remainTime <= 0) {
+      return toast.error('Lottery has been ended')
     }
     if (ticketStatus !== STATUS.open) {
       return toast.error('Lottery is not open yet')
     }
     if (ticketCountByUser > MaxTicketCount) {
       return toast.error(`You can buy Max ${MaxTicketCount} tickets`)
-    }
-    if (remainTime <= 0) {
-      return toast.error('Lottery has been ended')
     }
     try {
       setLoading(true)
@@ -209,7 +215,6 @@ const Play = () => {
         Number(ticketCountByUser) + Number(ticketCount)
       )
 
-      setLoading(false)
       tokenContract
         .balanceOf(walletAddress)
         .then((blnc) => setDiscountTokenBlnc(blnc.toString()))
@@ -224,6 +229,7 @@ const Play = () => {
       toast.error(`Error`)
       setLoading(false)
     }
+    setLoading(false)
   }
 
   const calculatePrice = (useDiscount, mintCnt) => {
@@ -362,7 +368,7 @@ const Play = () => {
     buyContract.lotteryStatus().then((newStatus) => setTicketStatus(newStatus))
     buyContract.amountCollected().then(
       (newAmountCollected) => {
-        console.log("newAmountCollected", newAmountCollected, typeof(newAmountCollected))
+        // console.log("newAmountCollected", newAmountCollected, typeof(newAmountCollected))
         const totalPot = newAmountCollected / (10 ** 18)
         setWinnersPot((totalPot * 70 / 100).toFixed(2))
         setCharityPot((totalPot * 15 / 100).toFixed(2))
