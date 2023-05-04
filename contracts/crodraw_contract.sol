@@ -6,7 +6,6 @@ import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
-// import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import 'witnet-solidity-bridge/contracts/interfaces/IWitnetRandomness.sol';
 
 interface TRPZToken is IERC20 {
@@ -16,7 +15,6 @@ interface TRPZToken is IERC20 {
 
 contract CroDraw is ReentrancyGuard, Ownable {
 	using SafeERC20 for TRPZToken;
-	// using SafeMath for uint256;
 
 	address public projectAddress;
 	address public charityAddress;
@@ -112,13 +110,12 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		require(msg.value >= totalPrice, 'Insufficient funds');
 		// ??? There's no logic to refund overpaid balance
 
-		// amountCollected = amountCollected.add(totalPrice);
 		amountCollected = amountCollected + totalPrice;
 
-		for (uint256 i = 0; i < _amount; i++) {
+		for (uint i; i < _amount; ++i) {
 			tickets[currentTicketId] = msg.sender;
 			// Increase lottery ticket number
-			currentTicketId++;
+			++currentTicketId;
 		}
 
 		numOfTickesPerOwner[msg.sender][lotteryId] += _amount;
@@ -132,7 +129,6 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		require(lotteryStatus == LotteryStatus.Open, 'Lottery is not open yet');
 		require(block.timestamp < endTime, 'Lottery has ended');
 		uint8 decimals = discountToken.decimals();
-		// uint256 discountTokenAmount = discountTokenPrice.mul(10**decimals).mul(_amount);
 		uint256 discountTokenAmount = discountTokenPrice * (10 ** decimals) * _amount;
 		discountToken.transferFrom(msg.sender, address(this), discountTokenAmount);
 		discountToken.burn(discountTokenAmount);
@@ -141,14 +137,13 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		require(msg.value >= totalPrice, 'Insufficient funds');
 		// ??? There's no logic to refund overpaid balance
 
-		// amountCollected = amountCollected.add(totalPrice);
-		amountCollected += amountCollected + totalPrice;
+		amountCollected = amountCollected + totalPrice;
 
-		for (uint256 i = 0; i < _amount; i++) {
+		for (uint i; i < _amount; ++i) {
 			tickets[currentTicketId] = msg.sender;
 
 			// Increase lottery ticket number
-			currentTicketId++;
+			++currentTicketId;
 		}
 
 		numOfTickesPerOwner[msg.sender][lotteryId] += _amount;
@@ -159,13 +154,11 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		lotteryStatus = LotteryStatus.Open;
 		amountCollected = 0;
 		currentTicketId = 0;
-		// endTime = _period.add(block.timestamp);
-		endTime = _period + block.timestamp;
+		endTime = block.timestamp + _period;
 	}
 
 	function addFund() external payable onlyOperator {
 		require(lotteryStatus == LotteryStatus.Open, 'Lottery is not open');
-		// amountCollected = amountCollected.add(msg.value);
 		amountCollected = amountCollected + msg.value;
 	}
 
@@ -210,7 +203,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
 			return;
 		}
 
-		uint256 nonce = 0;
+		uint256 nonce;
 
 		uint256 remainingPrize = amountCollected;
 		uint32 winningTicketId = witnet.random(
@@ -218,16 +211,13 @@ contract CroDraw is ReentrancyGuard, Ownable {
 			nonce,
 			latestRandomizingBlock
 		);
-		// nonce = nonce.add(1);
-		nonce = nonce + 1;
-		// uint256 winningPrize = amountCollected.div(10);
+		++nonce;
 		uint256 winningPrize = amountCollected / 10;
 
 		//Choose Top Winner
 		_chooseWinner(winningTicketId, winningPrize, 1);
 		_setTopWinner(winningTicketId);
 
-		// remainingPrize = remainingPrize.sub(winningPrize);
 		remainingPrize = remainingPrize - winningPrize;
 
 		// Choose rank2, 3, 4 winners
@@ -235,9 +225,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		for (i = 0; i < 3; ++i) {
 			winnerCnt = ((currentTicketId - 1) * winnerRate[i]) / 100;
 			if (winnerCnt > 0) {
-				// winningPrize = amountCollected.mul(prizeRate[i]).div(100).div(winnerCnt);
 				winningPrize = (amountCollected * prizeRate[i]) / 100 / winnerCnt;
-				// remainingPrize = remainingPrize.sub(winningPrize.mul(winnerCnt));
 				remainingPrize = remainingPrize - (winningPrize * winnerCnt);
 				while (winnerCnt > 0) {
 					winningTicketId = witnet.random(
@@ -245,11 +233,9 @@ contract CroDraw is ReentrancyGuard, Ownable {
 						nonce,
 						latestRandomizingBlock
 					);
-					// nonce = nonce.add(1);
-					nonce = nonce + 1;
+                    ++nonce;
 					_chooseWinner(winningTicketId, winningPrize, i + 2);
-					// winnerCnt = winnerCnt.sub(1);
-					winnerCnt = winnerCnt - 1;
+					--winnerCnt;
 				}
 			}
 		}
@@ -261,22 +247,18 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		payable(founder2Address).transfer(winningPrize);
 		payable(founder3Address).transfer(winningPrize);
 
-		// remainingPrize -= winningPrize * 3;
-		// remainingPrize = remainingPrize.sub(winningPrize.mul(3));
 		remainingPrize = remainingPrize - (winningPrize * 3);
-		// winningPrize = remainingPrize.div(3);
 		winningPrize = remainingPrize / 3;
 
 		// Send 7.5% to project
 		payable(projectAddress).transfer(winningPrize);
 
-		// remainingPrize = remainingPrize.sub(winningPrize);
 		remainingPrize = remainingPrize - winningPrize;
 
 		// Send remaining 15% to charity
 		payable(charityAddress).transfer(remainingPrize);
 
-		lotteryId++;
+		++lotteryId;
 	}
 
 	function claimRewards() external notContract nonReentrant {
@@ -291,7 +273,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
 	// Get last 5 top winners
 	function getLastWinners() external view returns (address[5] memory) {
 		address[5] memory lastWinners;
-		for (uint8 i = 0; i < 5; i++) {
+		for (uint8 i; i < 5; ++i) {
 			uint8 spi = (_sp + 5 - i - 1) % 5;
 			lastWinners[i] = _lastTopWinners[spi];
 		}
@@ -375,19 +357,15 @@ contract CroDraw is ReentrancyGuard, Ownable {
 	********************* PUBLIC FUNCTIONS *********************
 	***********************************************************/
 	function calculateTotalPrice(uint32 _amount, bool _useTrpz) public view returns (uint256) {
-		// uint256 totalPrice = ticketPrice.mul(_amount);
 		uint256 totalPrice = ticketPrice * _amount;
 		uint256 nftBalance = IERC721(nftContractAddress).balanceOf(msg.sender);
 		uint256 newDiscountRate = 0;
 		if (_useTrpz) {
-			// newDiscountRate = newDiscountRate.add(discountRate);
 			newDiscountRate = newDiscountRate + discountRate;
 		}
 		if (nftBalance > 0) {
-			// newDiscountRate = newDiscountRate.add(nftDiscountRate);
 			newDiscountRate = newDiscountRate + nftDiscountRate;
 		}
-		// totalPrice = totalPrice.mul(1000 - newDiscountRate).div(1000);
 		totalPrice = totalPrice * (1000 - newDiscountRate) / 1000;
 		return totalPrice;
 	}
@@ -405,7 +383,6 @@ contract CroDraw is ReentrancyGuard, Ownable {
 	function _chooseWinner(uint32 winningTicketId, uint256 winningPrize, uint8 pot) internal {
 		address user = tickets[winningTicketId];
 		require(user != address(0), 'Invalid Ticket');
-		// _rewardsByOwner[user] = _rewardsByOwner[user].add(winningPrize);
 		_rewardsByOwner[user] = _rewardsByOwner[user] + winningPrize;
 		_winnerByPot[pot].push(user);
 		if (winningPrize > topWinning) {
