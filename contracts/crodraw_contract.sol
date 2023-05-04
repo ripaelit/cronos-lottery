@@ -384,7 +384,7 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		}
 		if (nftBalance > 0) {
 			// newDiscountRate = newDiscountRate.add(nftDiscountRate);
-			newDiscountRate = newDiscountRate + nftDiscountRate
+			newDiscountRate = newDiscountRate + nftDiscountRate;
 		}
 		// totalPrice = totalPrice * (1000 - newDiscountRate) / 1000;
 		totalPrice = totalPrice.mul(1000 - newDiscountRate).div(1000);
@@ -404,8 +404,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 	function _chooseWinner(uint32 winningTicketId, uint256 winningPrize, uint8 pot) internal {
 		address user = tickets[winningTicketId];
 		require(user != address(0), 'Invalid Ticket');
-		// _rewardsByOwner[user] += winningPrize;
-		_rewardsByOwner[user] = _rewardsByOwner[user].add(winningPrize);
+		// _rewardsByOwner[user] = _rewardsByOwner[user].add(winningPrize);
+		_rewardsByOwner[user] = _rewardsByOwner[user] + winningPrize;
 		_winnerByPot[pot].push(user);
 		if (winningPrize > topWinning) {
 			topWinning = winningPrize;
