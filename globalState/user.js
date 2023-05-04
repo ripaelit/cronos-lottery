@@ -7,7 +7,6 @@ import WalletConnectProvider from '@walletconnect/web3-provider'
 import * as DefiWalletConnectProvider from '@deficonnect/web3-provider';
 import { appAuthInitFinished } from './initSlice'
 import { captureException } from '@sentry/react'
-// import abi from '../artifacts/contracts/CrosmoBaby.sol/AlienCrosmobaby.json'
 import abi from '../constants/abi.json'
 import tokenAbi from '../constants/tokenAbi.json'
 import {

@@ -1,9 +1,11 @@
-import { applyMiddleware, compose, createStore, combineReducers } from 'redux';
-
+import { applyMiddleware,
+  compose,
+  createStore,
+  combineReducers
+} from 'redux';
 import thunk from 'redux-thunk';
 import * as Sentry from '@sentry/react';
 import createSentryMiddleware from 'redux-sentry-middleware';
-
 import { appInitializeStateReducer } from '../globalState/initSlice';
 import { user } from '../globalState/user';
 
