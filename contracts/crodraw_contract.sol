@@ -220,8 +220,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		);
 		// nonce = nonce.add(1);
 		nonce = nonce + 1;
-		// uint256 winningPrize = amountCollected / 10;
-		uint256 winningPrize = amountCollected.div(10);
+		// uint256 winningPrize = amountCollected.div(10);
+		uint256 winningPrize = amountCollected / 10;
 
 		//Choose Top Winner
 		_chooseWinner(winningTicketId, winningPrize, 1);
@@ -255,8 +255,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		}
 		// Now 30% are remaining.
 		// Send 2.5% to each founder1, 2, 3, total 7.5%
-		// winningPrize = remainingPrize / 12;
-		winningPrize = remainingPrize.div(12);
+		// winningPrize = remainingPrize.div(12);
+		winningPrize = remainingPrize / 12;
 		payable(founder1Address).transfer(winningPrize);
 		payable(founder2Address).transfer(winningPrize);
 		payable(founder3Address).transfer(winningPrize);
@@ -264,8 +264,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		// remainingPrize -= winningPrize * 3;
 		// remainingPrize = remainingPrize.sub(winningPrize.mul(3));
 		remainingPrize = remainingPrize - (winningPrize * 3);
-		// winningPrize = remainingPrize / 3;
-		winningPrize = remainingPrize.div(3);
+		// winningPrize = remainingPrize.div(3);
+		winningPrize = remainingPrize / 3;
 
 		// Send 7.5% to project
 		payable(projectAddress).transfer(winningPrize);
