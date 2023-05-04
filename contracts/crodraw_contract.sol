@@ -6,7 +6,7 @@ import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+// import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import 'witnet-solidity-bridge/contracts/interfaces/IWitnetRandomness.sol';
 
 interface TRPZToken is IERC20 {
@@ -112,8 +112,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		require(msg.value >= totalPrice, 'Insufficient funds');
 		// ??? There's no logic to refund overpaid balance
 
-		// amountCollected += totalPrice;
-		amountCollected = amountCollected.add(totalPrice);
+		// amountCollected = amountCollected.add(totalPrice);
+		amountCollected = amountCollected + totalPrice;
 
 		for (uint256 i = 0; i < _amount; i++) {
 			tickets[currentTicketId] = msg.sender;
@@ -141,8 +141,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		require(msg.value >= totalPrice, 'Insufficient funds');
 		// ??? There's no logic to refund overpaid balance
 
-		// amountCollected += totalPrice;
-		amountCollected = amountCollected.add(totalPrice);
+		// amountCollected = amountCollected.add(totalPrice);
+		amountCollected += amountCollected + totalPrice;
 
 		for (uint256 i = 0; i < _amount; i++) {
 			tickets[currentTicketId] = msg.sender;
@@ -159,17 +159,18 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		lotteryStatus = LotteryStatus.Open;
 		amountCollected = 0;
 		currentTicketId = 0;
-		endTime = _period.add(block.timestamp);
+		// endTime = _period.add(block.timestamp);
+		endTime = _period + block.timestamp;
 	}
 
 	function addFund() external payable onlyOperator {
 		require(lotteryStatus == LotteryStatus.Open, 'Lottery is not open');
-		// amountCollected += msg.value;
-		amountCollected = amountCollected.add(msg.value);
+		// amountCollected = amountCollected.add(msg.value);
+		amountCollected = amountCollected + msg.value;
 	}
 
-	function extendPeriod(uint256 _period) external onlyOperator {
-		endTime = _period.add(block.timestamp);
+	function extendPeriod(uint256 _extraPeriod) external onlyOperator {
+		endTime = endTime + _extraPeriod;
 	}
 
 	function closeLottery() external payable onlyOperator {
@@ -217,8 +218,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 			nonce,
 			latestRandomizingBlock
 		);
-		// nonce++;
-		nonce = nonce.add(1);
+		// nonce = nonce.add(1);
+		nonce = nonce + 1;
 		// uint256 winningPrize = amountCollected / 10;
 		uint256 winningPrize = amountCollected.div(10);
 
@@ -244,8 +245,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 						nonce,
 						latestRandomizingBlock
 					);
-					// nonce++;
-					nonce = nonce.add(1);
+					// nonce = nonce.add(1);
+					nonce = nonce + 1;
 					_chooseWinner(winningTicketId, winningPrize, i + 2);
 					// --winnerCnt;
 					winnerCnt = winnerCnt.sub(1);
@@ -378,12 +379,12 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		uint256 nftBalance = IERC721(nftContractAddress).balanceOf(msg.sender);
 		uint256 newDiscountRate = 0;
 		if (_useTrpz) {
-			// newDiscountRate += discountRate;
-			newDiscountRate = newDiscountRate.add(discountRate);
+			// newDiscountRate = newDiscountRate.add(discountRate);
+			newDiscountRate = newDiscountRate + discountRate;
 		}
 		if (nftBalance > 0) {
-			// newDiscountRate += nftDiscountRate;
-			newDiscountRate = newDiscountRate.add(nftDiscountRate);
+			// newDiscountRate = newDiscountRate.add(nftDiscountRate);
+			newDiscountRate = newDiscountRate + nftDiscountRate
 		}
 		// totalPrice = totalPrice * (1000 - newDiscountRate) / 1000;
 		totalPrice = totalPrice.mul(1000 - newDiscountRate).div(1000);
