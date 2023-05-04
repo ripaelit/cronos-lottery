@@ -1,5 +1,7 @@
 require('dotenv').config()
 require('@nomiclabs/hardhat-waffle')
+require('@nomiclabs/hardhat-etherscan');
+require('@cronos-labs/hardhat-cronoscan');
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
@@ -32,7 +34,6 @@ module.exports = {
     },
     cronosTest: {
       url: "https://evm-t3.cronos.org",
-      // accounts: [process.env.METAMASK_PRIVATE_KEY || ""],
       accounts: {mnemonic: mnemonic},
       chainId: 338
     }
