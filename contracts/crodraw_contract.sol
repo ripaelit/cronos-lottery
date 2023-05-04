@@ -325,25 +325,28 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		maxNumberTicketsPerBuy = _maxNumberTicketsPerBuy;
 	}
 
-	function setOperatorAndTreasuryAndCharityAddresses(
-		address _operatorAddress,
-		address _projectAddress,
-		address _charityAddress,
-		address _founder1Address,
-		address _founder2Address
-	) external onlyOwner {
-		require(_operatorAddress != address(0), 'Enter address');
-		require(_projectAddress != address(0), 'Enter address');
+    function setTreasuryAndCharityAddresses(
+        address _projectAddress,
+        address _charityAddress,
+        address _founder1Address,
+        address _founder2Address
+    ) external onlyOwner {
+        require(_projectAddress != address(0), 'Enter address');
 		require(_charityAddress != address(0), 'Enter address');
 		require(_founder1Address != address(0), 'Enter address');
 		require(_founder2Address != address(0), 'Enter address');
-
-		operatorAddress = _operatorAddress;
-		projectAddress = _projectAddress;
+        projectAddress = _projectAddress;
 		charityAddress = _charityAddress;
 		founder1Address = _founder1Address;
 		founder2Address = _founder2Address;
-	}
+    }
+
+    function setOperatorAddress(
+		address _operatorAddress
+    ) external onlyOwner {
+		require(_operatorAddress != address(0), 'Enter address');
+		operatorAddress = _operatorAddress;
+    }
 
 	function recoverWrongTokens(address _tokenAddress, uint256 _tokenAmount) external onlyOwner {
 		IERC20(_tokenAddress).transfer(address(msg.sender), _tokenAmount);
