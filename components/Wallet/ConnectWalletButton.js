@@ -21,7 +21,7 @@ const ConnectWalletButton = () => {
   const dispatch = useDispatch()
   const isMobile = useMedia('(max-width: 1200px)')
   const [bought, setBought] = useState(-1)
-  const [hrgls, setHrgls] = useState(false);
+  const [hrgls, setHrgls] = useState(false)
 
   const walletAddress = useSelector((state) => {
     return state.user.address
@@ -91,10 +91,10 @@ const ConnectWalletButton = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setHrgls(oldVal => !oldVal);
-    }, 10000);
-    return () => clearInterval(interval);
-  }, []);
+      setHrgls((oldVal) => !oldVal)
+    }, 10000)
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     if (!walletAddress) {
@@ -103,14 +103,12 @@ const ConnectWalletButton = () => {
     const init = async () => {
       try {
         provider = new providers.JsonRpcProvider(chainConfig.rpcUrls[0])
-        lotteryContract = new Contract(
-          ContractAddress,
-          abi,
-          provider
-        );
-        lotteryContract.getUserTickets(walletAddress).then(userTickets => setBought(userTickets.toNumber()))
+        lotteryContract = new Contract(ContractAddress, abi, provider)
+        lotteryContract
+          .getUserTickets(walletAddress)
+          .then((userTickets) => setBought(userTickets.toNumber()))
       } catch (err) {
-        console.log('Error getting endtime:', err)
+        // console.log('Error getting endtime:', err)
       }
     }
     init()
@@ -137,20 +135,28 @@ const ConnectWalletButton = () => {
 
       {walletAddress && (
         <div className={styles.walletButtonContainer}>
-          {
-            isMobile ? <button className={styles.WalletButton} onClick={() => logout()}>
-              {walletAddress.substr(0, 6) +
-                '...' +
-                walletAddress.substr(walletAddress.length - 4, 4)}
-            </button> : bought >= 0 && <div className={styles.boughtText}>{bought} TICKET(S) BOUGHT</div>
-          }
-          {
-            isMobile ? bought >= 0 && <div className={styles.boughtText}>{bought} TICKET(S) BOUGHT</div> : <button className={styles.WalletButton} onClick={() => logout()}>
+          {isMobile ? (
+            <button className={styles.WalletButton} onClick={() => logout()}>
               {walletAddress.substr(0, 6) +
                 '...' +
                 walletAddress.substr(walletAddress.length - 4, 4)}
             </button>
-          }
+          ) : (
+            bought >= 0 && (
+              <div className={styles.boughtText}>{bought} TICKET(S) BOUGHT</div>
+            )
+          )}
+          {isMobile ? (
+            bought >= 0 && (
+              <div className={styles.boughtText}>{bought} TICKET(S) BOUGHT</div>
+            )
+          ) : (
+            <button className={styles.WalletButton} onClick={() => logout()}>
+              {walletAddress.substr(0, 6) +
+                '...' +
+                walletAddress.substr(walletAddress.length - 4, 4)}
+            </button>
+          )}
         </div>
       )}
     </div>

@@ -22,17 +22,17 @@ const Home = () => {
     const init = async () => {
       try {
         provider = new providers.JsonRpcProvider(chainConfig.rpcUrls[0])
-        lotteryContract = new Contract(
-          ContractAddress,
-          abi,
-          provider
-        );
-        lotteryContract.endTime().then(endTime => { console.log('endTime', endTime.toNumber()); setRemainTime((endTime.toNumber() - Date.now()) / 1000) })
-        lotteryContract.currentTicketId().then(curId => setCurrentTicketId(curId))
+        lotteryContract = new Contract(ContractAddress, abi, provider)
+        lotteryContract.endTime().then((endTime) => {
+          console.log('endTime', endTime.toNumber())
+          setRemainTime((endTime.toNumber() - Date.now()) / 1000)
+        })
+        lotteryContract
+          .currentTicketId()
+          .then((curId) => setCurrentTicketId(curId))
       } catch (err) {
-        console.log('Error getting endtime:', err)
+        // console.log('Error getting endtime:::', err)
       }
-      console.log('now', Date.now())
     }
     init()
   }, [])
@@ -44,7 +44,7 @@ const Home = () => {
       if (hour.length === 1) {
         hour = `0${hour}`
       }
-      let minute = `${Math.ceil(remainTime % 3600 / 60)}`
+      let minute = `${Math.ceil((remainTime % 3600) / 60)}`
       if (minute.length === 1) {
         minute = `0${minute}`
       }
@@ -61,9 +61,21 @@ const Home = () => {
 
   const tableRankingBodyLists = [
     { name: `POT 1`, winner: `1`, amount: `10%` },
-    { name: `POT 2`, winner: isMobile ? `2%` : `2% of entrants`, amount: isMobile ? `15% of pot` : `Split 15% of pot` },
-    { name: `POT 3`, winner: isMobile ? `5%` : `5% of entrants`, amount: isMobile ? `20% of pot` : `Split 20% of pot` },
-    { name: `POT 4`, winner: isMobile ? `10%` : `10% of entrants`, amount: isMobile ? `25% of pot` : `Split 25% of pot` },
+    {
+      name: `POT 2`,
+      winner: isMobile ? `2%` : `2% of entrants`,
+      amount: isMobile ? `15% of pot` : `Split 15% of pot`
+    },
+    {
+      name: `POT 3`,
+      winner: isMobile ? `5%` : `5% of entrants`,
+      amount: isMobile ? `20% of pot` : `Split 20% of pot`
+    },
+    {
+      name: `POT 4`,
+      winner: isMobile ? `10%` : `10% of entrants`,
+      amount: isMobile ? `25% of pot` : `Split 25% of pot`
+    },
     { name: `Hearts of gold`, winner: ``, amount: `15% of pot` },
     { name: `CroDraw `, winner: ``, amount: `15% of pot` }
   ]
@@ -76,77 +88,107 @@ const Home = () => {
             <div className={styles.Banner_left}>
               <div className={styles.Banner_left_top}>
                 <div className={styles.Home_container}>
-                  <div className={styles.Home_text}>Welcome to CroDraw!<br /><div className={styles.SmartCronos}>The SMART CRONOS lottery</div></div>
+                  <div className={styles.Home_text}>
+                    Welcome to CroDraw!
+                    <br />
+                    <div className={styles.SmartCronos}>
+                      The SMART CRONOS lottery
+                    </div>
+                  </div>
                   <Link href="/play">
                     <button className={styles.playButton}>Play now!</button>
                   </Link>
                   <Link href="/play">
-                    <button className={styles.playButtonMobile}>Play now!</button>
+                    <button className={styles.playButtonMobile}>
+                      Play now!
+                    </button>
                   </Link>
-                  <img src="/images/banner_img.png" alt='' className={styles.mobileBannerImg} width='131px' height='150px' />
+                  <img
+                    src="/images/banner_img.png"
+                    alt=""
+                    className={styles.mobileBannerImg}
+                    width="131px"
+                    height="150px"
+                  />
                 </div>
               </div>
               <div className={`${styles.Home_container} ${styles.hideMobile}`}>
                 <div className={styles.Banner_left_bottom}>
                   <p className={styles.Banner_left_bottom_context}>
-                    CroDraw is the first truly randomised, charity focused, lottery system built on the Cronos blockchain powered by Witnet Oracle.{' '}
+                    CroDraw is the first truly randomised, charity focused,
+                    lottery system built on the Cronos blockchain powered by
+                    Witnet Oracle.{' '}
                   </p>
                 </div>
               </div>
             </div>
             <div className={styles.Banner_right}>
               <div className={styles.Banner_img}>
-                <img src="/images/banner_img.png" alt='' />
+                <img src="/images/banner_img.png" alt="" />
               </div>
             </div>
           </div>
         </div>
 
         <div className={styles.Method_section}>
-          <div className={styles.Home_container} style={{ marginBottom: '120px' }}>
+          <div
+            className={styles.Home_container}
+            style={{ marginBottom: '120px' }}
+          >
             <div className={styles.Method_list}>
               <div className={styles.Method_item}>
                 <div className={styles.Method_img}>
-                  <img src="/images/method1.png" alt='' />
+                  <img src="/images/method1.png" alt="" />
                   <div />
                 </div>
                 <p className={styles.Method_title}>How does it work?</p>
                 <p className={styles.Method_context}>
-                  CroDraw is a weekly lottery system built on the Cronos blockchain, with 70% of ticket sales going straight back into the prize pot!
+                  CroDraw is a weekly lottery system built on the Cronos
+                  blockchain, with 70% of ticket sales going straight back into
+                  the prize pot!
                 </p>
                 <div className={styles.Method_item1}>
                   <Link href="#fairDistribution">
-                    <button className={styles.findoutButton1}>Fair Distribution</button>
+                    <button className={styles.findoutButton1}>
+                      Fair Distribution
+                    </button>
                   </Link>
                 </div>
               </div>
               <div className={styles.Method_item}>
                 <div className={styles.Method_img}>
-                  <img src="/images/method2.png" alt='' />
+                  <img src="/images/method2.png" alt="" />
                   <div />
                 </div>
                 <p className={styles.Method_title}>Giving back?</p>
                 <p className={styles.Method_context}>
-                  15% of ticket sales will go directly into a charity fund to support people and causes via our &apos;Hearts of Gold&apos; initiative.{' '}
+                  15% of ticket sales will go directly into a charity fund to
+                  support people and causes via our &apos;Hearts of Gold&apos;
+                  initiative.{' '}
                 </p>
                 <div className={styles.Method_item1}>
                   <Link href="#heartsOfGold">
-                    <button className={styles.findoutButton1}>Hearts of Gold</button>
+                    <button className={styles.findoutButton1}>
+                      Hearts of Gold
+                    </button>
                   </Link>
                 </div>
               </div>
               <div className={styles.Method_item}>
                 <div className={styles.Method_img}>
-                  <img src="/images/method3.png" alt='' />
+                  <img src="/images/method3.png" alt="" />
                   <div />
                 </div>
                 <p className={styles.Method_title}>Are you a winner?</p>
                 <p className={styles.Method_context}>
-                  CroDraws will take place every Wednesday at 18:00 EST, distribution is managed via smart contract.{' '}
+                  CroDraws will take place every Wednesday at 18:00 EST,
+                  distribution is managed via smart contract.{' '}
                 </p>
                 <div className={styles.Method_item1}>
                   <Link href="/redeem">
-                    <button className={styles.findoutButton1}>Redeem Winnings</button>
+                    <button className={styles.findoutButton1}>
+                      Redeem Winnings
+                    </button>
                   </Link>
                 </div>
               </div>
@@ -154,24 +196,30 @@ const Home = () => {
             <div className={`${styles.Method_list} ${styles.mt30}`}>
               <div className={styles.Method_item}>
                 <Link href="#fairDistribution">
-                  <button className={styles.findoutButton}>Fair Distribution</button>
+                  <button className={styles.findoutButton}>
+                    Fair Distribution
+                  </button>
                 </Link>
               </div>
               <div className={styles.Method_item}>
                 <Link href="#heartsOfGold">
-                  <button className={styles.findoutButton}>Hearts of Gold</button>
+                  <button className={styles.findoutButton}>
+                    Hearts of Gold
+                  </button>
                 </Link>
               </div>
               <div className={styles.Method_item}>
                 <Link href="/redeem">
-                  <button className={styles.findoutButton}>Redeem Winnings</button>
+                  <button className={styles.findoutButton}>
+                    Redeem Winnings
+                  </button>
                 </Link>
               </div>
             </div>
           </div>
         </div>
 
-        <div className={styles.Ranking_section} id='fairDistribution'>
+        <div className={styles.Ranking_section} id="fairDistribution">
           <div className={styles.Home_container}>
             <div className={styles.Ranking_control}>
               <p className={styles.Ranking_title}> CroDraw distribution</p>
@@ -198,7 +246,6 @@ const Home = () => {
                             idx === 0
                               ? styles.Ranking_first_tr_td1
                               : styles.Ranking_remain_tr_td1
-
                           }
                         >
                           {item.name}
@@ -228,7 +275,9 @@ const Home = () => {
               </div>
               <div className={styles.Crow}>
                 <p className={styles.Ranking_context}>
-                  A minimum of 101 ticket sales each week to ensure fair distribution, if this requirement is not met the draw will roll-over until it is.{' '}
+                  A minimum of 101 ticket sales each week to ensure fair
+                  distribution, if this requirement is not met the draw will
+                  roll-over until it is.{' '}
                 </p>
                 <Link href="/play">
                   <button className={styles.CrowButton}>PLAY NOW!</button>
@@ -238,24 +287,41 @@ const Home = () => {
           </div>
         </div>
 
-
-        <div className={styles.Heart_section} id='heartsOfGold' style={{ marginTop: '40px' }}>
+        <div
+          className={styles.Heart_section}
+          id="heartsOfGold"
+          style={{ marginTop: '40px' }}
+        >
           <div className={styles.Home_container}>
             <div className={styles.Heart_control}>
               <div className={styles.Heart_left}>
-                <img src="/images/hearts.png" className={styles.MobileLogo} alt='' />
+                <img
+                  src="/images/hearts.png"
+                  className={styles.MobileLogo}
+                  alt=""
+                />
               </div>
               <div className={styles.Heart_right}>
                 <p className={styles.Heart_title}>Hearts of gold</p>
                 <div className={styles.Heart_right_group}>
                   <p>
-                    CroDraw aims to support and raise awareness around mental health in Crypto and NFT space, with a particular focus on mens health.{' '}
+                    CroDraw aims to support and raise awareness around mental
+                    health in Crypto and NFT space, with a particular focus on
+                    mens health.{' '}
                   </p>
                   <p className={styles.Nft}>
-                    15% of weekly ticket sales will go directly into a charity fund to support people and causes brought forward by the community via our &apos;Hearts of Gold&apos; initiative.{' '}
+                    15% of weekly ticket sales will go directly into a charity
+                    fund to support people and causes brought forward by the
+                    community via our &apos;Hearts of Gold&apos; initiative.{' '}
                   </p>
                 </div>
-                <a target='_blank' rel="noreferrer" href='https://docs.google.com/forms/d/e/1FAIpQLScArHfhbIhBxjDTWOLtbwygUotp7OIMolnvTF8n1secD_8GFA/viewform'>Nominate a heart in need</a>
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://docs.google.com/forms/d/e/1FAIpQLScArHfhbIhBxjDTWOLtbwygUotp7OIMolnvTF8n1secD_8GFA/viewform"
+                >
+                  Nominate a heart in need
+                </a>
               </div>
             </div>
           </div>
@@ -267,19 +333,33 @@ const Home = () => {
               <div className={styles.Trpz_right}>
                 <p className={styles.Trpz_title}>Get a TRPZ discount!</p>
                 <p className={styles.Trpz_context}>
-                  Burn 100 $TRPZ tokens per ticket purchased to receive a 10% discount.
+                  Burn 100 $TRPZ tokens per ticket purchased to receive a 10%
+                  discount.
                 </p>
                 <p className={styles.learn_text}>
-                  To learn more about the $TRPZ token and the Troopz Community Staking Platform head over to the <span className={styles.Troopz_context}><a target="_blank" rel="noreferrer" href="https://discord.gg/trooprz ">Troopz n Friendz Discord. </a> </span>
+                  To learn more about the $TRPZ token and the Troopz Community
+                  Staking Platform head over to the{' '}
+                  <span className={styles.Troopz_context}>
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href="https://discord.gg/trooprz "
+                    >
+                      Troopz n Friendz Discord.{' '}
+                    </a>{' '}
+                  </span>
                 </p>
                 <Link href="/play">
                   <button className={styles.stakeButton}>PLAY NOW</button>
                 </Link>
               </div>
               <div className={styles.Trpz_left}>
-                <img src="/images/trpz.png" className={styles.trpzImg1} alt='' />
+                <img
+                  src="/images/trpz.png"
+                  className={styles.trpzImg1}
+                  alt=""
+                />
               </div>
-
             </div>
           </div>
         </div>
@@ -337,34 +417,43 @@ const Home = () => {
                 </tbody>
               </table>
             </div>
-
           </div>
         </div>
-
-
 
         <div className={styles.Heart_section}>
           <div className={styles.Home_container}>
             <div className={styles.Trpz_control}>
               <div className={styles.Trpz_left}>
-                <img src="/images/brother.png" className={styles.trpzImg} alt='' />
+                <img
+                  src="/images/brother.png"
+                  className={styles.trpzImg}
+                  alt=""
+                />
               </div>
               <div className={styles.Trpz_right}>
                 <p className={styles.Heart_title}>For My Brothers</p>
                 <div className={styles.Heart_right_group}>
                   <p>
-                    A unique NFT collection designed to raise awareness surrounding mens mental health in the Crypto and NFT space.
+                    A unique NFT collection designed to raise awareness
+                    surrounding mens mental health in the Crypto and NFT space.
                   </p>
                   <p className={styles.Nft}>
-                    NFT holders get a 10% discount on CroDraw tickets and are entered into a monthly side draw for 2.5% of the CroDraw distribution.
+                    NFT holders get a 10% discount on CroDraw tickets and are
+                    entered into a monthly side draw for 2.5% of the CroDraw
+                    distribution.
                   </p>
                 </div>
-                <a target='_blank' rel="noreferrer" href='https://app.ebisusbay.com/collection/for-my-brothers'>Get your For My Brothers NFT!</a>
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://app.ebisusbay.com/collection/for-my-brothers"
+                >
+                  Get your For My Brothers NFT!
+                </a>
               </div>
             </div>
           </div>
         </div>
-
 
         {/* <div className={styles.MobileSecuritySection}>
           <div className={styles.Home_container}>
