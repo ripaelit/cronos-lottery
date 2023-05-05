@@ -7,8 +7,8 @@ import BigNumber from 'bignumber.js'
 import Link from 'next/link'
 import { chainConfig, ContractAddress } from '../constants/index'
 import ERC721ABI from '../constants/erc721Abi.json'
-import { accountChanged } from '../globalState/user'
-import useInterval from '../hooks/useInterval'
+import { accountChanged } from '../components/globalState/user'
+import useInterval from '../components/hooks/useInterval'
 
 import styles from '../styles/Play.module.scss'
 import {

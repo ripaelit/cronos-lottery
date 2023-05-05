@@ -13,7 +13,7 @@ import {
   ContractAddress,
   chainConfig,
   TokenContractAddress
-} from '../constants/'
+} from '../constants'
 
 let chainInfo
 const userSlice = createSlice({

@@ -4,9 +4,9 @@ import Modal from '@mui/material/Modal'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 
-import * as walletMetamask from '../../helpers/wallet-metamask'
-import * as walletConnect from '../../helpers/wallet-connect'
-import * as walletDefiwallet from '../../helpers/wallet-defiwallet'
+import * as walletMetamask from '../helpers/wallet-metamask'
+import * as walletConnect from '../helpers/wallet-connect'
+import * as walletDefiwallet from '../helpers/wallet-defiwallet'
 
 const style = {
   position: 'absolute',

@@ -4,15 +4,13 @@ import { providers, Contract } from 'ethers'
 import MetaMaskOnboarding from '@metamask/onboarding'
 import { ContractAddress, chainConfig } from '../../constants'
 import abi from '../../constants/abi.json'
-import useMedia from '../../hooks/useMedia'
-
+import useMedia from '../hooks/useMedia'
 import {
   connectAccount,
   onLogout,
   setShowWrongChainModal,
   chainConnect
 } from '../../globalState/user'
-
 import styles from '../../styles/Component.module.scss'
 
 let lotteryContract, provider

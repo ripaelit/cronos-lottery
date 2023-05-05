@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { providers, Contract } from 'ethers'
-import useInterval from '../hooks/useInterval'
+import useInterval from '../components/hooks/useInterval'
 import { ContractAddress, chainConfig } from '../constants'
 import abi from '../constants/abi.json'
-import useMedia from '../hooks/useMedia'
+import useMedia from '../components/hooks/useMedia'
 import styles from '../styles/Home.module.scss'
 
 let lotteryContract, provider
@@ -24,7 +24,7 @@ const Home = () => {
         provider = new providers.JsonRpcProvider(chainConfig.rpcUrls[0])
         lotteryContract = new Contract(ContractAddress, abi, provider)
         lotteryContract.endTime().then((endTime) => {
-          console.log('endTime', endTime.toNumber())
+          // console.log('endTime:::', endTime.toNumber())
           setRemainTime((endTime.toNumber() - Date.now()) / 1000)
         })
         lotteryContract
