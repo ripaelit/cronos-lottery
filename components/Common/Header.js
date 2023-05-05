@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import { toast } from "react-toastify"
 import { useRouter } from 'next/router'
 
-import WalletConnectButton from '../Wallet/WalletConnectButton'
+import ConnectWalletButton from '../wallet/ConnectWalletButton'
 import { chainConfig } from '../../constants'
 
 import styles from '../../styles/Component.module.scss'
@@ -91,7 +91,7 @@ const Header = () => {
               }
             </div>
           </div>
-          <WalletConnectButton />
+          <ConnectWalletButton />
         </div>
       </div>
     </>

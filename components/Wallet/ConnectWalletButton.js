@@ -17,7 +17,7 @@ import styles from '../../styles/Component.module.scss'
 
 let lotteryContract, provider
 
-const WalletConnectButton = () => {
+const ConnectWalletButton = () => {
   const dispatch = useDispatch()
   const isMobile = useMedia('(max-width: 1200px)')
   const [bought, setBought] = useState(-1)
@@ -156,4 +156,4 @@ const WalletConnectButton = () => {
     </div>
   )
 }
-export default memo(WalletConnectButton)
+export default memo(ConnectWalletButton)
