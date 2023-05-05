@@ -100,24 +100,19 @@ contract CroDraw is ReentrancyGuard, Ownable {
 	***********************************************************/
 	function buyTickets(uint32 _amount) external payable notContract nonReentrant {
 		require(ticketPrice != 0, 'Price not set');
-		require(_amount != 0, 'Enter chosen amount to buy');
+		require(_amount != 0, 'Enter amount to buy');
 		require(_amount <= maxNumberTicketsPerBuy, 'Too many tickets');
-
 		require(lotteryStatus == LotteryStatus.Open, 'Lottery is not open yet');
-		require(block.timestamp < endTime, 'Lottery has ended');
-
+		require(block.timestamp < endTime, 'Lottery is ended');
 		uint256 totalPrice = calculateTotalPrice(_amount, false);
 		require(msg.value >= totalPrice, 'Insufficient funds');
 		// ??? There's no logic to refund overpaid balance
-
 		amountCollected = amountCollected + totalPrice;
-
 		for (uint i; i < _amount; ++i) {
 			tickets[currentTicketId] = msg.sender;
 			// Increase lottery ticket number
 			++currentTicketId;
 		}
-
 		numOfTickesPerOwner[msg.sender][lotteryId] += _amount;
 	}
 
@@ -125,27 +120,21 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		require(ticketPrice != 0, 'Price not set');
 		require(_amount != 0, 'Enter chosen amount to buy');
 		require(_amount <= maxNumberTicketsPerBuy, 'Too many tickets');
-
 		require(lotteryStatus == LotteryStatus.Open, 'Lottery is not open yet');
-		require(block.timestamp < endTime, 'Lottery has ended');
+		require(block.timestamp < endTime, 'Lottery is ended');
 		uint8 decimals = discountToken.decimals();
 		uint256 discountTokenAmount = discountTokenPrice * (10 ** decimals) * _amount;
 		discountToken.transferFrom(msg.sender, address(this), discountTokenAmount);
 		discountToken.burn(discountTokenAmount);
-
 		uint256 totalPrice = calculateTotalPrice(_amount, true);
 		require(msg.value >= totalPrice, 'Insufficient funds');
 		// ??? There's no logic to refund overpaid balance
-
 		amountCollected = amountCollected + totalPrice;
-
 		for (uint i; i < _amount; ++i) {
 			tickets[currentTicketId] = msg.sender;
-
 			// Increase lottery ticket number
 			++currentTicketId;
 		}
-
 		numOfTickesPerOwner[msg.sender][lotteryId] += _amount;
 	}
 
@@ -179,7 +168,6 @@ contract CroDraw is ReentrancyGuard, Ownable {
 	function closeLottery() external payable onlyOperator {
 		require(lotteryStatus == LotteryStatus.Open, 'Lottery is not open');
 		require(block.timestamp > endTime, 'Lottery is ongoing');
-
 		latestRandomizingBlock = block.number;
 		uint256 fee = witnet.estimateRandomizeFee(tx.gasprice);
 		if (msg.value < fee) {
@@ -189,32 +177,25 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		if (_usedFunds < msg.value) {
 			payable(msg.sender).transfer(msg.value - _usedFunds); // ???
 		}
-
 		lotteryStatus = LotteryStatus.Close;
 	}
 
 	function declareWinner() external nonReentrant onlyOperator {
 		require(lotteryStatus == LotteryStatus.Close, 'Lottery has not finished');
-
 		require(
 			witnet.isRandomized(latestRandomizingBlock) == true,
 			'Not Randomized'
 		);
-
 		uint8 i;
 		// uint256 j;
-
 		for (i = 1; i <= 4; ++i) {
 			delete _winnerByPot[i];
 		}
-
 		lotteryStatus = LotteryStatus.Pending;
 		if (currentTicketId == 0) {
 			return;
 		}
-
 		uint256 nonce;
-
 		uint256 remainingPrize = amountCollected;
 		uint32 winningTicketId = witnet.random(
 			currentTicketId,
@@ -222,12 +203,10 @@ contract CroDraw is ReentrancyGuard, Ownable {
 			latestRandomizingBlock
 		);
 		++nonce;
-
 		//Choose top winner
 		uint256 winningPrize = amountCollected * prizeRatio[0] / 100;
 		_chooseWinner(winningTicketId, winningPrize, 1);
 		_setTopWinner(winningTicketId);
-
 		// Choose rank2, 3, 4 winners
 		remainingPrize = remainingPrize - winningPrize;
 		uint256 winnerCnt;
@@ -255,18 +234,13 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		payable(founder1Address).transfer(winningPrize);
 		payable(founder2Address).transfer(winningPrize);
 		payable(founder3Address).transfer(winningPrize);
-
 		remainingPrize = remainingPrize - (winningPrize * 3);
 		winningPrize = remainingPrize / 3;
-
 		// Send 7.5% to project
 		payable(projectAddress).transfer(winningPrize);
-
 		remainingPrize = remainingPrize - winningPrize;
-
 		// Send remaining 15% to charity
 		payable(charityAddress).transfer(remainingPrize);
-
 		++lotteryId;
 	}
 
@@ -401,7 +375,6 @@ contract CroDraw is ReentrancyGuard, Ownable {
 			topWinning = winningPrize;
 			topWinner = user;
 		}
-
 		if (_lastWinningPot[user] > pot || _lastWinningPot[user] == 0)
 			_lastWinningPot[user] = pot;
 	}
