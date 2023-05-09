@@ -191,6 +191,7 @@ const Redeem = () => {
         {
           walletAddress && ticketStatus == STATUS.close &&
           <div className={styles.Redeem_bottom}>
+            <img className={styles.Redeem_img} src='images/security.png' />
             <p className={styles.Redeem_title} style={{lineHeight: "120%", marginTop: "24px"}}>No ongoing lottery</p>
             <p className={styles.Redeem_context} style={{margin: 0}}>Winners are being drawn shortly</p>
           </div>
