@@ -1,26 +1,28 @@
-import { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import MetaMaskOnboarding from '@metamask/onboarding'
-import { slide as Menu } from 'react-burger-menu'
-import Link from 'next/link'
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import MetaMaskOnboarding from "@metamask/onboarding";
+import { slide as Menu } from "react-burger-menu";
+import Link from "next/link";
 import { useRouter } from 'next/router'
+
 import {
   connectAccount,
   onLogout,
   setShowWrongChainModal,
-  chainConnect
-} from '../../globalState/user'
+  chainConnect,
+} from "../../globalState/user";
+
 import styles from '../../styles/Component.module.scss'
 
 const MobileSideBar = (props) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [activeId, setActiveId] = useState(0)
 
-  const router = useRouter()
+  const router = useRouter();
   const menuLists = [
     { id: 0, title: `Home`, link: '/home' },
     { id: 1, title: `Play`, link: '/play' },
-    { id: 2, title: `Redeem`, link: '/redeem' }
+    { id: 2, title: `Redeem`, link: '/redeem' },
   ]
 
   const [flag, setFlag] = useState(null)
@@ -32,68 +34,66 @@ const MobileSideBar = (props) => {
   }
 
   const walletAddress = useSelector((state) => {
-    return state.user.address
-  })
+    return state.user.address;
+  });
 
   const correctChain = useSelector((state) => {
-    return state.user.correctChain
-  })
+    return state.user.correctChain;
+  });
   const user = useSelector((state) => {
-    return state.user
-  })
+    return state.user;
+  });
   const needsOnboard = useSelector((state) => {
-    return state.user.needsOnboard
-  })
+    return state.user.needsOnboard;
+  });
 
   const connectWalletPressed = async () => {
     if (needsOnboard) {
-      const onboarding = new MetaMaskOnboarding()
-      onboarding.startOnboarding()
+      const onboarding = new MetaMaskOnboarding();
+      onboarding.startOnboarding();
     } else {
-      dispatch(connectAccount())
+      dispatch(connectAccount());
     }
-  }
+  };
 
   // show modal for wallet connect
   useEffect(() => {
     // console.log("connect wallet")
-    let defiLink = localStorage.getItem('DeFiLink_session_storage_extension')
+    let defiLink = localStorage.getItem("DeFiLink_session_storage_extension");
     if (defiLink) {
       try {
-        const json = JSON.parse(defiLink)
+        const json = JSON.parse(defiLink);
         if (!json.connected) {
-          dispatch(onLogout())
+          dispatch(onLogout());
         }
       } catch (error) {
-        dispatch(onLogout())
+        dispatch(onLogout());
       }
     }
     if (
-      localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER') ||
+      localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER") ||
       window.ethereum ||
-      localStorage.getItem('DeFiLink_session_storage_extension')
+      localStorage.getItem("DeFiLink_session_storage_extension")
     ) {
       if (!user.provider) {
-        if (window.navigator.userAgent.includes('Crypto.com DeFiWallet')) {
-          dispatch(connectAccount(false, 'defi'))
+        if (window.navigator.userAgent.includes("Crypto.com DeFiWallet")) {
+          dispatch(connectAccount(false, "defi"));
         } else {
-          dispatch(connectAccount())
+          dispatch(connectAccount());
         }
       }
     }
 
     if (!user.provider) {
-      if (window.navigator.userAgent.includes('Crypto.com DeFiWallet')) {
-        dispatch(connectAccount(false, 'defi'))
+      if (window.navigator.userAgent.includes("Crypto.com DeFiWallet")) {
+        dispatch(connectAccount(false, "defi"));
       }
     }
 
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
-  useEffect(() => {
-    setFlag(null)
-  }, [])
+  useEffect(() => { setFlag(null) }, [])
 
   useEffect(() => {
     const res = menuLists.filter((item) => item.link === router.asPath)
@@ -101,13 +101,13 @@ const MobileSideBar = (props) => {
   }, [router])
 
   const onWrongChainModalChangeChain = () => {
-    dispatch(setShowWrongChainModal(false))
-    dispatch(chainConnect())
-  }
+    dispatch(setShowWrongChainModal(false));
+    dispatch(chainConnect());
+  };
 
   const logout = async () => {
-    dispatch(onLogout())
-  }
+    dispatch(onLogout());
+  };
 
   const munualClose = () => {
     if (flag === null) {
@@ -119,54 +119,42 @@ const MobileSideBar = (props) => {
 
   return (
     <Menu {...props} isOpen={flag}>
-      <div className={styles.MobileMenuContent}>
-        <Link href="/home">
-          <img src="images/logo.png" />
-        </Link>
-        {menuLists.map((menu, idx) => (
-          <Link href={menu.link} key={idx}>
-            <p
-              onClick={() => {
-                handleActiveId(idx)
-                munualClose()
-              }}
-              className={
-                idx === activeId ? styles.menuActive : styles.menuPassive
-              }
-            >
-              {' '}
-              {menu.title}{' '}
-            </p>
-          </Link>
-        ))}
+      <div className={styles.MobileMenuContent} >
+        <Link href='/home' ><img src='images/logo.png' /></Link>
+        {
+          menuLists.map((menu, idx) =>
+            <Link href={menu.link} key={idx} >
+              <p
+                onClick={() => {
+                  handleActiveId(idx)
+                  munualClose()
+                }}
+                className={idx === activeId ? styles.menuActive : styles.menuPassive} > {menu.title} </p>
+            </Link>
+          )
+        }
         <div>
           {!walletAddress && (
-            <button
-              className={styles.MobileWalletButton}
+            <button className={styles.MobileWalletButton}
               onClick={() => connectWalletPressed()}
             >
               Connect Wallet
             </button>
           )}
           {walletAddress && !correctChain && !user.showWrongChainModal && (
-            <button
-              className={styles.MobileWalletButton}
+            <button className={styles.MobileWalletButton}
               onClick={() => onWrongChainModalChangeChain()}
             >
               Switch Network
             </button>
           )}
 
-          {walletAddress && (
-            <button
-              className={styles.MobileWalletButton}
-              onClick={() => logout()}
-            >
-              {walletAddress.substr(0, 6) +
-                '...' +
-                walletAddress.substr(walletAddress.length - 4, 4)}{' '}
-            </button>
-          )}
+          {
+            walletAddress &&
+            <button className={styles.MobileWalletButton} onClick={() =>
+              logout()
+            } >{walletAddress.substr(0, 6) + '...' + walletAddress.substr(walletAddress.length - 4, 4)} </button>
+          }
         </div>
       </div>
     </Menu>

@@ -7,33 +7,17 @@ import BigNumber from 'bignumber.js'
 import Link from 'next/link'
 import { chainConfig, ContractAddress } from '../constants/index'
 import ERC721ABI from '../constants/erc721Abi.json'
-import { accountChanged } from '../components/globalState/user'
-import useInterval from '../components/hooks/useInterval'
+import { accountChanged } from '../globalState/user'
+import useInterval from '../hooks/useInterval'
 
 import styles from '../styles/Play.module.scss'
-import {
-  BakeryDiningRounded,
-  SettingsBluetoothRounded
-} from '@mui/icons-material'
+import { BakeryDiningRounded, SettingsBluetoothRounded } from '@mui/icons-material'
 
 const renderer = ({ days, hours, minutes, seconds, completed }) => {
   if (completed) {
     return <div>Closed</div>
   } else {
-    return (
-      <div>
-        Get your tickets before{' '}
-        {days > 0 ? (
-          <>
-            {days} Days {hours} Hours
-          </>
-        ) : (
-          <>
-            {hours} Hours {minutes} Minutes {seconds} Seconds
-          </>
-        )}
-      </div>
-    )
+    return <div>Get your tickets before {days > 0 ? <>{days} Days {hours} Hours</> : <>{hours} Hours {minutes} Minutes {seconds} Seconds</>}</div>
   }
 }
 
@@ -61,10 +45,10 @@ const Play = () => {
   const [totalPrice, setTotalPrice] = useState('0')
   const [timeStr, setTimeStr] = useState('')
   const [remainTime, setRemainTime] = useState(0)
-  const [isBurned, setIsBurned] = useState(false)
-  const [showLivePotSizes, setShowLivePotSizes] = useState(true)
-  const [winnersPot, setWinnersPot] = useState(0)
-  const [charityPot, setCharityPot] = useState(0)
+  const [isBurned, setIsBurned] = useState(false);
+  const [showLivePotSizes, setShowLivePotSizes] = useState(true);
+  const [winnersPot, setWinnersPot] = useState(0);
+  const [charityPot, setCharityPot] = useState(0);
 
   const STATUS = {
     pending: 0,
@@ -81,7 +65,7 @@ const Play = () => {
   const dispatch = useDispatch()
 
   const handleBuyTicket = async () => {
-    // console.log("ticketStatus::: ", ticketStatus);
+    console.log("ticketStatus = ", ticketStatus);
     try {
       setLoading(true)
       if (!walletAddress) {
@@ -90,6 +74,7 @@ const Play = () => {
       }
       if (remainTime <= 0) {
         setLoading(false)
+        console.log("if remainTime <= 0")
         return toast.error('Lottery has been ended')
       }
       if (ticketStatus !== STATUS.open) {
@@ -107,22 +92,19 @@ const Play = () => {
         new BigNumber(ticketCount)
       )
       if (hasDiscountNft) {
-        getTicketBalance = getTicketBalance
-          .times(1000 - nftDiscountRate)
-          .div(1000)
+        getTicketBalance = getTicketBalance.times(1000 - nftDiscountRate).div(1000)
       }
       if (getWalletBalance.lt(getTicketBalance)) {
         // "lt" mean A < B (lessthan)
         setLoading(false)
-        return toast.error(
-          `You don’t have enough $TRPZ. Reduce the number of tickets or un-check the box.`
-        )
+        return toast.error(`You don’t have enough $TRPZ. Reduce the number of tickets or un-check the box.`)
       }
 
-      const sendValue = await buyContract.calculateTotalPrice(
-        ticketCount,
-        false
-      )
+      const sendValue = await buyContract
+        .calculateTotalPrice(
+          ticketCount,
+          false
+        )
       const gasEstimated = await buyContract.estimateGas.buyTickets(
         ticketCount,
         {
@@ -136,8 +118,12 @@ const Play = () => {
       })
       await tx.wait()
 
-      setCurrentTotalAmount(Number(currentTotalAmount) + Number(ticketCount))
-      setTicketCountByUser(Number(ticketCountByUser) + Number(ticketCount))
+      setCurrentTotalAmount(
+        Number(currentTotalAmount) + Number(ticketCount)
+      )
+      setTicketCountByUser(
+        Number(ticketCountByUser) + Number(ticketCount)
+      )
       provider
         .getBalance(walletAddress)
         .then((blnc) =>
@@ -145,17 +131,19 @@ const Play = () => {
         )
       toast.success('Successfully bought tickets')
     } catch (error) {
-      // console.log('error', { error })
+      console.log('error', { error })
       toast.error(`Error`)
     }
     setLoading(false)
   }
 
   const handleDiscountBuyTicket = async () => {
+    console.log("handleDiscountBuyTicket.ticketStatus = ", ticketStatus);
     setIsBurned(true)
     if (!walletAddress) {
       return toast.error('Please connect your wallet')
     }
+    console.log({remainTime});
     if (remainTime <= 0) {
       return toast.error('Lottery has been ended')
     }
@@ -168,20 +156,13 @@ const Play = () => {
     try {
       setLoading(true)
 
-      const discountedTicketPrice = new BigNumber(ticketPrice)
-        .times(1000 - discountRate - (hasDiscountNft ? nftDiscountRate : 0))
-        .div(1000)
-      const getWalletBalance = new BigNumber(walletBalance).times(
-        new BigNumber(10).pow(18)
-      )
-      const getTicketBalance = new BigNumber(discountedTicketPrice).times(
-        ticketCount
-      )
-      const requestTokenAmount = new BigNumber(ticketCount)
-        .times(new BigNumber(discountTokenPrice))
-        .times(new BigNumber(10).pow(discountTokenkDecimals))
+      const discountedTicketPrice = new BigNumber(ticketPrice).times(1000 - discountRate - (hasDiscountNft ? nftDiscountRate : 0)).div(1000)
+      const getWalletBalance = new BigNumber(walletBalance).times(new BigNumber(10).pow(18))
+      const getTicketBalance = new BigNumber(discountedTicketPrice).times(ticketCount)
+      const requestTokenAmount = new BigNumber(ticketCount).times(new BigNumber(discountTokenPrice)).times(new BigNumber(10).pow(discountTokenkDecimals))
 
-      if (new BigNumber(discountTokenBlnc).lt(requestTokenAmount)) {
+      if ((new BigNumber(discountTokenBlnc)).lt(requestTokenAmount)) {
+        console.log("discountTokenBlnc", discountTokenBlnc.toString(), "requestTokenAmount", requestTokenAmount.toString())
         toast.error('Insufficient Token')
         setLoading(false)
         return
@@ -192,11 +173,7 @@ const Play = () => {
         return
       }
       // approve only when allowance is insufficient
-      const allowanceAmount = new BigNumber(
-        (
-          await tokenContract.allowance(walletAddress, ContractAddress)
-        ).toString()
-      )
+      const allowanceAmount = new BigNumber((await tokenContract.allowance(walletAddress, ContractAddress)).toString())
       if (allowanceAmount.lt(requestTokenAmount)) {
         let gasEstimated = await tokenContract.estimateGas.approve(
           ContractAddress,
@@ -213,7 +190,11 @@ const Play = () => {
         await tx.wait()
       }
 
-      const sendValue = await buyContract.calculateTotalPrice(ticketCount, true)
+      const sendValue = await buyContract
+        .calculateTotalPrice(
+          ticketCount,
+          true
+        )
       let gasEstimated = await buyContract.estimateGas.buyDiscountTickets(
         ticketCount,
         {
@@ -227,8 +208,12 @@ const Play = () => {
       })
       await tx.wait()
 
-      setCurrentTotalAmount(Number(currentTotalAmount) + Number(ticketCount))
-      setTicketCountByUser(Number(ticketCountByUser) + Number(ticketCount))
+      setCurrentTotalAmount(
+        Number(currentTotalAmount) + Number(ticketCount)
+      )
+      setTicketCountByUser(
+        Number(ticketCountByUser) + Number(ticketCount)
+      )
 
       tokenContract
         .balanceOf(walletAddress)
@@ -240,7 +225,7 @@ const Play = () => {
         )
       toast.success('Successfully bought tickets')
     } catch (error) {
-      // console.log('error', error)
+      console.log('error', error)
       toast.error(`Error`)
       setLoading(false)
     }
@@ -248,58 +233,41 @@ const Play = () => {
   }
 
   const calculatePrice = (useDiscount, mintCnt) => {
-    const rate =
-      1000 -
-      (useDiscount ? discountRate : 0) -
-      (hasDiscountNft ? nftDiscountRate : 0)
-    setTotalPrice(
-      new BigNumber(ticketPrice)
-        .times(new BigNumber(mintCnt))
-        .times(new BigNumber(rate))
-        .div(1000)
-        .div(new BigNumber(10).pow(18))
-        .toFixed(2)
-    )
+    const rate = 1000 - (useDiscount ? discountRate : 0) - (hasDiscountNft ? nftDiscountRate : 0)
+    setTotalPrice((new BigNumber(ticketPrice)).times(new BigNumber(mintCnt)).times(new BigNumber(rate)).div(1000).div((new BigNumber(10)).pow(18)).toFixed(2))
   }
 
   useEffect(() => {
     if (!buyContract || !provider) {
       return
     }
-    // console.log('balance::', walletBalance);
+    console.log('balance', walletBalance);
     if (walletBalance <= 0) {
-      toast.error(
-        'You don’t have enough $CRO. Reduce the number of tickets or top up your wallet!'
-      )
+      toast.error("You don’t have enough $CRO. Reduce the number of tickets or top up your wallet!");
     }
     const init = async () => {
-      buyContract
-        .lotteryStatus()
-        .then((newStatus) => setTicketStatus(newStatus))
-      buyContract
-        .nftContractAddress()
-        .then((newNftAddress) => setDiscountNftAddress(newNftAddress))
-      buyContract
-        .nftDiscountRate()
-        .then((newRate) => setNftDiscountRate(newRate.toNumber()))
+      buyContract.lotteryStatus().then((newStatus) => setTicketStatus(newStatus))
+      buyContract.nftContractAddress().then(newNftAddress => setDiscountNftAddress(newNftAddress))
+      buyContract.nftDiscountRate().then(newRate => setNftDiscountRate(newRate.toNumber()))
       buyContract.endTime().then(async (edTime) => {
         try {
           const blockNumber = await provider.getBlockNumber()
           const timestamp = (await provider.getBlock(blockNumber)).timestamp
-          // console.log('current time:::', { current: Date.now() / 1000, timestamp, endtime: edTime.toNumber() })
+          console.log('current time:', { current: Date.now() / 1000, timestamp, endtime: edTime.toNumber() })
           // setRemainTime(Math.max(edTime.toNumber() - timestamp, 0))
-          // console.log('result:::', (edTime.toNumber() * 1000 - Date.now()) / 1000);
-          setRemainTime(
-            Math.max((edTime.toNumber() * 1000 - Date.now()) / 1000, 0)
-          )
-        } catch (error) {
-          // console.log("error:", error)
+          console.log('result', (edTime.toNumber() * 1000 - Date.now()) / 1000);
+          setRemainTime(Math.max((edTime.toNumber() * 1000 - Date.now()) / 1000, 0))
+        }
+        catch(err) {
+          console.log("error:", err)
         }
       })
 
-      buyContract.ticketPrice().then((newPrice) => {
-        setTicketPrice(newPrice.toString())
-      })
+      buyContract
+        .ticketPrice()
+        .then((newPrice) => {
+          setTicketPrice(newPrice.toString())
+        })
       buyContract
         .maxNumberTicketsPerBuy()
         .then((maxCount) => setMaxTicketCount(maxCount))
@@ -335,8 +303,8 @@ const Play = () => {
         newWinners.push(winner)
         winner = await buyContract.getWinnersByPot(4)
         newWinners.push(winner)
-      } catch (error) {
-        // console.log("error:", error)
+      } catch (err) {
+        console.log("error:", err)
       }
       setWinnerByPot([...newWinners])
       // const potNumber = 1
@@ -347,7 +315,7 @@ const Play = () => {
       //     setWinnerByPot(winByPot)
       //   }
       // })
-      // console.log('tokencontract:::', tokenContract)
+      console.log('tokencontract:', tokenContract)
 
       tokenContract
         .decimals()
@@ -378,10 +346,7 @@ const Play = () => {
       return
     }
     const readProvider = new providers.JsonRpcProvider(chainConfig.rpcUrls[0])
-    if (
-      discountNftAddress.toLowerCase() ===
-      '0x0000000000000000000000000000000000000000'
-    ) {
+    if (discountNftAddress.toLowerCase() === '0x0000000000000000000000000000000000000000') {
       return
     }
     const nftContract = new Contract(
@@ -389,9 +354,7 @@ const Play = () => {
       ERC721ABI,
       readProvider
     )
-    nftContract
-      .balanceOf(walletAddress)
-      .then((newBlnc) => setHasDiscountNft(newBlnc.toNumber() > 0))
+    nftContract.balanceOf(walletAddress).then(newBlnc => setHasDiscountNft(newBlnc.toNumber() > 0))
   }, [walletAddress, discountNftAddress, nftDiscountRate])
 
   useEffect(() => {
@@ -399,15 +362,18 @@ const Play = () => {
   }, [ticketPrice, hasDiscountNft])
 
   useInterval(() => {
-    if (!buyContract) return
+    if (!buyContract)
+      return;
 
     buyContract.lotteryStatus().then((newStatus) => setTicketStatus(newStatus))
-    buyContract.amountCollected().then((newAmountCollected) => {
-      // console.log("newAmountCollected", newAmountCollected, typeof(newAmountCollected))
-      const totalPot = newAmountCollected / 10 ** 18
-      setWinnersPot(((totalPot * 70) / 100).toFixed(2))
-      setCharityPot(((totalPot * 15) / 100).toFixed(2))
-    })
+    buyContract.amountCollected().then(
+      (newAmountCollected) => {
+        // console.log("newAmountCollected", newAmountCollected, typeof(newAmountCollected))
+        const totalPot = newAmountCollected / (10 ** 18)
+        setWinnersPot((totalPot * 70 / 100).toFixed(2))
+        setCharityPot((totalPot * 15 / 100).toFixed(2))
+      }
+    )
 
     if (remainTime > 0) {
       setRemainTime(remainTime - 1)
@@ -416,7 +382,7 @@ const Play = () => {
       if (hour.length === 1) {
         hour = `0${hour}`
       }
-      let minute = `${Math.floor((remainTime % 3600) / 60)}`
+      let minute = `${Math.floor(remainTime % 3600 / 60)}`
       if (minute.length === 1) {
         minute = `0${minute}`
       }
@@ -442,12 +408,14 @@ const Play = () => {
 
   return (
     <>
-      {isLoading ? <div id="preloader"></div> : ''}
+      {isLoading ? (
+        <div id="preloader"></div>
+      ) : ''}
       <div className={styles.Playpage}>
         <div className={styles.Play_top} />
-        {walletAddress ? (
-          <div className={styles.Play_control}>
-            {ticketStatus == STATUS.open ? (
+        {walletAddress ? <div className={styles.Play_control}>
+          {
+            ticketStatus == STATUS.open ?
               <div>
                 <img
                   className={styles.Play_img}
@@ -455,91 +423,35 @@ const Play = () => {
                 />
                 <div className={styles.Play_bottom}>
                   <p className={styles.Play_title}>Buy your ticket now!</p>
-                  <p className={styles.Play_price}>
-                    {new BigNumber(ticketPrice)
-                      .times(
-                        new BigNumber(
-                          1000 -
-                            (useTrpz ? discountRate : 0) -
-                            (hasDiscountNft ? nftDiscountRate : 0)
-                        )
-                      )
-                      .div(1000)
-                      .div(new BigNumber(10).pow(18))
-                      .toFixed(2)}{' '}
-                    CRO
-                  </p>
+                  <p className={styles.Play_price}>{new BigNumber(ticketPrice).times(new BigNumber(1000 - (useTrpz ? discountRate : 0) - (hasDiscountNft ? nftDiscountRate : 0))).div(1000).div(new BigNumber(10).pow(18)).toFixed(2)} CRO</p>
                   <div className={styles.Play_countPanel}>
-                    <div
-                      className={styles.Play_countChangeButton}
-                      onClick={() => {
-                        setTicketCount(
-                          ticketCount > 1 ? ticketCount - 1 : ticketCount
-                        )
-                        calculatePrice(
-                          useTrpz,
-                          ticketCount > 1 ? ticketCount - 1 : ticketCount
-                        )
-                      }}
-                    >
-                      -
-                    </div>
+                    <div className={styles.Play_countChangeButton} onClick={() => {
+                      setTicketCount(ticketCount > 1 ? ticketCount - 1 : ticketCount)
+                      calculatePrice(useTrpz, ticketCount > 1 ? ticketCount - 1 : ticketCount)
+                    }}>-</div>
                     <div className={styles.Play_countLabel}>{ticketCount}</div>
-                    <div
-                      className={styles.Play_countChangeButton}
-                      onClick={() => {
-                        setTicketCount(
-                          ticketCount < MaxTicketCount
-                            ? ticketCount + 1
-                            : ticketCount
-                        )
-                        calculatePrice(
-                          useTrpz,
-                          ticketCount < MaxTicketCount
-                            ? ticketCount + 1
-                            : ticketCount
-                        )
-                      }}
-                    >
-                      +
-                    </div>
+                    <div className={styles.Play_countChangeButton} onClick={() => {
+                      setTicketCount(ticketCount < MaxTicketCount ? ticketCount + 1 : ticketCount)
+                      calculatePrice(useTrpz, ticketCount < MaxTicketCount ? ticketCount + 1 : ticketCount)
+                    }}>+</div>
                   </div>
                   <div className={styles.Play_trpzOption}>
                     {hasDiscountNft ? (
-                      <a
-                        className={styles.Play_nftDiscount}
-                        href="https://app.ebisusbay.com/drops/for-my-brothers"
-                        target={'_blank'}
-                        rel="noopener noreferrer"
-                      >
-                        10% Discount has been added for holding a For My
-                        Brothers NFT
-                      </a>
+                      <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target={"_blank"} rel="noopener noreferrer">10% Discount has been added for holding a For My Brothers NFT</a>
                     ) : (
-                      <a
-                        className={styles.Play_nftDiscount}
-                        href="https://app.ebisusbay.com/drops/for-my-brothers"
-                        target={'_blank'}
-                        rel="noopener noreferrer"
-                      >
-                        For an extra 10% discount on tickets, grab a &apos; For
-                        My Brothers &apos; NFT
-                      </a>
+                      <a className={styles.Play_nftDiscount} href="https://app.ebisusbay.com/drops/for-my-brothers" target={"_blank"} rel="noopener noreferrer">For an extra 10% discount on tickets, grab a &apos; For My Brothers &apos; NFT</a>
                     )}
                     <div className={styles.burnTrpzOption}>
                       <input
-                        type="checkbox"
+                        type='checkbox'
                         checked={useTrpz}
-                        onChange={(e) => {
+                        onChange={e => {
                           setUseTrpz(!useTrpz)
                           calculatePrice(!useTrpz, ticketCount)
                         }}
                         className={styles.Play_trpzCheck}
                       />
-                      <label className={styles.Play_trpzLabel}>
-                        Burn {discountTokenPrice} $TRPZ tokens per ticket
-                        purchased to receive a {discountRate / 10}% discount.
-                      </label>
+                      <label className={styles.Play_trpzLabel}>Burn {discountTokenPrice} $TRPZ tokens per ticket purchased to receive a {discountRate / 10}% discount.</label>
                     </div>
                     {/* <label className={styles.Play_trpzLabel}>To learn more about the $TRPZ token and the Troopz Community Staking platform head over to the Troopz n Friendz discord.</label>
                     <a
@@ -551,29 +463,20 @@ const Play = () => {
                       Join the Discord
                     </a> */}
                   </div>
-                  <div className={styles.Play_pricePanel}>{totalPrice} CRO</div>
+                  <div className={styles.Play_pricePanel}>
+                    {totalPrice} CRO
+                  </div>
                   <div
                     className={styles.Play_playBtn}
-                    onClick={() => {
-                      useTrpz ? handleDiscountBuyTicket() : handleBuyTicket()
-                    }}
+                    onClick={() => { useTrpz ? handleDiscountBuyTicket() : handleBuyTicket() }}
                   >
                     BUY
                   </div>
-                  {!!timeStr && (
-                    <div className={styles.Get_ticket}>
-                      Ticket sale ends in {timeStr}
-                    </div>
-                  )}
-                  {showLivePotSizes && (
-                    <>
-                      <div className={styles.Get_ticket}>LIVE POT SIZES:</div>
-                      <label className={styles.Play_trpzLabel}>
-                        WINNERS POT: {winnersPot} CRO | CHARITY POT:{' '}
-                        {charityPot} CRO
-                      </label>
-                    </>
-                  )}
+                  {!!timeStr && <div className={styles.Get_ticket}>Ticket sale ends in {timeStr}</div>}
+                  {showLivePotSizes && <>
+                    <div className={styles.Get_ticket}>LIVE POT SIZES:</div>
+                    <label className={styles.Play_trpzLabel}>WINNERS POT: {winnersPot} CRO | CHARITY POT: {charityPot} CRO</label>
+                  </>}
                   {/* <div className={styles.currentInfoControl}>
                     <div className={styles.currentInfoGroup}>
                       <p className={styles.currentInfoTitle}>Total Buy Amount : </p>
@@ -625,46 +528,37 @@ const Play = () => {
                       </div>
                     </div>
                   </div> */}
+
                 </div>
               </div>
-            ) : (
-              <div>
-                <img className={styles.Play_img} src="images/security.png" />
+            : <div>
+                <img
+                  className={styles.Play_img}
+                  src="images/security.png"
+                />
                 <div className={styles.Play_bottom}>
-                  <p className={styles.Play_title}>
-                    Lottery is closed
-                    <br />
-                  </p>
-                  <p className={styles.Play_text}>
-                    {' '}
-                    Next lottery will start soon...
-                  </p>
+                  <p className={styles.Play_title}>Lottery is closed<br /></p>
+                  <p className={styles.Play_text}> Next lottery will start soon...</p>
                   <div className={styles.Play_playBtn}>
                     <Link href="/redeem">
-                      <button className={styles.findoutButton1}>
-                        Check your winnings!
-                      </button>
+                      <button className={styles.findoutButton1}>Check your winnings!</button>
                     </Link>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className={styles.Play_control}>
-            <img
-              className={styles.Play_img}
-              src="images/disconnectWallet.png"
-            />
-            <div className={styles.Play_bottom}>
-              <p className={styles.Play_title}>Whoops, no wallet connected</p>
-              <p className={styles.Play_context}>
-                You can connect your wallet by clicking the &quot;Connect
-                Wallet&quot;
-              </p>
             </div>
+          }
+        </div> : <div className={styles.Play_control}>
+          <img
+            className={styles.Play_img}
+            src="images/disconnectWallet.png"
+          />
+          <div className={styles.Play_bottom}>
+            <p className={styles.Play_title}>Whoops, no wallet connected</p>
+            <p className={styles.Play_context}>
+              You can connect your wallet by clicking the &quot;Connect Wallet&quot;
+            </p>
           </div>
-        )}
+        </div>}
       </div>
     </>
   )

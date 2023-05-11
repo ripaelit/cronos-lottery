@@ -27,11 +27,11 @@ contract CroDraw is ReentrancyGuard, Ownable {
 	uint256 public ticketPrice;
 	uint32 public maxNumberTicketsPerBuy = 100; // tickets limit per user
 	TRPZToken public discountToken;
-	uint16 public discountRatio = 100; // 10%
+	uint16 public discountRate = 100; // 10%
 	uint256 public discountTokenPrice = 100;
 	uint256 public endTime;
 	address public nftContractAddress;
-	uint256 public nftDiscountRatio = 100; // 10%
+	uint256 public nftDiscountRate = 100; // 10%
     uint8[] public winnerRatio = [2, 5, 10];   // 2, 5, 10%
 	uint8[] public prizeRatio = [10, 15, 20, 25];    // 10, 15, 20, 25%
 
@@ -283,8 +283,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		discountToken = TRPZToken(_token);
 	}
 
-	function setDiscountRatio(uint16 _newRatio) external onlyOwner {
-		discountRatio = _newRatio;
+	function setDiscountRate(uint16 _newRate) external onlyOwner {
+		discountRate = _newRate;
 	}
 
 	function setTicketPrice(uint256 _ticketPrice) external onlyOwner {
@@ -295,8 +295,8 @@ contract CroDraw is ReentrancyGuard, Ownable {
 		nftContractAddress = _newAddress;
 	}
 
-	function setDiscountNFTRatio(uint256 _newRatio) external onlyOwner {
-		nftDiscountRatio = _newRatio;
+	function setDiscountNFTRate(uint256 _newRate) external onlyOwner {
+		nftDiscountRate = _newRate;
 	}
 
 	function setDiscountTokenPrice(uint256 _discountTokenPRice) external onlyOwner {
@@ -345,14 +345,14 @@ contract CroDraw is ReentrancyGuard, Ownable {
 	function calculateTotalPrice(uint32 _amount, bool _useTrpz) public view returns (uint256) {
 		uint256 totalPrice = ticketPrice * _amount;
 		uint256 nftBalance = IERC721(nftContractAddress).balanceOf(msg.sender);
-		uint256 newDiscountRatio = 0;
+		uint256 newDiscountRate = 0;
 		if (_useTrpz) {
-			newDiscountRatio = newDiscountRatio + discountRatio;
+			newDiscountRate = newDiscountRate + discountRate;
 		}
 		if (nftBalance > 0) {
-			newDiscountRatio = newDiscountRatio + nftDiscountRatio;
+			newDiscountRate = newDiscountRate + nftDiscountRate;
 		}
-		totalPrice = totalPrice * (1000 - newDiscountRatio) / 1000;
+		totalPrice = totalPrice * (1000 - newDiscountRate) / 1000;
 		return totalPrice;
 	}
 

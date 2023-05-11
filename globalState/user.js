@@ -2,9 +2,9 @@ import { createSlice } from '@reduxjs/toolkit'
 import { Contract, ethers, BigNumber } from 'ethers'
 import Web3Modal from 'web3modal'
 import detectEthereumProvider from '@metamask/detect-provider'
-import { DeFiWeb3Connector } from 'deficonnect'
+import { DeFiWeb3Connector } from 'deficonnect';
 import WalletConnectProvider from '@walletconnect/web3-provider'
-import * as DefiWalletConnectProvider from '@deficonnect/web3-provider'
+import * as DefiWalletConnectProvider from '@deficonnect/web3-provider';
 import { appAuthInitFinished } from './initSlice'
 import { captureException } from '@sentry/react'
 import abi from '../constants/abi.json'
@@ -13,7 +13,7 @@ import {
   ContractAddress,
   chainConfig,
   TokenContractAddress
-} from '../constants'
+} from '../constants/'
 
 let chainInfo
 const userSlice = createSlice({
@@ -107,9 +107,7 @@ export const {
 } = userSlice.actions
 export const user = userSlice.reducer
 
-export const connectAccount =
-  (firstRun = false, type = '') =>
-  async (dispatch) => {
+export const connectAccount = (firstRun = false, type = '') => async (dispatch) => {
     // console.log('currentlyPath:::', window.location.pathname)
     chainInfo = chainConfig
     const providerOptions = {
@@ -125,7 +123,7 @@ export const connectAccount =
         display: {
           logo: '/images/defiwallet.png',
           name: 'Crypto.com DeFi Wallet',
-          description: 'Connect with the CDC DeFi Wallet'
+          description: 'Connect with the CDC DeFi Wallet',
         },
         options: {},
         package: DefiWalletConnectProvider,
@@ -138,15 +136,15 @@ export const connectAccount =
             pollingInterval: 15000,
             metadata: {
               icons: ['https://ebisusbay.com/vector%20-%20face.svg'],
-              description: 'Cronos NFT Marketplace'
-            }
-          })
+              description: 'Cronos NFT Marketplace',
+            },
+          });
 
-          await connector.activate()
-          let provider = await connector.getProvider()
-          return provider
-        }
-      }
+          await connector.activate();
+          let provider = await connector.getProvider();
+          return provider;
+        },
+      },
     }
 
     if (type !== 'defi') {
@@ -163,6 +161,7 @@ export const connectAccount =
           }
         }
       }
+      console.log('provider:', providerOptions.walletconnect)
     }
 
     const web3ModalWillShowUp = !localStorage.getItem(
@@ -186,7 +185,8 @@ export const connectAccount =
         // console.log('Could not get a wallet connection', error)
         return null
       })
-    // console.log('web3provider:::', web3provider)
+
+    console.log('web3provider:::', web3provider)
 
     if (!web3provider) {
       dispatch(onLogout())
@@ -210,7 +210,7 @@ export const connectAccount =
         method: 'eth_accounts',
         params: [{ chainId: cid }]
       })
-      // console.log('account:::', accounts[0])
+      console.log("account:::", accounts[0])
       const address = accounts[0]
       const signer = provider.getSigner()
 
