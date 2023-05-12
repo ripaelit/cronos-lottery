@@ -192,7 +192,7 @@ const Redeem = () => {
           walletAddress && ticketStatus == STATUS.close &&
           <div className={styles.Redeem_bottom}>
             <img className={styles.Redeem_img} src='images/security.png' />
-            <p className={styles.Redeem_title} style={{lineHeight: "120%", marginTop: "24px"}}>Waiting on <a target='_blank' rel="noreferrer" href='https://witnet.io/'>Witnet</a>...</p>
+            <p className={styles.Redeem_title} style={{lineHeight: "120%", marginTop: "24px"}}>Waiting on <a target='_blank' rel="noreferrer" href='https://witnet.io/'>Witnet...</a></p>
             <p className={styles.Redeem_context} style={{margin: 0}}>Winners are being drawn shortly</p>
           </div>
         }
