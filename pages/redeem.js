@@ -156,7 +156,7 @@ const Redeem = () => {
         {
           walletAddress && ticketStatus == STATUS.pending && !isClaimable &&
           <div className={styles.Redeem_control}>
-            <img className={styles.Redeem_img} src='images/waiting.png' />
+            <img className={styles.Redeem_img} src='images/no_win_ticket.png' />
             <div className={styles.Redeem_bottom}>
               <p className={styles.Redeem_title}>You have no winnings to claim.</p>
               {/* <div className={styles.Redeem_RedeemBtnGroup} >
@@ -191,7 +191,7 @@ const Redeem = () => {
         {
           walletAddress && ticketStatus == STATUS.close &&
           <div className={styles.Redeem_control}>
-            <img className={styles.Redeem_img} src='images/security.png' />
+            <img className={styles.Redeem_img} src='images/waiting.png' />
             <div className={styles.Redeem_bottom}>
             <p className={styles.Redeem_title} style={{lineHeight: "120%", marginTop: "24px"}}>Waiting on <a target='_blank' rel="noreferrer" href='https://witnet.io/'>Witnet...</a></p>
             <p className={styles.Redeem_context} style={{margin: 0}}>Winners are being drawn shortly</p>
