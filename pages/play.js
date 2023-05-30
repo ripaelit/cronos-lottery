@@ -35,7 +35,7 @@ const Play = () => {
   const [MaxTicketCount, setMaxTicketCount] = useState(0)
   const [discountTokenBlnc, setDiscountTokenBlnc] = useState('0')
   const [endTime, setEndTime] = useState(0)
-  const [ticketStatus, setTicketStatus] = useState(0)
+  const [lotteryStatus, setLotteryStatus] = useState(0)
   const [currentTotalAmount, setCurrentTotalAmount] = useState(0)
   const [lastWinners, setLastWinners] = useState([])
   const [lastTopWinner, setLastTopWinner] = useState('')
@@ -65,7 +65,7 @@ const Play = () => {
   const dispatch = useDispatch()
 
   const handleBuyTicket = async () => {
-    console.log("ticketStatus = ", ticketStatus);
+    console.log("lotteryStatus = ", lotteryStatus);
     try {
       setLoading(true)
       if (!walletAddress) {
@@ -77,7 +77,7 @@ const Play = () => {
         console.log("if remainTime <= 0")
         return toast.error('Lottery has been ended')
       }
-      if (ticketStatus !== STATUS.open) {
+      if (lotteryStatus !== STATUS.open) {
         setLoading(false)
         return toast.error('Lottery is not open yet')
       }
@@ -97,7 +97,7 @@ const Play = () => {
       if (getWalletBalance.lt(getTicketBalance)) {
         // "lt" mean A < B (lessthan)
         setLoading(false)
-        return toast.error(`You don’t have enough $TRPZ. Reduce the number of tickets or un-check the box.`)
+        return toast.error(`Insufficient Fund`)
       }
 
       const sendValue = await buyContract
@@ -138,7 +138,7 @@ const Play = () => {
   }
 
   const handleDiscountBuyTicket = async () => {
-    console.log("handleDiscountBuyTicket.ticketStatus = ", ticketStatus);
+    console.log("handleDiscountBuyTicket.lotteryStatus = ", lotteryStatus);
     setIsBurned(true)
     if (!walletAddress) {
       return toast.error('Please connect your wallet')
@@ -147,7 +147,7 @@ const Play = () => {
     if (remainTime <= 0) {
       return toast.error('Lottery has been ended')
     }
-    if (ticketStatus !== STATUS.open) {
+    if (lotteryStatus !== STATUS.open) {
       return toast.error('Lottery is not open yet')
     }
     if (ticketCountByUser > MaxTicketCount) {
@@ -168,9 +168,8 @@ const Play = () => {
         return
       }
       if (getWalletBalance.lt(getTicketBalance)) {
-        toast.error(`Insufficient Fund`)
         setLoading(false)
-        return
+        return toast.error(`Insufficient Fund`)
       }
       // approve only when allowance is insufficient
       const allowanceAmount = new BigNumber((await tokenContract.allowance(walletAddress, ContractAddress)).toString())
@@ -246,7 +245,7 @@ const Play = () => {
       toast.error("You don’t have enough $CRO. Reduce the number of tickets or top up your wallet!");
     }
     const init = async () => {
-      buyContract.lotteryStatus().then((newStatus) => setTicketStatus(newStatus))
+      buyContract.lotteryStatus().then((newStatus) => setLotteryStatus(newStatus))
       buyContract.nftContractAddress().then(newNftAddress => setDiscountNftAddress(newNftAddress))
       buyContract.nftDiscountRate().then(newRate => setNftDiscountRate(newRate.toNumber()))
       buyContract.endTime().then(async (edTime) => {
@@ -365,7 +364,7 @@ const Play = () => {
     if (!buyContract)
       return;
 
-    buyContract.lotteryStatus().then((newStatus) => setTicketStatus(newStatus))
+    buyContract.lotteryStatus().then((newStatus) => setLotteryStatus(newStatus))
     buyContract.amountCollected().then(
       (newAmountCollected) => {
         // console.log("newAmountCollected", newAmountCollected, typeof(newAmountCollected))
@@ -415,7 +414,7 @@ const Play = () => {
         <div className={styles.Play_top} />
         {walletAddress ? <div className={styles.Play_control}>
           {
-            ticketStatus == STATUS.open ?
+            lotteryStatus == STATUS.open ?
               <div>
                 <img
                   className={styles.Play_img}
