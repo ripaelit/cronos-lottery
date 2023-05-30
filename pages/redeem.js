@@ -18,7 +18,7 @@ const Redeem = () => {
     discount: 1
   })
   const [claimableAmount, setClaimableAmount] = useState('')
-  const [ticketStatus, setTicketStatus] = useState(0)
+  const [lotteryStatus, setLotteryStatus] = useState(0)
   const [firstPotWinner, setFirstPotWinner] = useState('')
   const [timeStr, setTimeStr] = useState('')
   const [remainTime, setRemainTime] = useState(0)
@@ -56,7 +56,7 @@ const Redeem = () => {
       if (!buyContract) {
         return
       }
-      buyContract.lotteryStatus().then(newStatus => setTicketStatus(newStatus))
+      buyContract.lotteryStatus().then(newStatus => setLotteryStatus(newStatus))
       buyContract.ticketPrice().then(newPrice => setTicketPrice(newPrice.toString()))
       buyContract.maxNumberTicketsPerBuy().then(newMax => setMaxTicketCount(newMax))
       buyContract.getWinnersByPot(1).then(firstPotWinners => setFirstPotWinner(firstPotWinners.length > 0 ? firstPotWinners[0] : ''))
@@ -75,7 +75,7 @@ const Redeem = () => {
     if (!buyContract)
       return;
 
-    buyContract.lotteryStatus().then((newStatus) => setTicketStatus(newStatus))
+    buyContract.lotteryStatus().then((newStatus) => setLotteryStatus(newStatus))
 
     if (remainTime > 0) {
       setRemainTime(remainTime - 1)
@@ -132,7 +132,7 @@ const Redeem = () => {
           </div>
         }
         {
-          walletAddress && ticketStatus == STATUS.pending && isClaimable &&
+          walletAddress && lotteryStatus == STATUS.pending && isClaimable &&
           <div className={styles.Redeem_control}>
             <img className={styles.Redeem_img} src='images/win_ticket.png' />
             <div className={styles.Redeem_bottom}>
@@ -154,7 +154,7 @@ const Redeem = () => {
           </div>
         }
         {
-          walletAddress && ticketStatus == STATUS.pending && !isClaimable &&
+          walletAddress && lotteryStatus == STATUS.pending && !isClaimable &&
           <div className={styles.Redeem_control}>
             <img className={styles.Redeem_img} src='images/no_win_ticket.png' />
             <div className={styles.Redeem_bottom}>
@@ -168,7 +168,7 @@ const Redeem = () => {
           </div>
         }
         {
-          walletAddress && ticketStatus == STATUS.open &&
+          walletAddress && lotteryStatus == STATUS.open &&
           <div className={styles.Redeem_control}>
             <img className={styles.Redeem_img} src='images/no_win_ticket.png' />
             <div className={styles.Redeem_bottom}>
@@ -189,7 +189,7 @@ const Redeem = () => {
           </div>
         }
         {
-          walletAddress && ticketStatus == STATUS.close &&
+          walletAddress && lotteryStatus == STATUS.close &&
           <div className={styles.Redeem_control}>
             <img className={styles.Redeem_img} src='images/waiting.png' />
             <div className={styles.Redeem_bottom}>
