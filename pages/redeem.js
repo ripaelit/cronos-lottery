@@ -72,11 +72,12 @@ const Redeem = () => {
     }, [walletAddress, buyContract])
 
   useInterval(() => {
-    if (!buyContract)
-      return;
+    if (!buyContract) {
+      return
+    }
 
     buyContract.lotteryStatus().then((newStatus) => setLotteryStatus(newStatus))
-
+    
     if (remainTime > 0) {
       setRemainTime(remainTime - 1)
       let day = `${Math.floor(remainTime / 86400)}`
@@ -132,7 +133,7 @@ const Redeem = () => {
           </div>
         }
         {
-          walletAddress && lotteryStatus == STATUS.pending && isClaimable &&
+          walletAddress && isClaimable &&
           <div className={styles.Redeem_control}>
             <img className={styles.Redeem_img} src='images/win_ticket.png' />
             <div className={styles.Redeem_bottom}>
@@ -154,7 +155,7 @@ const Redeem = () => {
           </div>
         }
         {
-          walletAddress && lotteryStatus == STATUS.pending && !isClaimable &&
+          walletAddress && !isClaimable && lotteryStatus == STATUS.pending && 
           <div className={styles.Redeem_control}>
             <img className={styles.Redeem_img} src='images/no_win_ticket.png' />
             <div className={styles.Redeem_bottom}>
@@ -168,7 +169,7 @@ const Redeem = () => {
           </div>
         }
         {
-          walletAddress && lotteryStatus == STATUS.open &&
+          walletAddress && !isClaimable && lotteryStatus == STATUS.open &&
           <div className={styles.Redeem_control}>
             <img className={styles.Redeem_img} src='images/no_win_ticket.png' />
             <div className={styles.Redeem_bottom}>
@@ -189,7 +190,7 @@ const Redeem = () => {
           </div>
         }
         {
-          walletAddress && lotteryStatus == STATUS.close &&
+          walletAddress && !isClaimable && lotteryStatus == STATUS.close &&
           <div className={styles.Redeem_control}>
             <img className={styles.Redeem_img} src='images/waiting.png' />
             <div className={styles.Redeem_bottom}>
